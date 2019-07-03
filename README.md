@@ -1,28 +1,32 @@
-# EvolvSDK
-[![Version](https://img.shields.io/cocoapods/v/EvolvSDK.svg?style=flat)](https://cocoapods.org/pods/EvolvSDK)
-[![License](https://img.shields.io/cocoapods/l/EvolvSDK.svg?style=flat)](https://cocoapods.org/pods/EvolvSDK)
-[![Platform](https://img.shields.io/cocoapods/p/EvolvSDK.svg?style=flat)](https://cocoapods.org/pods/EvolvSDK)
+# EvolvKit
+[![Version](https://img.shields.io/cocoapods/v/EvolvKit.svg?style=flat)](https://cocoapods.org/pods/EvolvKit)
+[![License](https://img.shields.io/cocoapods/l/EvolvKit.svg?style=flat)](https://cocoapods.org/pods/EvolvKit)
+[![Platform](https://img.shields.io/cocoapods/p/EvolvKit.svg?style=flat)](https://cocoapods.org/pods/EvolvKit)
 
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
+cocoapods
+```ruby
+sudo gem install cocoapods
+```
 
 ## Installation
 
-EvolvSDK is available through [CocoaPods](https://cocoapods.org). To install
+EvolvKit is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'EvolvSDK'
+pod 'EvolvKit'
 ```
 
 ## License
 
-EvolvSDK is available under the Apache License, Version 2.0. See the LICENSE file for more info.
+EvolvKit is available under the Apache License, Version 2.0. See the LICENSE file for more info.
 
-## How to use the Evolv SDK
+## How to use the EvolvKit SDK
 
 #### Vocabulary
 
@@ -30,26 +34,27 @@ EvolvSDK is available under the Apache License, Version 2.0. See the LICENSE fil
 **Allocation:** The set of configurations that have been given to the participant, the values that are being
 experimented against.
 
-For a complete example of how to use this SDK see our [example app](https://github.com/PhyllisWong/EvolvSDK/tree/master/Example).
+For a complete example of how to use this SDK see our [example app](https://github.com/PhyllisWong/EvolvKit/tree/master/Example).
 
 ### Import the SDK
 
 1. Import the Evolv SDK.
 ```swift
-import EvolvSDK
+import EvolvKit
 ```
 
 
 ### Client Initialization
 
-1. Build an AscendConfig instance.
+1. Build an EvolvConfig instance.
 ```swift
-let config: AscendConfig = AscendConfig.builder(<environment_id>, <http_client>).build()
+let config: EvolvConfig = EvolvConfig.builder(eid: <environment_id>,
+                                              httpClient: <http_client>).build()
 ```
 
-2. Initialize the AscendClient.
+2. Initialize the EvolvClient.
 ```swift
-let client: AscendClient = AscendClientFactory.init(config)
+let client: EvolvClient = EvolvClientFactory.init(config)
 ```
 
 ### Confirm the Allocation
@@ -58,12 +63,12 @@ let client: AscendClient = AscendClientFactory.init(config)
 ```swift
 client.confirm()
 ```
-*Note: After the client has initialized, it is important to confirm the participant into the experiment. This action
-records the participant's allocation and sends the info back to Ascend.*
+*Note: After the client has been initialized, it is important to confirm the participant into the experiment. This action
+records the participant's allocation and sends the information back to Evolv.*
 
 ### Value Retrieval
 
-1. Retrieve values from Ascend.
+1. Retrieve values from Evolv.
 ```swift
 let value: T = client.get(key:<key_for_value>, defaultValue:<default_value>)
 ```
@@ -77,11 +82,9 @@ allocation has been received.*
 You may want to use a value from your allocation without blocking the execution of your application. If this is true, you can
 subscribe to a value and apply any actions as a result of it asynchronously.
 
-1. Subscribe to a value from Ascend.
+1. Subscribe to a value from Evolv.
 ```swift
-client.subscribe(<key_for_value>, <default_value>, value -> {
-Your code...
-})
+client?.subscribe(key: <key_for_value>, defaultValue: <default_value>, function: <closure>)
 ```
 
 *Note: The return value's type is decided by the provided default value's type. If there is an issue retrieving the
@@ -98,14 +101,14 @@ thats important to record is a "conversion" event. If you implemented the SDK in
 
 1. Emit a custom event.
 ```swift
-client.emitEvent(<event_type>)
+client.emitEvent(key: <event_type>)
 ```
 
 AND / OR
 
 2. Emit a custom event with an associated score.
 ```swift
-client.emitEvent(<event_type>, <score>)
+client.emitEvent(key: <event_type>, score: <score>)
 ```
 
 ### Contaminate the Allocation (optional)
@@ -119,26 +122,27 @@ client.contaminate()
 
 ### Custom Allocation Store (optional)
 
-Once a participant has been allocated into an experiment you may want to retain the allocations they received. To do this, create a custom allocation store by implementing the AscendAllocationStore interface. You can supply the
-custom allocation store to the client when you build the AscendConfig.
+Once a participant has been allocated into an experiment you may want to retain the allocations they received. To do this, create a custom allocation store by
+implementing the EvolvAllocationStore interface. You can supply the custom allocation store to the client when you build the EvolvConfig.
 
 1. Supply the allocation store to the client.
 ```swift
-let config: AscendConfig = AscendConfig.Builder(<environment_id>)
-.setAscendAllocationStore(<custom_store>)
+let config: EvolvConfig = EvolvConfig.Builder(eid: <environment_id>)
+.setEvolvAllocationStore(allocationStore: <custom_store>)
 .build()
 
-let client: AscendClient = AscendClient.init(config)
+let client: EvolvClientProtocol = EvolvClientImpl(<config>, <eventEmitter>, <futureAllocations>, <previousAllocations>, <participant>)
+
 ```
 
 
 ### Optional Configurations
 
-There are several optional configurations available through the AscendConfig builder, check out the AscendConfig
+There are several optional configurations available through the EvolvConfig builder, check out the EvolvConfig
 documentation to see what options are available.
 
 
-### About Evolv and the Ascend Product
+### About Evolv and the Evolv Product
 
 Evolv Delivers Autonomous Optimization Across Web & Mobile.
 

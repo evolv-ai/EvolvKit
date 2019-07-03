@@ -1,19 +1,19 @@
 {
   "name": "EvolvKit",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "summary": "Autonomous Optimizations Tool",
   "description": "'This SDK is designed to be integrated into projects to allow for autonomous UI optimozations'",
-  "homepage": "https://github.com/PhyllisWong/EvolvSDK",
+  "homepage": "https://github.com/PhyllisWong/EvolvKit",
   "license": {
-    "type": "Apache License, Version 2.0",
+    "type": "APACHE",
     "file": "LICENSE"
   },
   "authors": {
     "PhyllisWong": "phyllis.wong@evolv.ai"
   },
   "source": {
-    "git": "https://github.com/PhyllisWong/EvolvSDK.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/PhyllisWong/EvolvKit.git",
+    "tag": "0.1.2"
   },
   "swift_versions": "5.0",
   "platforms": {

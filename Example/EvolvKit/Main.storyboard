@@ -34,7 +34,7 @@
                                     <color key="textShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </textAttributes>
                                 <items>
-                                    <navigationItem title="Evolv SDK Example App" id="4UR-Ur-iO0"/>
+                                    <navigationItem title="EvolvKit Example App" id="4UR-Ur-iO0"/>
                                 </items>
                             </navigationBar>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LMA-me-O9U">
@@ -113,6 +113,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="checkoutButton" destination="yDA-A0-a1s" id="ht9-z0-r4I"/>
                         <outlet property="textLabel" destination="LMA-me-O9U" id="Y2n-Fz-8hC"/>
                     </connections>
                 </viewController>

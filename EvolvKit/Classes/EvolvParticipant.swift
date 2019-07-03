@@ -6,7 +6,6 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
-import Foundation
 import SwiftyJSON
 
 public class EvolvParticipant {
@@ -14,7 +13,7 @@ public class EvolvParticipant {
   private var userId: String
   private var userAttributes: [String : String]
   
-  fileprivate init(userId: String, sessionId: String, userAttributes: [String: String]) {
+  init(userId: String, sessionId: String, userAttributes: [String: String]) {
     self.userId = userId
     self.sessionId = sessionId
     self.userAttributes = userAttributes
@@ -50,36 +49,35 @@ public class ParticipantBuilder {
   
   /**
    A unique key representing the participant.
-   
    - Parameters:
-   - userId a unique key
+      - userId: A unique key.
    - Returns: this instance of the participant
    */
   
   public func setUserId(userId: String) -> ParticipantBuilder {
-    self.userId = userId;
+    self.userId = userId
     return self
   }
   
   /**
    A unique key representing the participant's session.
    - Parameters:
-   - sessionId a unique key
+      - sessionId: A unique key.
    - Returns: this instance of the participant
    */
   public func setSessionId(sessionId: String) -> ParticipantBuilder {
-    self.sessionId = sessionId;
+    self.sessionId = sessionId
     return self
   }
   
   /**
    Sets the users attributes which can be used to filter users upon.
    - Parameters:
-   - userAttributes a map representing specific attributes that describe the participant
+      - userAttributes: A map representing specific attributes that describe the participant.
    - Returns: this instance of the participant
    */
   public func setUserAttributes(userAttributes: [String : String]) -> ParticipantBuilder {
-    self.userAttributes = userAttributes;
+    self.userAttributes = userAttributes
     return self;
   }
   
@@ -88,10 +86,8 @@ public class ParticipantBuilder {
    - Returns: an EvolvParticipant instance.
    */
   public func build() -> EvolvParticipant {
-    let uid = self.userId
-    let sid = self.sessionId
-    let ua = self.userAttributes
-    let participant = EvolvParticipant(userId: uid, sessionId: sid, userAttributes: ua)
-    return participant
+    self.userAttributes.updateValue(self.userId, forKey: "uid")
+    self.userAttributes.updateValue(self.sessionId, forKey: "sid")
+    return EvolvParticipant(userId: self.userId, sessionId: self.sessionId, userAttributes: self.userAttributes)
   }
 }
