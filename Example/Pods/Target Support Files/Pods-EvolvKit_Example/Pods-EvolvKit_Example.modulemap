@@ -1,0 +1,6 @@
+framework module Pods_EvolvKit_Example {
+  umbrella header "Pods-EvolvKit_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

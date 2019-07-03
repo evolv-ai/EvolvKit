@@ -1,0 +1,14 @@
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+
+use_frameworks!
+
+target 'EvolvKit_Example' do
+  pod 'EvolvKit', :path => '../'
+
+  target 'EvolvKit_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

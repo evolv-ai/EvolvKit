@@ -1,0 +1,39 @@
+PODS:
+  - Alamofire (4.8.2)
+  - EvolvKit (0.1.0):
+    - Alamofire
+    - PromiseKit (~> 6.8)
+    - SwiftyJSON (~> 4.0)
+  - PromiseKit (6.10.0):
+    - PromiseKit/CorePromise (= 6.10.0)
+    - PromiseKit/Foundation (= 6.10.0)
+    - PromiseKit/UIKit (= 6.10.0)
+  - PromiseKit/CorePromise (6.10.0)
+  - PromiseKit/Foundation (6.10.0):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (6.10.0):
+    - PromiseKit/CorePromise
+  - SwiftyJSON (4.3.0)
+
+DEPENDENCIES:
+  - EvolvKit (from `../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - PromiseKit
+    - SwiftyJSON
+
+EXTERNAL SOURCES:
+  EvolvKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  EvolvKit: e755421018d1d692eb269a9f18b7ea930a6fa8cf
+  PromiseKit: 1fdaeb6c0a94a5114fcb814ff3d772b86886ad4e
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
+
+PODFILE CHECKSUM: e3d5063718fbadfd7a29a774b9c5355bad41961c
+
+COCOAPODS: 1.7.3
