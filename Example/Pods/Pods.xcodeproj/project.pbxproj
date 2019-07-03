@@ -32,6 +32,27 @@
 		331CA0CEFBE4588ABA0245DB8931EB2F /* NSNotificationCenter+AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = E42D6F48140C11A58ED2277887DAA421 /* NSNotificationCenter+AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3531C1192598109A85EFCA93FEA115C7 /* Pods-EvolvKit_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DD9D6354DDCF715B67FA13AE1A893E7 /* Pods-EvolvKit_Tests-dummy.m */; };
 		3571F958A3907B3A806E62D50C2550D4 /* NetworkReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EF8AD49A1B8910C7D96543757AC856 /* NetworkReachabilityManager.swift */; };
+		362EC06522CD73A10088E4BA /* EvolvParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC05C22CD73A00088E4BA /* EvolvParticipant.swift */; };
+		362EC06622CD73A10088E4BA /* EvolvClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC06322CD73A00088E4BA /* EvolvClientProtocol.swift */; };
+		362EC06722CD73A10088E4BA /* Allocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC05B22CD73A00088E4BA /* Allocator.swift */; };
+		362EC06822CD73A10088E4BA /* Allocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC05E22CD73A00088E4BA /* Allocations.swift */; };
+		362EC06922CD73A10088E4BA /* EvolvAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC06422CD73A00088E4BA /* EvolvAction.swift */; };
+		362EC06A22CD73A10088E4BA /* Audience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC05722CD73A00088E4BA /* Audience.swift */; };
+		362EC06B22CD73A10088E4BA /* EventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC05922CD73A00088E4BA /* EventEmitter.swift */; };
+		362EC06C22CD73A10088E4BA /* EvolvErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC05822CD73A00088E4BA /* EvolvErrorHandling.swift */; };
+		362EC06D22CD73A10088E4BA /* EvolvClientFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC05A22CD73A00088E4BA /* EvolvClientFactory.swift */; };
+		362EC06E22CD73A10088E4BA /* Execution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC06122CD73A00088E4BA /* Execution.swift */; };
+		362EC06F22CD73A10088E4BA /* AllocationStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC05D22CD73A00088E4BA /* AllocationStoreProtocol.swift */; };
+		362EC07022CD73A10088E4BA /* EvolvConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC06222CD73A00088E4BA /* EvolvConfig.swift */; };
+		362EC07122CD73A10088E4BA /* DefaultAllocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC06022CD73A00088E4BA /* DefaultAllocationStore.swift */; };
+		362EC07222CD73A10088E4BA /* ExecutionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC05F22CD73A00088E4BA /* ExecutionQueue.swift */; };
+		362EC07322CD73A10088E4BA /* EvolvClientImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC05622CD739F0088E4BA /* EvolvClientImpl.swift */; };
+		362EC07622CD743F0088E4BA /* HttpProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC07422CD743F0088E4BA /* HttpProtocol.swift */; };
+		362EC07722CD743F0088E4BA /* EvolvHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC07522CD743F0088E4BA /* EvolvHttpClient.swift */; };
+		362EC07C22CD74520088E4BA /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC07822CD74520088E4BA /* LinkedList.swift */; };
+		362EC07D22CD74520088E4BA /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC07922CD74520088E4BA /* Log.swift */; };
+		362EC07E22CD74520088E4BA /* LinkedQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC07A22CD74520088E4BA /* LinkedQueue.swift */; };
+		362EC07F22CD74520088E4BA /* LruCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362EC07B22CD74520088E4BA /* LruCache.swift */; };
 		3B5C4B70431F65A2EF16D0B420ECDF4B /* NSURLSession+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23FBAA95EE39F56C0C463C7B90BD3E47 /* NSURLSession+Promise.swift */; };
 		44F6053BBE67E3E9C9E642E1202B67AC /* hang.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A736A8D91A652339E8F4625366DE9D4 /* hang.swift */; };
 		4697BA4A804BC5E868F9CC7134C64F30 /* AnyPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CDF2344CDA58D064DFB1329D25ED1B /* AnyPromise.swift */; };
@@ -66,7 +87,7 @@
 		A4C4385BD8C1AB8B4F9A1058BC056C68 /* AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 132966A15AB56FD28521710B3C6DF36C /* AnyPromise.m */; };
 		A5478ECD4AC735C4E0AF061CA8BCAC31 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616C7E55BA4B53780B474D96D77408DD /* Promise.swift */; };
 		A5B9135EC47A777B4407951270567178 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 988E85F45C1B6922D22E42748D706288 /* Foundation.framework */; };
-		AAE549A65DFE425FF4FFF49BCBE0C122 /* ReplaceMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCAF6E41CD67967E2F3A2C88D0D8400 /* ReplaceMe.swift */; };
+		AAE549A65DFE425FF4FFF49BCBE0C122 /* EvolvParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCAF6E41CD67967E2F3A2C88D0D8400 /* EvolvParticipant.swift */; };
 		AFC64B1097F7355FF423D6A73E9C7210 /* TaskDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D233F58BC8DDBCCB549DA25B202792B /* TaskDelegate.swift */; };
 		B30F334B544AAFE738F18FC1D86D30AB /* UIViewController+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B6EE575AE98095E811471106898513 /* UIViewController+AnyPromise.m */; };
 		B7F05EAEFF29AFD53F00F9AD38E7F6E2 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DF26A7CB42B39DA6665B1672DFECE4 /* Box.swift */; };
@@ -157,7 +178,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		002B1E88BA14EBF633CD66EBFBA107E9 /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = PromiseKit.framework; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		002B1E88BA14EBF633CD66EBFBA107E9 /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01CA331E7C3ED2B0D2768375FF345E01 /* SwiftyJSON.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SwiftyJSON.modulemap; sourceTree = "<group>"; };
 		02F469715FB568BEF83250A41B4BF836 /* NSNotificationCenter+Promise.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSNotificationCenter+Promise.swift"; path = "Extensions/Foundation/Sources/NSNotificationCenter+Promise.swift"; sourceTree = "<group>"; };
 		05CDF2344CDA58D064DFB1329D25ED1B /* AnyPromise.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AnyPromise.swift; path = Sources/AnyPromise.swift; sourceTree = "<group>"; };
@@ -172,11 +193,11 @@
 		14C0C25174444EEA262C312CE4B20F07 /* after.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = after.m; path = Sources/after.m; sourceTree = "<group>"; };
 		1860FBEF644155BF82C090AE04E62C76 /* Pods-EvolvKit_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-EvolvKit_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		195680456D789922E8F042DB5733A267 /* Validation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Validation.swift; path = Source/Validation.swift; sourceTree = "<group>"; };
-		19E6B36D810C673AA452A6605C3AF8F3 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		19E6B36D810C673AA452A6605C3AF8F3 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		1A736A8D91A652339E8F4625366DE9D4 /* hang.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = hang.swift; path = Sources/hang.swift; sourceTree = "<group>"; };
 		1AAA6F32BD87DA07259955DDA41B5BCB /* Pods-EvolvKit_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-EvolvKit_Example-Info.plist"; sourceTree = "<group>"; };
 		1B1B489603C73D22927AABB57620425B /* EvolvKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EvolvKit-prefix.pch"; sourceTree = "<group>"; };
-		1CCAF6E41CD67967E2F3A2C88D0D8400 /* ReplaceMe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReplaceMe.swift; path = EvolvKit/Classes/ReplaceMe.swift; sourceTree = "<group>"; };
+		1CCAF6E41CD67967E2F3A2C88D0D8400 /* EvolvParticipant.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EvolvParticipant.swift; path = EvolvKit/Classes/EvolvParticipant.swift; sourceTree = "<group>"; };
 		1D2892B6637FD77061B5D4CCD3E9EAF7 /* race.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = race.m; path = Sources/race.m; sourceTree = "<group>"; };
 		1E78E87BBF3C8588869048F8AB3C7EA5 /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22926B94CAE64EA8D118AD582956A027 /* SwiftyJSON-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyJSON-prefix.pch"; sourceTree = "<group>"; };
@@ -191,8 +212,29 @@
 		2D936C882FE76B894CF468A4937C1E55 /* Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Source/Alamofire.swift; sourceTree = "<group>"; };
 		301D32AC3FA78ABC0E43B5D395E28609 /* CustomStringConvertible.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CustomStringConvertible.swift; path = Sources/CustomStringConvertible.swift; sourceTree = "<group>"; };
 		31CC4391B7257704D0F402BC4902D2CB /* SessionDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionDelegate.swift; path = Source/SessionDelegate.swift; sourceTree = "<group>"; };
+		362EC05622CD739F0088E4BA /* EvolvClientImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvClientImpl.swift; sourceTree = "<group>"; };
+		362EC05722CD73A00088E4BA /* Audience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audience.swift; sourceTree = "<group>"; };
+		362EC05822CD73A00088E4BA /* EvolvErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvErrorHandling.swift; sourceTree = "<group>"; };
+		362EC05922CD73A00088E4BA /* EventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEmitter.swift; sourceTree = "<group>"; };
+		362EC05A22CD73A00088E4BA /* EvolvClientFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvClientFactory.swift; sourceTree = "<group>"; };
+		362EC05B22CD73A00088E4BA /* Allocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Allocator.swift; sourceTree = "<group>"; };
+		362EC05C22CD73A00088E4BA /* EvolvParticipant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvParticipant.swift; sourceTree = "<group>"; };
+		362EC05D22CD73A00088E4BA /* AllocationStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllocationStoreProtocol.swift; sourceTree = "<group>"; };
+		362EC05E22CD73A00088E4BA /* Allocations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Allocations.swift; sourceTree = "<group>"; };
+		362EC05F22CD73A00088E4BA /* ExecutionQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutionQueue.swift; sourceTree = "<group>"; };
+		362EC06022CD73A00088E4BA /* DefaultAllocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAllocationStore.swift; sourceTree = "<group>"; };
+		362EC06122CD73A00088E4BA /* Execution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Execution.swift; sourceTree = "<group>"; };
+		362EC06222CD73A00088E4BA /* EvolvConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvConfig.swift; sourceTree = "<group>"; };
+		362EC06322CD73A00088E4BA /* EvolvClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvClientProtocol.swift; sourceTree = "<group>"; };
+		362EC06422CD73A00088E4BA /* EvolvAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvAction.swift; sourceTree = "<group>"; };
+		362EC07422CD743F0088E4BA /* HttpProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpProtocol.swift; sourceTree = "<group>"; };
+		362EC07522CD743F0088E4BA /* EvolvHttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvHttpClient.swift; sourceTree = "<group>"; };
+		362EC07822CD74520088E4BA /* LinkedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
+		362EC07922CD74520088E4BA /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		362EC07A22CD74520088E4BA /* LinkedQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedQueue.swift; sourceTree = "<group>"; };
+		362EC07B22CD74520088E4BA /* LruCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LruCache.swift; sourceTree = "<group>"; };
 		3798FAC3E9A9B3982DDDC1CE78C025C6 /* Alamofire-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Alamofire-Info.plist"; sourceTree = "<group>"; };
-		3A03A34613BC8BF04778A87846DDA1E8 /* Pods_EvolvKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_EvolvKit_Tests.framework; path = "Pods-EvolvKit_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A03A34613BC8BF04778A87846DDA1E8 /* Pods_EvolvKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EvolvKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D59B9BFC707CC1EE63D8381A089E721 /* when.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = when.m; path = Sources/when.m; sourceTree = "<group>"; };
 		3DD9D6354DDCF715B67FA13AE1A893E7 /* Pods-EvolvKit_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-EvolvKit_Tests-dummy.m"; sourceTree = "<group>"; };
 		3F1016F27B2590ED88C64049ABB1A5A1 /* Notifications.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Notifications.swift; path = Source/Notifications.swift; sourceTree = "<group>"; };
@@ -210,7 +252,7 @@
 		59B092620843A87E8C85F343B7F1F23E /* ParameterEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ParameterEncoding.swift; path = Source/ParameterEncoding.swift; sourceTree = "<group>"; };
 		5A1EAE50139C8CE79D38B66B7FAE0431 /* after.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = after.swift; path = Sources/after.swift; sourceTree = "<group>"; };
 		5D2F754A73320B9B9B9648E31CF4CE82 /* EvolvKit.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = EvolvKit.modulemap; sourceTree = "<group>"; };
-		5D797E9A5C5782CE845840781FA1CC81 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Alamofire.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D797E9A5C5782CE845840781FA1CC81 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E765F01D733133BE331FBBDB0ECAD05 /* NSURLSession+AnyPromise.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSURLSession+AnyPromise.h"; path = "Extensions/Foundation/Sources/NSURLSession+AnyPromise.h"; sourceTree = "<group>"; };
 		5EF880152900FAA5E878EEEE619A5629 /* Pods-EvolvKit_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-EvolvKit_Tests-umbrella.h"; sourceTree = "<group>"; };
 		616C7E55BA4B53780B474D96D77408DD /* Promise.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = Sources/Promise.swift; sourceTree = "<group>"; };
@@ -237,8 +279,8 @@
 		988E85F45C1B6922D22E42748D706288 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		988FC6CDAF0EDB08CAD7420952B71370 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		994519A4B30B7858F37EB748CB74E7EB /* Process+Promise.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Process+Promise.swift"; path = "Extensions/Foundation/Sources/Process+Promise.swift"; sourceTree = "<group>"; };
-		9B1577247B28D349A11C7DF3835C40B9 /* EvolvKit.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = EvolvKit.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9B1577247B28D349A11C7DF3835C40B9 /* EvolvKit.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = EvolvKit.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A0E9AEA1D920DC541ADAA63A3D57D0D6 /* EvolvKit-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "EvolvKit-Info.plist"; sourceTree = "<group>"; };
 		A2BB04EEEA9B1B0524057714CC52D953 /* Error.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Sources/Error.swift; sourceTree = "<group>"; };
 		A5DDAE7BB4C2FA2D339398CCC1ED8FB3 /* SwiftyJSON.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = Source/SwiftyJSON/SwiftyJSON.swift; sourceTree = "<group>"; };
@@ -254,11 +296,11 @@
 		C3CB984025ABF0A50A254DEC882461FF /* Pods-EvolvKit_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-EvolvKit_Example-umbrella.h"; sourceTree = "<group>"; };
 		C813F5674D8B962D2516670E6EDA5229 /* EvolvKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EvolvKit-umbrella.h"; sourceTree = "<group>"; };
 		CEF25AD2DF9649639AA466A448083A94 /* SwiftyJSON-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SwiftyJSON-Info.plist"; sourceTree = "<group>"; };
-		D8B673E2F4A38940E96C56978DE43C2C /* Pods_EvolvKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_EvolvKit_Example.framework; path = "Pods-EvolvKit_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8B673E2F4A38940E96C56978DE43C2C /* Pods_EvolvKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EvolvKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8BD8ABA438EE43836BC5FF3BF572695 /* hang.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = hang.m; path = Sources/hang.m; sourceTree = "<group>"; };
 		D9EEE7E2466E142B847292C0C49BA2AD /* PromiseKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PromiseKit-prefix.pch"; sourceTree = "<group>"; };
 		DC5A65B5711CFFD8FCDA8E8CBF41E3C1 /* UIView+AnyPromise.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIView+AnyPromise.h"; path = "Extensions/UIKit/Sources/UIView+AnyPromise.h"; sourceTree = "<group>"; };
-		E23C076BA70925415F490FEDB215DA92 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftyJSON.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E23C076BA70925415F490FEDB215DA92 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E31E0F136ED5275E240208C5F5294C34 /* Response.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Response.swift; path = Source/Response.swift; sourceTree = "<group>"; };
 		E32AF9517744E95AB1B206B77AF63E80 /* fwd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = fwd.h; path = Sources/fwd.h; sourceTree = "<group>"; };
 		E42D6F48140C11A58ED2277887DAA421 /* NSNotificationCenter+AnyPromise.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+AnyPromise.h"; path = "Extensions/Foundation/Sources/NSNotificationCenter+AnyPromise.h"; sourceTree = "<group>"; };
@@ -266,10 +308,10 @@
 		E50E5DAB5C8BECC9ECE37CDF310750DF /* Pods-EvolvKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-EvolvKit_Example.release.xcconfig"; sourceTree = "<group>"; };
 		E6B6EE575AE98095E811471106898513 /* UIViewController+AnyPromise.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+AnyPromise.m"; path = "Extensions/UIKit/Sources/UIViewController+AnyPromise.m"; sourceTree = "<group>"; };
 		EC830D2620A6F51F01E09996D4F0C85F /* ResponseSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResponseSerialization.swift; path = Source/ResponseSerialization.swift; sourceTree = "<group>"; };
-		EDA51E6D6B4DD5527DC5278EDB5AE092 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		EDA51E6D6B4DD5527DC5278EDB5AE092 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F34D586E29B7D89F6EF566C4C19B961B /* Pods-EvolvKit_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-EvolvKit_Example-dummy.m"; sourceTree = "<group>"; };
 		F3951C1F7B8C5B4B368514C7A2D0A34C /* Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Alamofire-umbrella.h"; sourceTree = "<group>"; };
-		F3BCFFB468C3BF25A72D5C449DD46C25 /* EvolvKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = EvolvKit.framework; path = EvolvKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3BCFFB468C3BF25A72D5C449DD46C25 /* EvolvKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EvolvKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41018437C967E0D145EAAE2A0093596 /* NSURLSession+AnyPromise.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSURLSession+AnyPromise.m"; path = "Extensions/Foundation/Sources/NSURLSession+AnyPromise.m"; sourceTree = "<group>"; };
 		F5D07E1A63FD31C49401C899882F0F49 /* AnyPromise.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AnyPromise.h; path = Sources/AnyPromise.h; sourceTree = "<group>"; };
 		F7103AF4569A45F758897EC844790087 /* Pods-EvolvKit_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-EvolvKit_Example-frameworks.sh"; sourceTree = "<group>"; };
@@ -345,7 +387,6 @@
 				911C7D0B8F43E2CACE2FF5C1840632E2 /* Support Files */,
 				739EFA4E398ED92B8B71F3BF96E25A3E /* UIKit */,
 			);
-			name = PromiseKit;
 			path = PromiseKit;
 			sourceTree = "<group>";
 		};
@@ -380,7 +421,6 @@
 				195680456D789922E8F042DB5733A267 /* Validation.swift */,
 				51AB8770BC364DB6CE6CAF87F8890D26 /* Support Files */,
 			);
-			name = Alamofire;
 			path = Alamofire;
 			sourceTree = "<group>";
 		};
@@ -395,6 +435,26 @@
 				E23C076BA70925415F490FEDB215DA92 /* SwiftyJSON.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		362EC05422CD739F0088E4BA /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				362EC07922CD74520088E4BA /* Log.swift */,
+				362EC07A22CD74520088E4BA /* LinkedQueue.swift */,
+				362EC07822CD74520088E4BA /* LinkedList.swift */,
+				362EC07B22CD74520088E4BA /* LruCache.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		362EC05522CD739F0088E4BA /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				362EC07422CD743F0088E4BA /* HttpProtocol.swift */,
+				362EC07522CD743F0088E4BA /* EvolvHttpClient.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 		382322C1A22FF2CA79837CCA93C262E8 /* Support Files */ = {
@@ -570,7 +630,6 @@
 				A5DDAE7BB4C2FA2D339398CCC1ED8FB3 /* SwiftyJSON.swift */,
 				382322C1A22FF2CA79837CCA93C262E8 /* Support Files */,
 			);
-			name = SwiftyJSON;
 			path = SwiftyJSON;
 			sourceTree = "<group>";
 		};
@@ -618,7 +677,24 @@
 		E9D63530A7CDE83BC04621A90CD1215E /* EvolvKit */ = {
 			isa = PBXGroup;
 			children = (
-				1CCAF6E41CD67967E2F3A2C88D0D8400 /* ReplaceMe.swift */,
+				362EC05E22CD73A00088E4BA /* Allocations.swift */,
+				362EC05D22CD73A00088E4BA /* AllocationStoreProtocol.swift */,
+				362EC05B22CD73A00088E4BA /* Allocator.swift */,
+				362EC05722CD73A00088E4BA /* Audience.swift */,
+				362EC06022CD73A00088E4BA /* DefaultAllocationStore.swift */,
+				362EC06422CD73A00088E4BA /* EvolvAction.swift */,
+				362EC05A22CD73A00088E4BA /* EvolvClientFactory.swift */,
+				362EC05622CD739F0088E4BA /* EvolvClientImpl.swift */,
+				362EC06322CD73A00088E4BA /* EvolvClientProtocol.swift */,
+				362EC06222CD73A00088E4BA /* EvolvConfig.swift */,
+				362EC05922CD73A00088E4BA /* EventEmitter.swift */,
+				362EC05822CD73A00088E4BA /* EvolvErrorHandling.swift */,
+				362EC05C22CD73A00088E4BA /* EvolvParticipant.swift */,
+				1CCAF6E41CD67967E2F3A2C88D0D8400 /* EvolvParticipant.swift */,
+				362EC06122CD73A00088E4BA /* Execution.swift */,
+				362EC05F22CD73A00088E4BA /* ExecutionQueue.swift */,
+				362EC05522CD739F0088E4BA /* Networking */,
+				362EC05422CD739F0088E4BA /* Utility */,
 				6E1E785732AEEA606404B2B7243FB0A0 /* Pod */,
 				41480F279AED7C09E00EEDB74335CFBA /* Support Files */,
 			);
@@ -895,15 +971,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				362EC07F22CD74520088E4BA /* LruCache.swift in Sources */,
 				83956E20859CDBBE7BC38ABADE0170FB /* AFError.swift in Sources */,
 				1945CD5D63A1C164AEAAA9A33E85571E /* Alamofire-dummy.m in Sources */,
+				362EC07D22CD74520088E4BA /* Log.swift in Sources */,
 				BEE6B677416CA71C981D1D3F60B18C96 /* Alamofire.swift in Sources */,
 				D3D8C379C6E4FB487E5ABD6800AD7B7E /* DispatchQueue+Alamofire.swift in Sources */,
 				1986B50C74F1697EA43F68335C93CEB3 /* MultipartFormData.swift in Sources */,
 				3571F958A3907B3A806E62D50C2550D4 /* NetworkReachabilityManager.swift in Sources */,
+				362EC07C22CD74520088E4BA /* LinkedList.swift in Sources */,
 				132E0F619E4338E5D1B27E4C72076B3F /* Notifications.swift in Sources */,
+				362EC07622CD743F0088E4BA /* HttpProtocol.swift in Sources */,
 				0C5E11DE24DAA737704B355F5F2F3426 /* ParameterEncoding.swift in Sources */,
 				98A929C8E9012AB167672714FFD2113C /* Request.swift in Sources */,
+				362EC07E22CD74520088E4BA /* LinkedQueue.swift in Sources */,
 				D65C254F5ABF2CB5ECEE50FE8F8E1A80 /* Response.swift in Sources */,
 				E3747EC31FCCA97D75A81FC700CF7E24 /* ResponseSerialization.swift in Sources */,
 				64744C911253C3E01461FAD7C935C8D7 /* Result.swift in Sources */,
@@ -913,6 +994,7 @@
 				AFC64B1097F7355FF423D6A73E9C7210 /* TaskDelegate.swift in Sources */,
 				933FDA5970AA525D6CB92BFEBA2BAB4A /* Timeline.swift in Sources */,
 				53791F5E5F07400F92CFDFC89A432305 /* Validation.swift in Sources */,
+				362EC07722CD743F0088E4BA /* EvolvHttpClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -937,8 +1019,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				362EC06522CD73A10088E4BA /* EvolvParticipant.swift in Sources */,
+				362EC06622CD73A10088E4BA /* EvolvClientProtocol.swift in Sources */,
 				DCBAF2E55D007EC333396D7BE8B9BC27 /* EvolvKit-dummy.m in Sources */,
-				AAE549A65DFE425FF4FFF49BCBE0C122 /* ReplaceMe.swift in Sources */,
+				362EC07322CD73A10088E4BA /* EvolvClientImpl.swift in Sources */,
+				362EC06D22CD73A10088E4BA /* EvolvClientFactory.swift in Sources */,
+				362EC06F22CD73A10088E4BA /* AllocationStoreProtocol.swift in Sources */,
+				362EC06822CD73A10088E4BA /* Allocations.swift in Sources */,
+				362EC07122CD73A10088E4BA /* DefaultAllocationStore.swift in Sources */,
+				362EC07022CD73A10088E4BA /* EvolvConfig.swift in Sources */,
+				362EC07222CD73A10088E4BA /* ExecutionQueue.swift in Sources */,
+				362EC06C22CD73A10088E4BA /* EvolvErrorHandling.swift in Sources */,
+				362EC06E22CD73A10088E4BA /* Execution.swift in Sources */,
+				362EC06722CD73A10088E4BA /* Allocator.swift in Sources */,
+				362EC06922CD73A10088E4BA /* EvolvAction.swift in Sources */,
+				AAE549A65DFE425FF4FFF49BCBE0C122 /* EvolvParticipant.swift in Sources */,
+				362EC06B22CD73A10088E4BA /* EventEmitter.swift in Sources */,
+				362EC06A22CD73A10088E4BA /* Audience.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1228,8 +1325,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
