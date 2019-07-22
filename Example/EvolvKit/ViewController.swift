@@ -16,59 +16,65 @@ class ViewController: UIViewController {
   @IBOutlet weak var textLabel: UILabel!
   @IBOutlet weak var checkoutButton: UIButton!
   
-//  let store : AllocationStoreProtocol
-//  var allocations = [JSON]()
-//  var client : EvolvClientProtocol
-//  var httpClient: HttpProtocol
-//  let LOGGER = Log.logger
+  var allocations = [JSON]()
+  var client : EvolvClientProtocol
+  var httpClient: HttpProtocol
+  let LOGGER = Log.logger
+  let store : AllocationStoreProtocol
+  
   
   @IBAction func didPressCheckOut(_ sender: Any) {
-    //client.emitEvent(key: "conversion")
+    client.emitEvent(key: "conversion")
     self.textLabel.text = "Conversion!"
   }
   
   @IBAction func didPressProductInfo(_ sender: Any) {
-    self.textLabel.text = "Some really cool product info!"
+    self.textLabel.text = "Some really cool product info"
   }
   
-  // FIXME: Migrate setup to app delegate
+  
   required init?(coder aDecoder: NSCoder) {
     /*
      When you receive the fetched json from the participants API, it will be as type String.
-     If you use the EvolvHttpClient, the json will be parsed with SwiftyJSON (required data type for our implementation of the cache.
-     This example shows how the data can be structured, your implementation can work directly with the raw String and serialize into Swift if you choose.
-     Uncomment each option one at a time to see the UI change based on the allocation.
+     If you use the EvolvHttpClient, the json will be parsed with SwiftyJSON
+     (required data type for the AllocationsStoreProtocol).
+     
+     This example shows how the data can be structured in your view controllers,
+     your implementation can work directly with the raw string and serialize into SwiftyJSON.
      */
     
+    self.store = CustomAllocationStore()
+    httpClient = EvolvHttpClient()
+    
+    /// Uncomment each option to see the UI change based on the allocation.
     let option1 = "option_1"
-    //let option3 = "option_3"
-    //let option7 = "option_7"
-    let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_1\",\"buttons\":{\"checkout\":{\"text\":\"\(option1)\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"오늘추천\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
-    // store = CustomAllocationStore()
+    let option3 = "option_3"
+    // let option7 = "option_7"
+    
+    let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"\(option3)\",\"buttons\":{\"checkout\":{\"text\":\"\(option1)\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
     
     if let dataFromString = myStoredAllocation.data(using: String.Encoding.utf8, allowLossyConversion: false) {
       do {
-        //self.allocations = try JSON(data: dataFromString).arrayValue
-        // store.put(uid: "sandbox_user", allocations: self.allocations)
+        self.allocations = try JSON(data: dataFromString).arrayValue
+        store.put(uid: "sandbox_user", allocations: self.allocations)
       } catch {
-        //let message = "Error converting string json to SwiftyJSON"
-        //LOGGER.log(.error, message: message)
+        let message = "Error converting string json to SwiftyJSON"
+        LOGGER.log(.error, message: message)
       }
     }
     
-    //httpClient = EvolvHttpClient()
     
     /// - Build config with custom timeout and custom allocation store
     // set client to use sandbox environment
-//    let config = EvolvConfig.builder(environmentId: "sandbox", httpClient: httpClient)
-//      .setEvolvAllocationStore(allocationStore: store)
-//      .build()
+    let config = EvolvConfig.builder(environmentId: "sandbox", httpClient: httpClient)
+      .setEvolvAllocationStore(allocationStore: store)
+      .build()
     
     /// - Initialize the client with a stored user
     /// fetches allocations from Evolv, and stores them in a custom store
-//    client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
-//      .setUserId(userId: "sandbox_user").build()).client as! EvolvClientImpl
-    
+    client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
+      .setUserId(userId: "sandbox_user").build()).client as! EvolvClientImpl
+
     /// - Initialize the client with a new user
     /// - Uncomment this line if you prefer this initialization.
     // client = EvolvClientFactory(config: config) as! EvolvClientProtocol
@@ -76,27 +82,33 @@ class ViewController: UIViewController {
     super.init(coder: aDecoder)
   }
   
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    
     guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
     statusBarView.backgroundColor = UIColor(red: 0.0, green: 0.3, blue: 0.3, alpha: 1.0)
     
-    
-    //client.subscribe(key: "ui.layout", defaultValue: "#000000", function: setContentViewWith)
-    
-    //client.subscribe(key: "ui.buttons.checkout.text", defaultValue: "오늘의추천", function: changeButtonText)
-    //client.confirm()
-    
+    client.subscribe(key: "ui.layout", defaultValue: "#000000", function: setContentViewWith)
+    client.subscribe(key: "ui.buttons.checkout.text", defaultValue: "오늘의추천", function: changeButtonText)
+    client.confirm()
   }
   
   
-  /// Example of a closure that will affect the UI
+  override var preferredStatusBarStyle: UIStatusBarStyle {
+    return .lightContent
+  }
+  
+  
+  /// Trailing closure example that will apply the treatments from the allocation.
+  ///
+  /// - Parameter layoutOption: Implementer decides what the data type will be.
+  ///   Needs to match subscribe method's default value data type.
+  /// - Use DispatchQueue to ensure this operation runs on the UI thread
   lazy var changeButtonText : (String) -> () = { buttonTextOption in
     DispatchQueue.main.async {
       switch buttonTextOption {
       case "option_1":
-        self.checkoutButton.setTitle("당일배송", for: .normal)
+        self.checkoutButton.setTitle("Begin Secure Checkout", for: .normal)
       case "option_2":
         self.checkoutButton.setTitle("Begin Checkout", for: .normal)
       case "option_3":
@@ -105,22 +117,17 @@ class ViewController: UIViewController {
         self.checkoutButton.setTitle("Checkout", for: .normal)
       }
     }
-    print("FOO")
-  }
-  
-  override var preferredStatusBarStyle: UIStatusBarStyle {
-    return .lightContent
   }
 }
 
 private extension ViewController {
   
-  /// This function can be a simple function, a closure, or any execution that will apply the treatments from the allocation.
+  /// Simple function example that will apply the treatments from the allocation.
   ///
   /// - Parameter layoutOption: Implementer decides what the data type will be.
   ///   Needs to match subscribe method's default value data type.
+  /// - Use DispatchQueue to ensure this operation runs on the UI thread
   func setContentViewWith(_ layoutOption: String) -> () {
-    // this operation needs to run on the UI thread
     DispatchQueue.main.async {
       switch layoutOption {
       case "option_1":
