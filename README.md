@@ -15,7 +15,7 @@ sudo gem install cocoapods
 
 ## Installation
 
-EvolvKit is available through [CocoaPods](https://cocoapods.org). To install
+EvolvKit is available through [CocoaPods](https://cocoapods.org/pods/EvolvKit). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
@@ -48,13 +48,13 @@ import EvolvKit
 
 1. Build an EvolvConfig instance.
 ```swift
-let config: EvolvConfig = EvolvConfig.builder(eid: <environment_id>,
-                                              httpClient: <http_client>).build()
+let config: EvolvConfig = EvolvConfig.builder(eid: <environment_id>, httpClient: <http_client>).build()
 ```
 
 2. Initialize the EvolvClient.
 ```swift
-let client: EvolvClient = EvolvClientFactory.init(config)
+let client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
+//      .setUserId(userId: "sandbox_user").build()).client as! EvolvClientImpl
 ```
 
 ### Confirm the Allocation
@@ -70,7 +70,7 @@ records the participant's allocation and sends the information back to Evolv.*
 
 1. Retrieve values from Evolv.
 ```swift
-let value: T = client.get(key:<key_for_value>, defaultValue:<default_value>)
+let value = client.get(key:<key_for_value>, defaultValue:<default_value>)
 ```
 
 *Note: The return value's type is decided by the provided default value's type. If there is an issue retrieving the
@@ -84,7 +84,7 @@ subscribe to a value and apply any actions as a result of it asynchronously.
 
 1. Subscribe to a value from Evolv.
 ```swift
-client?.subscribe(key: <key_for_value>, defaultValue: <default_value>, function: <closure>)
+client.subscribe(key: <key_for_value>, defaultValue: <default_value>, function: <closure>)
 ```
 
 *Note: The return value's type is decided by the provided default value's type. If there is an issue retrieving the
@@ -127,12 +127,16 @@ implementing the EvolvAllocationStore interface. You can supply the custom alloc
 
 1. Supply the allocation store to the client.
 ```swift
-let config: EvolvConfig = EvolvConfig.Builder(eid: <environment_id>)
-.setEvolvAllocationStore(allocationStore: <custom_store>)
-.build()
+let config = EvolvConfig.Builder(eid: <environment_id>)
+  .setEvolvAllocationStore(allocationStore: <custom_store>)
+  .build()
 
-let client: EvolvClientProtocol = EvolvClientImpl(<config>, <eventEmitter>, <futureAllocations>, <previousAllocations>, <participant>)
+let client = EvolvClientImpl(<config>, <eventEmitter>, <futureAllocations>, <previousAllocations>, <participant>)
 
+or
+
+let client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
+      .setUserId(userId: "sandbox_user").build()).client as! EvolvClientImpl
 ```
 
 
