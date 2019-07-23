@@ -49,8 +49,8 @@ class ViewController: UIViewController {
     // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_1\",\"buttons\":{\"checkout\":{\"text\":\"option_1\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
     // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_2\",\"buttons\":{\"checkout\":{\"text\":\"option_2\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
     // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_3\",\"buttons\":{\"checkout\":{\"text\":\"option_3\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
-    let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_4\",\"buttons\":{\"checkout\":{\"text\":\"option_7\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
-    // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_7\",\"buttons\":{\"checkout\":{\"text\":\"option_7\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
+    // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_4\",\"buttons\":{\"checkout\":{\"text\":\"option_7\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
+    let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_7\",\"buttons\":{\"checkout\":{\"text\":\"option_7\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
     
     if let dataFromString = myStoredAllocation.data(using: String.Encoding.utf8, allowLossyConversion: false) {
       do {
@@ -87,7 +87,7 @@ class ViewController: UIViewController {
     statusBarView.backgroundColor = UIColor(red: 0.0, green: 0.3, blue: 0.3, alpha: 1.0)
 
     client.subscribe(key: "ui.layout", defaultValue: "#000000", function: setBackgroundColor)
-    client.subscribe(key: "ui.buttons.checkout.text", defaultValue: "오늘의추천", function: changeButtonText)
+    client.subscribe(key: "ui.buttons.checkout.text", defaultValue: "보안 체크 아웃 시작", function: changeButtonText)
     client.confirm()
   }
   
@@ -107,11 +107,11 @@ class ViewController: UIViewController {
       case "option_1":
         self.checkoutButton.setTitle("Begin Secure Checkout", for: .normal)
       case "option_2":
-        self.checkoutButton.setTitle("Checkout", for: .normal)
+        self.checkoutButton.setTitle("CHECKOUT", for: .normal)
       case "option_3":
         self.checkoutButton.setTitle("Start Checking Out", for: .normal)
       default:
-        self.checkoutButton.setTitle("오늘의추천", for: .normal)
+        self.checkoutButton.setTitle("보안 체크 아웃 시작", for: .normal)
       }
     }
   }
@@ -128,18 +128,18 @@ private extension ViewController {
     DispatchQueue.main.async {
       switch layoutOption {
       case "option_1":
-        self.view.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1.0)
+        self.view.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1.0) // yellow
         
       case "option_2":
-        self.view.backgroundColor = UIColor(red: 0.6, green: 0.9, blue: 0.5, alpha: 1.0)
+        self.view.backgroundColor = UIColor(red: 0.6, green: 0.9, blue: 0.5, alpha: 1.0) // light green
         
       case "option_3":
-        self.view.backgroundColor = UIColor(red: 32/255, green: 79/255, blue: 79/255, alpha: 1)
+        self.view.backgroundColor = UIColor(red: 32/255, green: 79/255, blue: 79/255, alpha: 1) // dark green
         
       case "option_4":
-        self.view.backgroundColor = UIColor(red: 255/255, green: 176/255, blue: 198/255, alpha: 1)
+        self.view.backgroundColor = UIColor(red: 255/255, green: 176/255, blue: 198/255, alpha: 1) // pink color
       default:
-        self.view.backgroundColor = UIColor(hexString: layoutOption)
+        self.view.backgroundColor = UIColor(hexString: layoutOption) // light turquoise (control)
       }
     }
   }
