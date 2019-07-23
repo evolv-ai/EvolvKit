@@ -52,7 +52,6 @@ public class EvolvClientImpl : EvolvClientProtocol {
       execution.executeWithDefault()
     }
 
-    
     let allocationStatus = allocator.getAllocationStatus()
     if allocationStatus == Allocator.AllocationStatus.FETCHING {
       executionQueue.enqueue(execution: execution)

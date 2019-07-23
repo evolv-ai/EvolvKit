@@ -26,12 +26,13 @@ class AllocationStoreMock: AllocationStoreProtocol {
   var expectPutExpectation : XCTestExpectation?
   
   private var mockedGet: (String) -> [JSON] = { _ in
-    // XCTFail("unexpected call to set")
-    return []
+    let rawAllocation = AllocationsTest.rawAllocation
+    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    return allocations
   }
   
   private var mockedPut: (String, [JSON]) -> Void = { _,_  in
-    XCTFail("unexpected call to set")
+    
   }
   
   

@@ -230,10 +230,8 @@ class AllocatorTest: XCTestCase {
     let participant = EvolvParticipant.builder().build()
     let rawAllocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
     let allocationsEmpty = mockAllocationStore.get(uid: participant.getUserId())
-    var allocationsPromiseResolved = [JSON]()
     let allocator = Allocator(config: mockConfig, participant: participant)
     let allocationsPromise = allocator.fetchAllocations()
-    
 
     XCTAssertNotNil(allocationsPromise)
     XCTAssertNotEqual(rawAllocations, allocationsEmpty)

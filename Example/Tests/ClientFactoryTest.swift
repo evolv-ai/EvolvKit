@@ -63,12 +63,16 @@ class ClientFactoryTest: XCTestCase {
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
     var responsePromise = mockHttpClient.get(url: URL(string: anyString(length: 12))!)
-    responsePromise = Promise.value(rawAllocation)
+    responsePromise = Promise { resolver in
+      resolver.fulfill(rawAllocation)
+    }
     
+    XCTAssertNotNil(responsePromise)
     XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
     
     let client = EvolvClientFactory(config: mockConfig)
     XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
+    XCTAssertNotNil(client)
   }
 
   fileprivate func anyString(length: Int) -> String {
@@ -78,18 +82,23 @@ class ClientFactoryTest: XCTestCase {
   
   func testClientInitSameUser() {
     let participant = EvolvParticipant.builder().setUserId(userId: "test_uid").build()
-    var mockClient = HttpClientMock()
+    let mockClient = HttpClientMock()
     
     let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
     mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(mockConfig, actualConfig,
                                                                              mockExecutionQueue, mockClient, mockAllocationStore)
     
     let previousAllocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
-    let previousUid = previousAllocations[0]["uid"].rawString()
-    // when(mockAllocationStore.get(participant.getUserId())).thenReturn(previousAllocations)
+    let previousUid = previousAllocations[0]["uid"].rawString()!
+    
+    mockAllocationStore.put(uid: previousUid, allocations: previousAllocations)
+    let cachedAllocations = mockAllocationStore.get(uid: previousUid)
+    
+    XCTAssertEqual(cachedAllocations, previousAllocations)
     
     let client = EvolvClientFactory(config: mockConfig, participant: participant)
-    // verify(mockAllocationStore, times(2)).get(participant.getUserId())
-    // Assert.assertTrue(client instanceof AscendClient)
+    let verifiedClient = client.client as EvolvClientProtocol
+    
+    XCTAssertNotNil(verifiedClient)
   }
 }

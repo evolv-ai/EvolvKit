@@ -169,9 +169,6 @@ class EventEmitterTest: XCTestCase {
   
   func testGenericEvent() {
     let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
-    let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig, mockExecutionQueue,
-                                                                            mockHttpClient, mockAllocationStore)
-    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
     let participant = EvolvParticipant.builder().build()
     let emitter = EmitterMock(config: actualConfig, participant: participant)
     
@@ -182,9 +179,6 @@ class EventEmitterTest: XCTestCase {
   
   func testGenericEventWithScore() {
     let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
-    let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig, mockExecutionQueue,
-                                                                            mockHttpClient, mockAllocationStore)
-    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
     let participant = EvolvParticipant.builder().build()
     let emitter = EmitterMock(config: actualConfig, participant: participant)
     

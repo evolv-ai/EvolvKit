@@ -13,8 +13,8 @@ class ClientImplTest: XCTestCase {
   var mockAllocator : Allocator!
   
   private let participant = EvolvParticipant(userId: "test_user", sessionId: "test_session", userAttributes: [
-      "userId": "test_user",
-      "sessionId": "test_session"
+    "userId": "test_user",
+    "sessionId": "test_session"
     ])
   
   private let environmentId = "test_env"
@@ -51,49 +51,37 @@ class ClientImplTest: XCTestCase {
     }
   }
   
-  func testSubscribe_AllocationStoreNotEmpty_SubscriptionKeyIsValid() {
-    let subscriptionKey = "search.weighting"
+  func testSubscribeStoreNotEmptySubscriptionKey_Valid() {
+    let subscriptionKey = "search.weighting.distance"
     let defaultValue: Double = 0.001
-    let applyFunction: (Double) -> Void = { value in
-      XCTAssertNotEqual(defaultValue, value)
-    }
-    
-    let participantId = "id"
-    
-    let participant = EvolvParticipant(userId: participantId, sessionId: "sid", userAttributes: [
-      "userId": "id",
-      "sessionId": "sid"
-      ])
     
     self.mockAllocationStore.expectGet { uid -> [JSON] in
-      XCTAssertEqual(uid, participantId)
-      
-      let myStoredAllocation = "[{\"uid\":\"\(participantId)\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_1\",\"buttons\":{\"checkout\":{\"text\":\"Begin Secure Checkout\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Product Specifications\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
-      let dataFromString = myStoredAllocation.data(using: String.Encoding.utf8, allowLossyConversion: false)!
-      let allocations = try! JSON(data: dataFromString).arrayValue
-      
+      XCTAssertEqual(uid, self.participant.getUserId())
+      let allocations = AllocationsTest().parseRawAllocations(raw: self.rawAllocation)
       return allocations
     }
     
     let config = EvolvConfig("https", "test.evolv.ai", "v1", "test_env", self.mockAllocationStore, self.mockHttpClient)
     let emitter = EventEmitter(config: config, participant: participant)
-    let promise = Promise<[JSON]>.pending().promise
-    let allocator = Allocator(config: config, participant: participant)
+    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
     
-    let client = EvolvClientImpl(config, emitter, promise, allocator, false, participant)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
+    
+    let applyFunction: (Double) -> Void = { value in
+      XCTAssertNotEqual(defaultValue, value)
+    }
+    
+    let client = EvolvClientImpl(config, emitter, promise, mockAllocator, false, participant)
     client.subscribe(key: subscriptionKey, defaultValue: defaultValue, function: applyFunction)
     
     self.waitForExpectations(timeout: 5)
   }
   
-  func testSubscribe_AllocationStoreNotEmpty_SubscriptionKeyInvalid() {
+  func testSubscribeStoreNotEmptySubscriptionKey_Invalid() {
     let subscriptionKey = "search.weighting.distance.bubbles"
     let defaultValue: Double = 0.001
-    
-    let applyFunction: (Double) -> Void = { value in
-      XCTAssertEqual(defaultValue, value)
-    }
-    
     let participantId = "id"
     
     let participant = EvolvParticipant(userId: participantId, sessionId: "sid", userAttributes: [
@@ -102,22 +90,24 @@ class ClientImplTest: XCTestCase {
       ])
     
     self.mockAllocationStore.expectGet { uid -> [JSON] in
-      XCTAssertEqual(uid, participantId)
-      
-      let myStoredAllocation = "[{\"uid\":\"\(participantId)\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_1\",\"buttons\":{\"checkout\":{\"text\":\"Begin Secure Checkout\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Product Specifications\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
-      let dataFromString = myStoredAllocation.data(using: String.Encoding.utf8, allowLossyConversion: false)!
-      let allocations = try! JSON(data: dataFromString).arrayValue
-      
+      XCTAssertEqual(uid, participant.getUserId())
+      let allocations = AllocationsTest().parseRawAllocations(raw: self.rawAllocation)
       return allocations
     }
     
-    
     let config = EvolvConfig("https", "test.evolv.ai", "v1", "test_env", self.mockAllocationStore, self.mockHttpClient)
     let emitter = EventEmitter(config: config, participant: participant)
-    let promise = Promise<[JSON]>.pending().promise
-    let allocator = Allocator(config: config, participant: participant)
+    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
     
-    let client = EvolvClientImpl(config, emitter, promise, allocator, false, participant)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
+    
+    let applyFunction: (Double) -> Void = { value in
+      XCTAssertEqual(defaultValue, value)
+    }
+    
+    let client = EvolvClientImpl(config, emitter, promise, mockAllocator, false, participant)
     client.subscribe(key: subscriptionKey, defaultValue: defaultValue, function: applyFunction)
     
     self.waitForExpectations(timeout: 5)
@@ -129,9 +119,10 @@ class ClientImplTest: XCTestCase {
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
     
-    var promise = Promise<[JSON]>.pending().promise
-    let responsePromise = Promise.value(rawAllocation)
     let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
     let key = "testKey"
@@ -146,10 +137,10 @@ class ClientImplTest: XCTestCase {
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
-    
-    var promise = Promise<[JSON]>.pending().promise
-    let responsePromise = Promise.value(rawAllocation)
     let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
     let key = "testKey"
@@ -166,9 +157,11 @@ class ClientImplTest: XCTestCase {
     
     XCTAssertEqual(mockAllocator.getAllocationStatus(), Allocator.AllocationStatus.FETCHING)
     
-    var promise = Promise<[JSON]>.pending().promise
-    let responsePromise = Promise.value(rawAllocation)
     let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
+    
     let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
     client.confirm(allocator: allocator)
@@ -181,9 +174,11 @@ class ClientImplTest: XCTestCase {
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
-    var promise = Promise<[JSON]>.pending().promise
-    let responsePromise = Promise.value(rawAllocation)
     let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
+    
     let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
@@ -200,9 +195,11 @@ class ClientImplTest: XCTestCase {
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
-    var promise = Promise<[JSON]>.pending().promise
-    let responsePromise = Promise.value(rawAllocation)
     let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
+    
     let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
     allocator.allocationStatus = Allocator.AllocationStatus.FETCHING
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
@@ -217,9 +214,11 @@ class ClientImplTest: XCTestCase {
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
-    var promise = Promise<[JSON]>.pending().promise
-    let responsePromise = Promise.value(rawAllocation)
     let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
+    
     let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
@@ -236,15 +235,17 @@ class ClientImplTest: XCTestCase {
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
-    var promise = Promise<[JSON]>.pending().promise
-    let responsePromise = Promise.value(rawAllocation)
     let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
+    
     let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
     allocator.allocationStatus = Allocator.AllocationStatus.FETCHING
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, allocator, false, self.participant)
     
-    let expectedTestValue: Double = 10.01
+    let expectedTestValue: Double = 2.5
     let defaultValue: Double = 10.01
     
     func updateValue(value: Double) {
@@ -257,11 +258,95 @@ class ClientImplTest: XCTestCase {
     self.testValue = 0.0
   }
   
-  func testSubscribeNoPreviousAllocationsWithRetrievedState() {}
+  func testSubscribeNoPreviousAllocationsWithRetrievedState() {
+    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
+                                                                            mockExecutionQueue, mockHttpClient,
+                                                                            mockAllocationStore)
+    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
+    
+    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    allocator.allocationStatus = Allocator.AllocationStatus.RETRIEVED
+    
+    let client = ClientImplMock(mockConfig, mockEventEmitter, promise, allocator, false, self.participant)
+    
+    let expectedTestValue: Double = 0.0
+    let defaultValue: Double = 10.01
+    
+    XCTAssertEqual(expectedTestValue, self.testValue)
+    
+    let expected: Double = 2.5
+    func updateValue(value: Double) {
+      self.testValue = value
+    }
+    
+    client.subscribe(key: "search.weighting.distance", defaultValue: defaultValue, function: updateValue)
+    XCTAssertEqual(expected, self.testValue)
+    self.testValue = 0.0
+  }
   
-  func testSubscribeNoPreviousAllocationsWithFailedState() {}
+  func testSubscribeNoPreviousAllocationsWithFailedState() {
+    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
+                                                                            mockExecutionQueue, mockHttpClient,
+                                                                            mockAllocationStore)
+    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
+    
+    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    allocator.allocationStatus = Allocator.AllocationStatus.FAILED
+    
+    let client = ClientImplMock(mockConfig, mockEventEmitter, promise, allocator, false, self.participant)
+    
+    let expectedTestValue: Double = 0.0
+    let defaultValue: Double = 10.01
+    
+    XCTAssertEqual(expectedTestValue, self.testValue)
+    
+    let expected: Double = 2.5
+    func updateValue(value: Double) {
+      self.testValue = value
+    }
+    
+    client.subscribe(key: "search.weighting.distance", defaultValue: defaultValue, function: updateValue)
+    XCTAssertNotEqual(expected, self.testValue)
+    self.testValue = 0.0
+  }
   
-  func testSubscribeNoPreviousAllocationsWithRetrievedStateThrowsError() {}
+  func testSubscribeNoPreviousAllocationsWithRetrievedStateThrowsError() {
+    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
+                                                                            mockExecutionQueue, mockHttpClient,
+                                                                            mockAllocationStore)
+    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let promise = Promise { resolver in
+      resolver.fulfill(allocations)
+    }
+    
+    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    allocator.allocationStatus = Allocator.AllocationStatus.FAILED
+    
+    let client = ClientImplMock(mockConfig, mockEventEmitter, promise, allocator, false, self.participant)
+    
+    let expectedTestValue: Double = 0.0
+    let defaultValue: Double = 10.01
+    
+    XCTAssertEqual(expectedTestValue, self.testValue)
+    
+    let expected: Double = 2.5
+    func updateValue(value: Double) {
+      self.testValue = value
+    }
+    
+    client.subscribe(key: "not.a.valid.key", defaultValue: defaultValue, function: updateValue)
+    XCTAssertNotEqual(expected, self.testValue)
+    self.testValue = 0.0
+  }
   
 }
 
