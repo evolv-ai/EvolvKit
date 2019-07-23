@@ -259,12 +259,14 @@ class ClientImplTest: XCTestCase {
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, allocator, false, self.participant)
     
-    let expectedTestValue: Double = 0.0
-    let defaultValue: Double = 10.10
+    let expectedTestValue: Double = 10.01
+    let defaultValue: Double = 10.01
     
-    client.subscribe(key: "search.weighting.distance", defaultValue: defaultValue) { (value) in
+    func updateValue(value: Double) {
       self.testValue = value
     }
+    
+    client.subscribe(key: "search.weighting.distance", defaultValue: defaultValue, function: updateValue)
     
     XCTAssertEqual(expectedTestValue, self.testValue)
     self.testValue = 0.0
