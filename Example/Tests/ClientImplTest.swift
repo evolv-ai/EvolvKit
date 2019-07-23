@@ -13,8 +13,8 @@ class ClientImplTest: XCTestCase {
   var mockAllocator : Allocator!
   
   private let participant = EvolvParticipant(userId: "test_user", sessionId: "test_session", userAttributes: [
-    "userId": "test_user",
-    "sessionId": "test_session"
+      "userId": "test_user",
+      "sessionId": "test_session"
     ])
   
   private let environmentId = "test_env"
@@ -51,20 +51,6 @@ class ClientImplTest: XCTestCase {
     }
   }
   
-  func testGetReturnsDefaultsUponNilPromise() {
-    
-    let emitter = EventEmitter(config: self.mockConfig, participant: self.participant)
-    let promise = Promise<[JSON]>.pending().promise
-    let allocator = Allocator(config:  self.mockConfig, participant: self.participant)
-    
-    let client = EvolvClientImpl( self.mockConfig, self.mockEventEmitter, promise, self.mockAllocator, false, participant)
-    
-    let expectedValue: Double = 0.001
-    // let result = client.get(key: "search.weighting.distance", defaultValue: expectedValue) as! Double
-    
-    // XCTAssertEqual(expectedValue, result)
-  }
-  
   func testSubscribe_AllocationStoreNotEmpty_SubscriptionKeyIsValid() {
     let subscriptionKey = "search.weighting"
     let defaultValue: Double = 0.001
@@ -88,7 +74,6 @@ class ClientImplTest: XCTestCase {
       
       return allocations
     }
-    
     
     let config = EvolvConfig("https", "test.evolv.ai", "v1", "test_env", self.mockAllocationStore, self.mockHttpClient)
     let emitter = EventEmitter(config: config, participant: participant)
@@ -119,8 +104,8 @@ class ClientImplTest: XCTestCase {
     self.mockAllocationStore.expectGet { uid -> [JSON] in
       XCTAssertEqual(uid, participantId)
       
-      
-      let dataFromString = self.rawAllocation.data(using: String.Encoding.utf8, allowLossyConversion: false)!
+      let myStoredAllocation = "[{\"uid\":\"\(participantId)\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_1\",\"buttons\":{\"checkout\":{\"text\":\"Begin Secure Checkout\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Product Specifications\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
+      let dataFromString = myStoredAllocation.data(using: String.Encoding.utf8, allowLossyConversion: false)!
       let allocations = try! JSON(data: dataFromString).arrayValue
       
       return allocations

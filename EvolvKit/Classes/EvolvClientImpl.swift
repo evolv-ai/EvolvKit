@@ -40,44 +40,6 @@ public class EvolvClientImpl : EvolvClientProtocol {
     return type(of: element)
   }
   
-  public func get<T>(key: String, defaultValue: T) -> Any {
-    var value = [JSON]()
-    var promisedAllocations = [JSON]()
-    
-    if (futureAllocations == nil) {
-      print("\(String(describing: futureAllocations))")
-      return defaultValue
-    }
-    
-    do {
-      let a = try futureAllocations?.wait()
-      guard let alloc = a else {
-        return defaultValue
-      }
-      
-      promisedAllocations = alloc
-      if !Allocator.allocationsNotEmpty(allocations: promisedAllocations) {
-        return defaultValue
-      }
-      
-      let type = getMyType(defaultValue)
-      guard let _ = type else { return defaultValue }
-      do {
-        let alloc = Allocations(allocations: promisedAllocations)
-        let v = try alloc.getValueFromAllocations(key, type, participant)
-        value = [v] as! [JSON]
-      } catch {
-        let message = "Unable to retrieve the treatment. Returning the default."
-        LOGGER.log(.error, message: message)
-        return defaultValue
-      }
-    } catch {
-      LOGGER.log(.debug, message: "Error retrieving Allocations")
-      return defaultValue
-    }
-    return value
-  }
-  
   public func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> ()) {
     let execution = Execution(key, defaultValue, participant, function)
     let previous = self.store.get(uid: self.participant.getUserId())

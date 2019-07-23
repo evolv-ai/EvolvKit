@@ -53,8 +53,7 @@ let config: EvolvConfig = EvolvConfig.builder(eid: <environment_id>, httpClient:
 
 2. Initialize the EvolvClient.
 ```swift
-let client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
-//      .setUserId(userId: "sandbox_user").build()).client as! EvolvClientImpl
+let client: EvolvClient = EvolvClientFactory.init(config)
 ```
 
 ### Confirm the Allocation
@@ -66,16 +65,6 @@ client.confirm()
 *Note: After the client has been initialized, it is important to confirm the participant into the experiment. This action
 records the participant's allocation and sends the information back to Evolv.*
 
-### Value Retrieval
-
-1. Retrieve values from Evolv.
-```swift
-let value = client.get(key:<key_for_value>, defaultValue:<default_value>)
-```
-
-*Note: The return value's type is decided by the provided default value's type. If there is an issue retrieving the
-requested value, the default value will be returned in its place. This method is blocking, it will wait until the
-allocation has been received.*
 
 ### Value Subscription
 

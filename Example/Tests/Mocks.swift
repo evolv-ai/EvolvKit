@@ -41,7 +41,7 @@ class AllocationStoreMock: AllocationStoreProtocol {
     self.mockedGet = mocked
     return expectGetExpectation!
   }
-  
+
   func expectPut(_ mocked: @escaping (_ uid: String, _ allocations: [JSON]) -> Void) -> XCTestExpectation {
     self.expectPutExpectation = self.testCase.expectation(description: "expect put")
     self.mockedPut = mocked
@@ -54,7 +54,7 @@ class AllocationStoreMock: AllocationStoreProtocol {
     self.expectGetExpectation?.fulfill()
     return mockedGet(uid)
   }
-  
+
   func put(uid: String, allocations: [JSON]) {
     self.expectGetExpectation?.fulfill()
     return mockedPut(uid, allocations)

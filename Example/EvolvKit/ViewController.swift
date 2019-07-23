@@ -16,12 +16,11 @@ class ViewController: UIViewController {
   @IBOutlet weak var textLabel: UILabel!
   @IBOutlet weak var checkoutButton: UIButton!
   
+//  let store : AllocationStoreProtocol
 //  var allocations = [JSON]()
 //  var client : EvolvClientProtocol
 //  var httpClient: HttpProtocol
 //  let LOGGER = Log.logger
-//  let store : AllocationStoreProtocol
- 
   
   @IBAction func didPressCheckOut(_ sender: Any) {
 //    client.emitEvent(key: "conversion")
@@ -31,7 +30,6 @@ class ViewController: UIViewController {
   @IBAction func didPressProductInfo(_ sender: Any) {
     self.textLabel.text = "Some really cool product info"
   }
-  
   
   required init?(coder aDecoder: NSCoder) {
     /*
@@ -49,9 +47,9 @@ class ViewController: UIViewController {
     /// Uncomment each option to see the UI change based on the allocation.
     let option1 = "option_1"
     let option3 = "option_3"
-    // let option7 = "option_7"
+    let option7 = "option_7"
     
-    let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"\(option3)\",\"buttons\":{\"checkout\":{\"text\":\"\(option1)\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
+    let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"\(option7)\",\"buttons\":{\"checkout\":{\"text\":\"\(option7)\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
     
     if let dataFromString = myStoredAllocation.data(using: String.Encoding.utf8, allowLossyConversion: false) {
       do {
@@ -62,7 +60,6 @@ class ViewController: UIViewController {
 //        LOGGER.log(.error, message: message)
       }
     }
-    
     
     /// - Build config with custom timeout and custom allocation store
     // set client to use sandbox environment
@@ -85,12 +82,14 @@ class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
     guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
     statusBarView.backgroundColor = UIColor(red: 0.0, green: 0.3, blue: 0.3, alpha: 1.0)
     
-//    client.subscribe(key: "ui.layout", defaultValue: "#000000", function: setBackgroundColorWith)
-//    client.subscribe(key: "ui.buttons.checkout.text", defaultValue: "Buy Stuff", function: changeButtonText)
-//    client.confirm()
+    //client.subscribe(key: "ui.layout", defaultValue: "#000000", function: setContentViewWith)
+    //client.subscribe(key: "ui.buttons.checkout.text", defaultValue: "오늘의추천", function: changeButtonText)
+    //client.confirm()
+    
   }
   
   override var preferredStatusBarStyle: UIStatusBarStyle {

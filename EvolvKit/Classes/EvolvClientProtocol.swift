@@ -7,22 +7,6 @@
 //
 
 public protocol EvolvClientProtocol {
-  /**
-   Retrieves a value from the participant's allocation, returns a default upon error.
-   
-   - Given a unique key this method will retrieve the key's associated value. A
-   default value can also be specified in case any errors occur during the values
-   retrieval. If the allocation call times out or fails the default value is
-   always returned. This method is blocking, it will wait till the allocation
-   is available and then return.
-   
-   - Parameters:
-      - key: A unique key identifying a specific value in the participants allocation.
-      - defaultValue: A default value to return upon error.
-      - <T>: Type of value to be returned.
-   - Returns: a value associated with the given key
-   */
-  func get<T>(key: String, defaultValue: T) -> Any
   
   /**
    Retrieves a value from Evolv asynchronously and applies some custom action.
