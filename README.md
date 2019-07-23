@@ -43,6 +43,19 @@ For a complete example of how to use this SDK see our [example app](https://gith
 import EvolvKit
 ```
 
+### Participant Initialization
+
+1. Build an EvolvParticipant instance.
+```swift
+let participant = EvolvParticipant.builder().build()
+
+or 
+
+let participant = EvolvParticipant.builder()
+.setUserId(userId: <custom_id>).build()
+```
+*Note: If you do not set the participant's userId, the builder will create a unique id for you.*
+
 
 ### Client Initialization
 
