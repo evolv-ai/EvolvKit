@@ -29,8 +29,9 @@ public class EvolvParticipant {
   
   public func getUserAttributes() -> [String: String] { return userAttributes }
   
-  func setUserId(userId: String) { self.userId = userId }
-  
+  public func setUserId(userId: String) {
+    self.userId = userId
+  }
 }
 
 

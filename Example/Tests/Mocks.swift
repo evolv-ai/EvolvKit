@@ -41,7 +41,7 @@ class AllocationStoreMock: AllocationStoreProtocol {
     self.mockedGet = mocked
     return expectGetExpectation!
   }
-
+  
   func expectPut(_ mocked: @escaping (_ uid: String, _ allocations: [JSON]) -> Void) -> XCTestExpectation {
     self.expectPutExpectation = self.testCase.expectation(description: "expect put")
     self.mockedPut = mocked
@@ -49,12 +49,12 @@ class AllocationStoreMock: AllocationStoreProtocol {
   }
   
   // conform to protocol
-   @discardableResult
+  @discardableResult
   func get(uid: String) -> [JSON] {
     self.expectGetExpectation?.fulfill()
     return mockedGet(uid)
   }
-
+  
   func put(uid: String, allocations: [JSON]) {
     self.expectGetExpectation?.fulfill()
     return mockedPut(uid, allocations)
@@ -114,9 +114,74 @@ class HttpClientMock: HttpProtocol {
   }
 }
 
+class ClientImplMock: EvolvClientImpl {
+  var emitEventWasCalled = false
+  var emitEventWithScoreWasCalled = false
+  let mockHttpClient = EvolvHttpClient()
+  
+  override public func emitEvent(key: String) -> Void {
+    emitEventWasCalled = true
+  }
+  
+  override public func emitEvent(key: String, score: Double) -> Void {
+    emitEventWithScoreWasCalled = true
+  }
+  
+  public func confirm(allocator: AllocatorMock) -> Void {
+    allocator.sandbagConfirmation()
+  }
+  
+  public func confirm(eventEmitter: EmitterMock, allocations: [JSON]) -> Void {
+    eventEmitter.confirm(allocations: allocations)
+  }
+  
+  public func contaminate(allocator: AllocatorMock) -> Void {
+    allocator.sandbagContamination()
+  }
+  
+  public func contaminate(eventEmitter: EmitterMock, allocations: [JSON]) {
+    eventEmitter.confirm(allocations: allocations)
+  }
+
+}
+
+class AllocatorMock : Allocator {
+  
+  var sandbagConfirmationWasCalled = false
+  var sandbagContamationWasCalled = false
+  
+  var config: EvolvConfig
+  var participant : EvolvParticipant
+  
+  var allocationStatus: AllocationStatus
+  
+  override init(config: EvolvConfig, participant: EvolvParticipant) {
+    self.config = config
+    self.participant = participant
+    self.allocationStatus = AllocationStatus.FETCHING
+    
+    super.init(config: config, participant: participant)
+  }
+  
+  override func getAllocationStatus() -> Allocator.AllocationStatus {
+    return self.allocationStatus
+  }
+  
+  override func sandbagConfirmation() {
+    self.allocationStatus = AllocationStatus.RETRIEVED
+    sandbagConfirmationWasCalled = true
+  }
+  
+  override func sandbagContamination() {
+    sandbagContamationWasCalled = true
+  }
+}
+
 class EmitterMock : EventEmitter {
   
   let httpClientMock = HttpClientMock()
+  var confirmWithAllocationsWasCalled = false
+  var contaminateWithAllocationsWasCalled = false
   
   override func sendAllocationEvents(_ key: String, _ allocations: [JSON]) {
     let eid = allocations[0]["eid"].rawString()!
@@ -130,11 +195,11 @@ class EmitterMock : EventEmitter {
   }
   
   override public func contaminate(allocations: [JSON]) -> Void {
-    self.sendAllocationEvents(CONTAMINATE_KEY, allocations)
+    contaminateWithAllocationsWasCalled = true
   }
   
   override public func confirm(allocations: [JSON]) -> Void {
-    self.sendAllocationEvents(CONFIRM_KEY, allocations)
+    confirmWithAllocationsWasCalled = true
   }
   
   override public func emit(_ key: String) -> Void {

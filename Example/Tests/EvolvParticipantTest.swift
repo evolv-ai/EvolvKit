@@ -49,6 +49,16 @@ class EvolvParticipantTest: XCTestCase {
   }
   
   func testParticipantGetUserAttr(){
-    
+    let p = EvolvParticipant.builder().setUserId(userId: "test_user").setSessionId(sessionId: "test_session").build()
+    let userAttributes = p.getUserAttributes()
+    let expectedUserAttributes = ["uid":"test_user", "sid":"test_session"]
+    XCTAssertEqual(userAttributes["uid"], "test_user")
+    XCTAssertEqual(userAttributes["sid"], "test_session")
+  }
+  
+  func testEvolvParticipant() {
+    let p = EvolvParticipant.builder().build()
+    p.setUserId(userId: "test_user")
+    XCTAssertEqual(p.getUserId(), "test_user")
   }
 }
