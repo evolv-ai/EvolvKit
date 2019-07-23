@@ -10,7 +10,6 @@
 		362EC05322CD68630088E4BA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 362EC05222CD68630088E4BA /* Main.storyboard */; };
 		36419BF422E10BFA00509207 /* LruCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36419BF322E10BFA00509207 /* LruCacheTest.swift */; };
 		36419BF622E1362600509207 /* EventEmitterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36419BF522E1362600509207 /* EventEmitterTest.swift */; };
-		36B777BD22D7E60E00CF9252 /* MainActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B777BC22D7E60E00CF9252 /* MainActivity.swift */; };
 		36B777C122D7E62D00CF9252 /* CustomAllocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B777C022D7E62D00CF9252 /* CustomAllocationStore.swift */; };
 		36DE55B222DAB45800284E4C /* ClientFactoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DE55B122DAB45800284E4C /* ClientFactoryTest.swift */; };
 		36E7CFE722DE3D2800027778 /* ClientImplTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E7CFE622DE3D2800027778 /* ClientImplTest.swift */; };
@@ -46,7 +45,6 @@
 		362EC05222CD68630088E4BA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		36419BF322E10BFA00509207 /* LruCacheTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LruCacheTest.swift; sourceTree = "<group>"; };
 		36419BF522E1362600509207 /* EventEmitterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEmitterTest.swift; sourceTree = "<group>"; };
-		36B777BC22D7E60E00CF9252 /* MainActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActivity.swift; sourceTree = "<group>"; };
 		36B777C022D7E62D00CF9252 /* CustomAllocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAllocationStore.swift; sourceTree = "<group>"; };
 		36B77E1822D52D8900F419DD /* Pods_EvolvKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_EvolvKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		36DE55B122DAB45800284E4C /* ClientFactoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientFactoryTest.swift; sourceTree = "<group>"; };
@@ -103,13 +101,12 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		36B777C322D7E65300CF9252 /* Controller */ = {
+		36B777C322D7E65300CF9252 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				36B777BC22D7E60E00CF9252 /* MainActivity.swift */,
 				36B777C022D7E62D00CF9252 /* CustomAllocationStore.swift */,
 			);
-			name = Controller;
+			name = Utility;
 			sourceTree = "<group>";
 		};
 		607FACC71AFB9204008FA782 = {
@@ -139,10 +136,10 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				36B777C322D7E65300CF9252 /* Controller */,
+				36B777C322D7E65300CF9252 /* Utility */,
 				362EC05222CD68630088E4BA /* Main.storyboard */,
-				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
+				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
 			name = Example;
@@ -384,7 +381,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
-				36B777BD22D7E60E00CF9252 /* MainActivity.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				36B777C122D7E62D00CF9252 /* CustomAllocationStore.swift in Sources */,
 			);

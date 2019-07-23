@@ -16,62 +16,63 @@ class ViewController: UIViewController {
   @IBOutlet weak var textLabel: UILabel!
   @IBOutlet weak var checkoutButton: UIButton!
   
-//  let store : AllocationStoreProtocol
-//  var allocations = [JSON]()
-//  var client : EvolvClientProtocol
-//  var httpClient: HttpProtocol
-//  let LOGGER = Log.logger
+  var allocations = [JSON]()
+  var client : EvolvClientProtocol
+  var httpClient: HttpProtocol
+  let LOGGER = Log.logger
+  let store : AllocationStoreProtocol
+  
   
   @IBAction func didPressCheckOut(_ sender: Any) {
-//    client.emitEvent(key: "conversion")
+    client.emitEvent(key: "conversion")
     self.textLabel.text = "Conversion!"
   }
   
   @IBAction func didPressProductInfo(_ sender: Any) {
     self.textLabel.text = "Some really cool product info"
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     /*
      When you receive the fetched json from the participants API, it will be as type String.
      If you use the EvolvHttpClient, the json will be parsed with SwiftyJSON
-     (required data type for the AllocationsStoreProtocol).
+     (required data type for AllocationsStoreProtocol).
      
      This example shows how the data can be structured in your view controllers,
      your implementation can work directly with the raw string and serialize into SwiftyJSON.
      */
+
+    self.store = CustomAllocationStore()
+    httpClient = EvolvHttpClient()
     
-//    self.store = CustomAllocationStore()
-//    httpClient = EvolvHttpClient()
-    
-    /// Uncomment each option to see the UI change based on the allocation.
-    let option1 = "option_1"
-    let option3 = "option_3"
-    let option7 = "option_7"
-    
-    let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"\(option7)\",\"buttons\":{\"checkout\":{\"text\":\"\(option7)\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
+    /// Uncomment each allocation option to see the UI change based on the allocation.
+    // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_1\",\"buttons\":{\"checkout\":{\"text\":\"option_1\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
+    // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_2\",\"buttons\":{\"checkout\":{\"text\":\"option_2\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
+    // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_3\",\"buttons\":{\"checkout\":{\"text\":\"option_3\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
+    let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_4\",\"buttons\":{\"checkout\":{\"text\":\"option_7\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
+    // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_7\",\"buttons\":{\"checkout\":{\"text\":\"option_7\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
     
     if let dataFromString = myStoredAllocation.data(using: String.Encoding.utf8, allowLossyConversion: false) {
       do {
-//        self.allocations = try JSON(data: dataFromString).arrayValue
-//        store.put(uid: "sandbox_user", allocations: self.allocations)
+        self.allocations = try JSON(data: dataFromString).arrayValue
+        store.put(uid: "sandbox_user", allocations: self.allocations)
       } catch {
         let message = "Error converting string json to SwiftyJSON"
-//        LOGGER.log(.error, message: message)
+        LOGGER.log(.error, message: message)
       }
     }
     
     /// - Build config with custom timeout and custom allocation store
     // set client to use sandbox environment
-//    let config = EvolvConfig.builder(environmentId: "sandbox", httpClient: httpClient)
-//      .setEvolvAllocationStore(allocationStore: store)
-//      .build()
+    let config = EvolvConfig.builder(environmentId: "sandbox", httpClient: httpClient)
+      .setEvolvAllocationStore(allocationStore: store)
+      .build()
     
     /// - Initialize the client with a stored user
     /// fetches allocations from Evolv, and stores them in a custom store
-//    client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
-//      .setUserId(userId: "sandbox_user").build()).client as! EvolvClientImpl
-    
+    client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
+      .setUserId(userId: "sandbox_user").build()).client as! EvolvClientImpl
+
     /// - Initialize the client with a new user
     /// - Uncomment this line if you prefer this initialization.
     // client = EvolvClientFactory(config: config) as! EvolvClientProtocol
@@ -82,21 +83,19 @@ class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
     guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
     statusBarView.backgroundColor = UIColor(red: 0.0, green: 0.3, blue: 0.3, alpha: 1.0)
-    
-    //client.subscribe(key: "ui.layout", defaultValue: "#000000", function: setContentViewWith)
-    //client.subscribe(key: "ui.buttons.checkout.text", defaultValue: "오늘의추천", function: changeButtonText)
-    //client.confirm()
-    
+
+    client.subscribe(key: "ui.layout", defaultValue: "#000000", function: setBackgroundColor)
+    client.subscribe(key: "ui.buttons.checkout.text", defaultValue: "오늘의추천", function: changeButtonText)
+    client.confirm()
   }
+  
   
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
   }
-  
-  
+
   /// Trailing closure example that will apply the treatments from the allocation.
   ///
   /// - Parameter layoutOption: Implementer decides what the data type will be.
@@ -108,11 +107,11 @@ class ViewController: UIViewController {
       case "option_1":
         self.checkoutButton.setTitle("Begin Secure Checkout", for: .normal)
       case "option_2":
-        self.checkoutButton.setTitle("Begin Checkout", for: .normal)
-      case "option_3":
-        self.checkoutButton.setTitle("Start Checkout Process", for: .normal)
-      default:
         self.checkoutButton.setTitle("Checkout", for: .normal)
+      case "option_3":
+        self.checkoutButton.setTitle("Start Checking Out", for: .normal)
+      default:
+        self.checkoutButton.setTitle("오늘의추천", for: .normal)
       }
     }
   }
@@ -125,7 +124,7 @@ private extension ViewController {
   /// - Parameter layoutOption: Implementer decides what the data type will be.
   ///   Needs to match subscribe method's default value data type.
   /// - Use DispatchQueue to ensure this operation runs on the UI thread
-  func setBackgroundColorWith(_ layoutOption: String) -> () {
+  func setBackgroundColor(_ layoutOption: String) -> () {
     DispatchQueue.main.async {
       switch layoutOption {
       case "option_1":
@@ -138,7 +137,7 @@ private extension ViewController {
         self.view.backgroundColor = UIColor(red: 32/255, green: 79/255, blue: 79/255, alpha: 1)
         
       case "option_4":
-        self.view.backgroundColor = UIColor(red: 59/255, green: 144/255, blue: 147/255, alpha: 1)
+        self.view.backgroundColor = UIColor(red: 255/255, green: 176/255, blue: 198/255, alpha: 1)
       default:
         self.view.backgroundColor = UIColor(hexString: layoutOption)
       }
