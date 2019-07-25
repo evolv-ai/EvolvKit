@@ -57,10 +57,10 @@ class ViewController: UIViewController {
             "cid": "candidate_3",
             "genome": [
                 "ui": [
-                    "layout": "option_1",
+                    "layout": "option_4",
                     "buttons": [
                         "checkout": [
-                            "text": "option_1",
+                            "text": "option_4     ",
                             "color": "#f3b36d"
                         ],
                         "info": [
@@ -156,7 +156,7 @@ private extension ViewController {
       case "option_3":
         self?.view.backgroundColor = UIColor(red: 32 / 255, green: 79 / 255, blue: 79 / 255, alpha: 1) // dark green
       case "option_4":
-        self?.view.backgroundColor = UIColor(red: 255 / 255, green: 176 / 255, blue: 198 / 255, alpha: 1) // pink color
+        self?.view.backgroundColor = UIColor(red: 255 / 255, green: 176 / 255, blue: 198 / 255, alpha: 1) // pink
       default:
         self?.view.backgroundColor = UIColor(hexString: layoutOption) // light turquoise (control)
       }

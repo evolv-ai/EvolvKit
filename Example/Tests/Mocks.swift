@@ -210,17 +210,17 @@ class EmitterMock: EventEmitter {
 }
 
 class ExecutionQueueMock: ExecutionQueue {
-  var executeAllWithValuesFromAllocationsWasCalled = false
-  var executeAllWithValuesFromDefaultsWasCalled = false
+  var executeValuesFromAllocationsWasCalled = false
+  var executeWithDefaultsWasCalled = false
   
   override func executeAllWithValuesFromAllocations(allocations: [JSON]) {
     self.count -= 1
-    executeAllWithValuesFromAllocationsWasCalled = true
+    executeValuesFromAllocationsWasCalled = true
   }
   
   override func executeAllWithValuesFromDefaults() {
     self.count -= 1
-    executeAllWithValuesFromDefaultsWasCalled = true
+    executeWithDefaultsWasCalled = true
   }
 }
 

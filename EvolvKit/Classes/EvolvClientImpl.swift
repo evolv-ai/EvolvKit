@@ -22,11 +22,11 @@ public class EvolvClientImpl: EvolvClientProtocol {
   private let dispatchGroup = DispatchGroup()
   
   public init(_ config: EvolvConfig,
-       _ eventEmitter: EventEmitter,
-       _ futureAllocations: Promise<[JSON]>,
-       _ allocator: Allocator,
-       _ previousAllocations: Bool,
-       _ participant: EvolvParticipant) {
+              _ eventEmitter: EventEmitter,
+              _ futureAllocations: Promise<[JSON]>,
+              _ allocator: Allocator,
+              _ previousAllocations: Bool,
+              _ participant: EvolvParticipant) {
     self.store = config.getEvolvAllocationStore()
     self.executionQueue = config.getExecutionQueue()
     self.eventEmitter = eventEmitter

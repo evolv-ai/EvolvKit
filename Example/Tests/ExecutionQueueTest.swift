@@ -116,9 +116,9 @@ class ExecutionQueueTest: XCTestCase {
     mockExecutionQueue.executeAllWithValuesFromAllocations(allocations: allocations)
     
     XCTAssertEqual(mockExecutionQueue.count, 1)
-    XCTAssertTrue(mockExecutionQueue.executeAllWithValuesFromAllocationsWasCalled)
+    XCTAssertTrue(mockExecutionQueue.executeValuesFromAllocationsWasCalled)
   }
-
+  
   func testExecuteAllWithValuesFromDefaults() {
     let key = "pages.testing_page_typo.header_typo"
     let defaultValue = "red"
@@ -134,7 +134,7 @@ class ExecutionQueueTest: XCTestCase {
     mockExecutionQueue.executeAllWithValuesFromDefaults()
 
     XCTAssertEqual(mockExecutionQueue.count, 1)
-    XCTAssertTrue(mockExecutionQueue.executeAllWithValuesFromDefaultsWasCalled)
+    XCTAssertTrue(mockExecutionQueue.executeWithDefaultsWasCalled)
   }
   
 }
