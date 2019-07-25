@@ -16,28 +16,28 @@ public class Allocator {
     case FETCHING, RETRIEVED, FAILED
   }
   
-  private let executionQueue: ExecutionQueue
-  private let store: AllocationStoreProtocol
   private let config: EvolvConfig
-  private let participant: EvolvParticipant
   private let eventEmitter: EventEmitter
+  private let executionQueue: ExecutionQueue
   private let httpClient: HttpProtocol
-  
+  private let participant: EvolvParticipant
+  private let store: AllocationStoreProtocol
+ 
   private var confirmationSandbagged: Bool = false
   private var contaminationSandbagged: Bool = false
   
   private var LOGGER = Log.logger
   private var allocationStatus: AllocationStatus
   
-  init(config: EvolvConfig,
-       participant: EvolvParticipant) {
+  init(_ config: EvolvConfig,
+       _ participant: EvolvParticipant) {
     self.executionQueue = config.getExecutionQueue()
     self.store = config.getEvolvAllocationStore()
     self.config = config
     self.participant = participant
     self.httpClient = config.getHttpClient()
     self.allocationStatus = AllocationStatus.FETCHING
-    self.eventEmitter = EventEmitter(config: config, participant: participant)
+    self.eventEmitter = EventEmitter(config, participant)
   }
 
   func getAllocationStatus() -> AllocationStatus {
@@ -75,28 +75,28 @@ public class Allocator {
     return Promise { resolve in
       let url = self.createAllocationsUrl()
       
-      _ = self.httpClient.get(url: url).done { (stringJSON) in
-        var allocations = JSON.init(parseJSON: stringJSON).arrayValue
-        let previous = self.store.get(uid: self.participant.getUserId())
+      _ = self.httpClient.get(url).done { (stringJSON) in
+        var currentAllocations = JSON.init(parseJSON: stringJSON).arrayValue
+        let previousAllocations = self.store.get(self.participant.getUserId())
         
-        if Allocator.allocationsNotEmpty(allocations: previous) {
-          allocations = Allocations.reconcileAllocations(previousAllocations: previous,
-                                                         currentAllocations: allocations)
+        if Allocator.allocationsNotEmpty(previousAllocations) {
+          currentAllocations = Allocations.reconcileAllocations(previousAllocations, currentAllocations)
         }
         
-        self.store.put(uid: self.participant.getUserId(), allocations: allocations)
+        self.store.put(self.participant.getUserId(), currentAllocations)
         self.allocationStatus = AllocationStatus.RETRIEVED
         
         if self.confirmationSandbagged {
-          self.eventEmitter.confirm(allocations: allocations)
+          self.eventEmitter.confirm(currentAllocations)
         }
         
         if self.contaminationSandbagged {
-          self.eventEmitter.contaminate(allocations: allocations)
+          self.eventEmitter.contaminate(currentAllocations)
         }
-        resolve.fulfill(allocations)
+        
+        resolve.fulfill(currentAllocations)
         do {
-          try self.executionQueue.executeAllWithValuesFromAllocations(allocations: allocations)
+          try self.executionQueue.executeAllWithValuesFromAllocations(currentAllocations)
         } catch let err {
           _ = self.resolveAllocationsFailure()
           let message = "There was an error executing with allocations. \(err.localizedDescription)"
@@ -107,37 +107,37 @@ public class Allocator {
   }
   
   public func resolveAllocationsFailure() -> [JSON] {
-    let previous = self.store.get(uid: self.participant.getUserId())
+    let previousAllocations = self.store.get(self.participant.getUserId())
     
-    if Allocator.allocationsNotEmpty(allocations: previous) {
+    if Allocator.allocationsNotEmpty(previousAllocations) {
       LOGGER.log(.debug, message: "Falling back to participant's previous allocation.")
       
       if confirmationSandbagged {
-        eventEmitter.confirm(allocations: previous)
+        eventEmitter.confirm(previousAllocations)
       }
       if contaminationSandbagged {
-        eventEmitter.contaminate(allocations: previous)
+        eventEmitter.contaminate(previousAllocations)
       }
       
       allocationStatus = AllocationStatus.RETRIEVED
       do {
-        try executionQueue.executeAllWithValuesFromAllocations(allocations: previous)
+        try executionQueue.executeAllWithValuesFromAllocations(previousAllocations)
       } catch {
         LOGGER.log(.error, message: "Execution with values from Allocations fails, falling back on defaults.")
         executionQueue.executeAllWithValuesFromDefaults()
-        return previous
+        return previousAllocations
       }
       
     } else {
       LOGGER.log(.error, message: "Falling back to the supplied defaults.")
       allocationStatus = AllocationStatus.FAILED
       executionQueue.executeAllWithValuesFromDefaults()
-      return previous
+      return previousAllocations
     }
-    return previous
+    return previousAllocations
   }
   
-  static func allocationsNotEmpty(allocations: [JSON]?) -> Bool {
+  static func allocationsNotEmpty(_ allocations: [JSON]?) -> Bool {
     guard let allocArray = allocations else {
       return false
     }

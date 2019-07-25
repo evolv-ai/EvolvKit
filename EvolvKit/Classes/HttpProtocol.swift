@@ -23,7 +23,7 @@ public protocol HttpProtocol {
    
    - Returns: A response promise as a String
    */
-  func get(url: URL) -> PromiseKit.Promise<String>
+  func get(_ url: URL) -> PromiseKit.Promise<String>
   
   /**
    - Performs a GET request to the **events endpoint** using the provided url.
@@ -37,5 +37,5 @@ public protocol HttpProtocol {
    - Returns: Void
    */
   
-  func sendEvents(url: URL)
+  func sendEvents(_ url: URL)
 }

@@ -185,7 +185,7 @@ class AllocationsTest: XCTestCase {
   func testGetValueFromAllocationGenome() {
     do {
       let participant = EvolvParticipant.builder().build()
-      let allocations = Allocations(allocations: AllocationsTest.rawAllocations)
+      let allocations = Allocations(AllocationsTest.rawAllocations)
       let defaultBool: Bool = true
       let defaultDouble: Double = 10.0
       let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
@@ -202,7 +202,7 @@ class AllocationsTest: XCTestCase {
   func testGetValueFromMultiAllocationGenome() {
     do {
       let participant: EvolvParticipant = EvolvParticipant.builder().build()
-      let allocations = Allocations(allocations: AllocationsTest.rawAllocations)
+      let allocations = Allocations(AllocationsTest.rawAllocations)
       let defaultBool: Bool = true
       let defaultDouble: Double = 10.0
       let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
@@ -219,7 +219,7 @@ class AllocationsTest: XCTestCase {
   func testGetValueFromMultiAllocationWithDupsGenome() {
     do {
       let participant: EvolvParticipant = EvolvParticipant.builder().build()
-      let allocations = Allocations(allocations: self.rawMultiAllocations)
+      let allocations = Allocations(self.rawMultiAllocations)
       let defaultBool: Bool = true
       let defaultDouble: Double = 10.0
       let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
@@ -234,7 +234,7 @@ class AllocationsTest: XCTestCase {
   }
   
   func testGetActiveExperiments () {
-    let allocations = Allocations(allocations: self.rawMultiAllocationsWithDups)
+    let allocations = Allocations(self.rawMultiAllocationsWithDups)
     let activeExperiments: Set<String> = allocations.getActiveExperiments()
     var expected: Set<String> = Set()
     expected.update(with: "test_eid")

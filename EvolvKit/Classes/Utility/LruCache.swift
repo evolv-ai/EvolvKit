@@ -30,7 +30,7 @@ public class LRUCache {
     return val
   }
   
-  public func putEntry(_ key: String, val: [JSON]) {
+  public func putEntry(_ key: String, _ val: [JSON]) {
     if cache[key] != nil {
       remove(key)
     } else if priority.count >= self.maxSize, let keyToRemove = priority.last?.value {

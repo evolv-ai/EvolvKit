@@ -23,12 +23,12 @@ public class CustomAllocationStore: AllocationStoreProtocol {
     self.allocations = Dictionary()
   }
   
-  public func get(uid: String) -> [JSON] {
-    return allocations[uid] ?? [JSON]()
+  public func get(_ participantId: String) -> [JSON] {
+    return allocations[participantId] ?? [JSON]()
   }
   
-  public func put(uid: String, allocations: [JSON]) {
-    self.allocations.updateValue(allocations, forKey: uid)
+  public func put(_ participantId: String, _ allocations: [JSON]) {
+    self.allocations.updateValue(allocations, forKey: participantId)
   }
   
 }

@@ -22,7 +22,7 @@ public protocol AllocationStoreProtocol {
    - Returns: a SwiftyJSON array of allocation if one exists, else an empty SwiftyJSON array.
    */
   
-  func get(uid: String) -> [JSON]
+  func get(_ participantId: String) -> [JSON]
   
   /**
    Stores a JsonArray.
@@ -31,5 +31,5 @@ public protocol AllocationStoreProtocol {
       - uid: The participant's unique id.
       - allocations: The participant's allocations.
    */
-  func put(uid: String, allocations: [JSON])
+  func put(_ participantId: String, _ allocations: [JSON])
 }

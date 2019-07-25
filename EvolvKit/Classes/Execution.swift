@@ -32,9 +32,9 @@ class Execution<T> {
     return type(of: element)
   }
   
-  func executeWithAllocation(rawAllocations: [JSON]) throws {
+  func executeWithAllocation(_ allocations: [JSON]) throws {
     let type = getMyType(defaultValue)
-    let allocations = Allocations(allocations: rawAllocations)
+    let allocations = Allocations(allocations)
     let optionalValue = try allocations.getValueFromAllocations(key, type, participant)
   
     guard let value = optionalValue else {

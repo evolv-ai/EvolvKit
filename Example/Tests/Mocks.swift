@@ -20,14 +20,14 @@ class AllocationStoreMockWithAllocations: AllocationStoreProtocol {
   public init(size: Int) {
     self.cache = LRUCache(size)
     let allocationsForMockStore = AllocationsTest.rawAllocations
-    cache.putEntry("test_user", val: allocationsForMockStore)
+    cache.putEntry("test_user", allocationsForMockStore)
   }
-  public func get(uid: String) -> [JSON] {
+  public func get(_ uid: String) -> [JSON] {
     return cache.getEntry(uid)
   }
   
-  public func put(uid: String, allocations: [JSON]) {
-    cache.putEntry(uid, val: allocations)
+  public func put(_ uid: String, _ allocations: [JSON]) {
+    cache.putEntry(uid, allocations)
   }
 }
 
@@ -50,7 +50,7 @@ class AllocationStoreMock: AllocationStoreProtocol {
   private var mockedPut: (String, [JSON]) -> Void = { _, _  in
     let rawAllocation = AllocationsTest.rawAllocations
     let allocations = AllocationsTest.rawAllocations
-    DefaultAllocationStore(size: 10).put(uid: "test_user", allocations: allocations)
+    DefaultAllocationStore(size: 10).put("test_user", allocations)
   }
   
   @discardableResult
@@ -68,12 +68,12 @@ class AllocationStoreMock: AllocationStoreProtocol {
   
   /// conform to protocol
   @discardableResult
-  func get(uid: String) -> [JSON] {
+  func get(_ uid: String) -> [JSON] {
     self.expectGetExpectation?.fulfill()
     return mockedGet(uid)
   }
 
-  func put(uid: String, allocations: [JSON]) {
+  func put(_ uid: String, _ allocations: [JSON]) {
     self.expectGetExpectation?.fulfill()
     return mockedPut(uid, allocations)
   }
@@ -87,7 +87,7 @@ class HttpClientMock: HttpProtocol {
   public static var httpClientSendEventsWasCalled = false
   
   @discardableResult
-  func get(url: URL) -> Promise<String> {
+  func get(_ url: URL) -> Promise<String> {
     HttpClientMock.httpClientSendEventsWasCalled = true
     return Promise<String> { resolver -> Void in
       
@@ -108,7 +108,7 @@ class HttpClientMock: HttpProtocol {
     }
   }
   
-  func sendEvents(url: URL) {
+  func sendEvents(_ url: URL) {
     HttpClientMock.httpClientSendEventsWasCalled = true
     let headers = [
       "Content-Type": "application/json",
@@ -134,28 +134,28 @@ class ClientImplMock: EvolvClientImpl {
   var emitEventWithScoreWasCalled = false
   let mockHttpClient = EvolvHttpClient()
   
-  override public func emitEvent(key: String) {
+  override public func emitEvent(_ key: String) {
     emitEventWasCalled = true
   }
   
-  override public func emitEvent(key: String, score: Double) {
+  override public func emitEvent(_ key: String, _ score: Double) {
     emitEventWithScoreWasCalled = true
   }
   
-  public func confirm(allocator: AllocatorMock) {
+  public func confirm(_ allocator: AllocatorMock) {
     allocator.sandbagConfirmation()
   }
   
-  public func confirm(eventEmitter: EmitterMock, allocations: [JSON]) {
-    eventEmitter.confirm(allocations: allocations)
+  public func confirm(_ eventEmitter: EmitterMock, _ allocations: [JSON]) {
+    eventEmitter.confirm(allocations)
   }
   
-  public func contaminate(allocator: AllocatorMock) {
+  public func contaminate(_ allocator: AllocatorMock) {
     allocator.sandbagContamination()
   }
   
-  public func contaminate(eventEmitter: EmitterMock, allocations: [JSON]) {
-    eventEmitter.confirm(allocations: allocations)
+  public func contaminate(_ eventEmitter: EmitterMock, _ allocations: [JSON]) {
+    eventEmitter.confirm(allocations)
   }
 
 }
@@ -170,12 +170,12 @@ class AllocatorMock: Allocator {
   
   var allocationStatus: AllocationStatus
   
-  override init(config: EvolvConfig, participant: EvolvParticipant) {
+  override init(_ config: EvolvConfig, _ participant: EvolvParticipant) {
     self.config = config
     self.participant = participant
     self.allocationStatus = AllocationStatus.FETCHING
     
-    super.init(config: config, participant: participant)
+    super.init(config, participant)
   }
   
   override func getAllocationStatus() -> Allocator.AllocationStatus {
@@ -201,35 +201,35 @@ class EmitterMock: EventEmitter {
   override func sendAllocationEvents(_ key: String, _ allocations: [JSON]) {
     let eid = allocations[0]["eid"].rawString()!
     let cid = allocations[0]["cid"].rawString()!
-    let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
+    let url = createEventUrl(key, eid, cid)
     makeEventRequest(url)
   }
   
   private func makeEventRequest(_ url: URL) {
-    _ = httpClientMock.sendEvents(url: url)
+    _ = httpClientMock.sendEvents(url)
   }
   
   /// emitter.contaminate => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
-  override public func contaminate(allocations: [JSON]) {
+  override public func contaminate(_ allocations: [JSON]) {
     let testKey = "test_key"
     sendAllocationEvents(testKey, allocations)
     contaminateWithAllocationsWasCalled = true
   }
   
   /// emitter.confirm => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
-  override public func confirm(allocations: [JSON]) {
+  override public func confirm(_ allocations: [JSON]) {
     let testKey = "test_key"
     sendAllocationEvents(testKey, allocations)
     confirmWithAllocationsWasCalled = true
   }
   
   override public func emit(_ key: String) {
-    let url: URL = createEventUrl(type: key, score: 1.0)
+    let url: URL = createEventUrl(key, 1.0)
     self.makeEventRequest(url)
   }
   
   override public func emit(_ key: String, _ score: Double) {
-    let url: URL = createEventUrl(type: key, score: score)
+    let url: URL = createEventUrl(key, score)
     self.makeEventRequest(url)
   }
   
@@ -239,7 +239,7 @@ class ExecutionQueueMock: ExecutionQueue {
   var executeValuesFromAllocationsWasCalled = false
   var executeWithDefaultsWasCalled = false
   
-  override func executeAllWithValuesFromAllocations(allocations: [JSON]) {
+  override func executeAllWithValuesFromAllocations(_ allocations: [JSON]) {
     self.count -= 1
     executeValuesFromAllocationsWasCalled = true
   }
@@ -254,17 +254,17 @@ class ExecutionMock<T>: Execution<T> {
   
   override func executeWithDefault() {}
   
-  override func executeWithAllocation(rawAllocations: [JSON]) throws {}
+  override func executeWithAllocation(_ rawAllocations: [JSON]) throws {}
 }
 
 class ConfigMock: EvolvConfig { }
 
 class ClientHttpMock: HttpProtocol {
-  func get(url: URL) -> Promise<String> {
+  func get(_ url: URL) -> Promise<String> {
     fatalError()
   }
   
-  func sendEvents(url: URL) {
+  func sendEvents(_ url: URL) {
     fatalError()
   }
 }

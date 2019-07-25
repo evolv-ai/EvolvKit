@@ -22,27 +22,27 @@ public class EventEmitter {
   let participant: EvolvParticipant
   let audience = Audience()
   
-  init(config: EvolvConfig, participant: EvolvParticipant) {
+  init(_ config: EvolvConfig, _ participant: EvolvParticipant) {
     self.config = config
     self.participant = participant
     self.httpClient = config.getHttpClient()
   }
   
   public func emit(_ key: String) {
-    let url: URL = createEventUrl(type: key, score: 1.0)
+    let url: URL = createEventUrl(key, 1.0)
     _ = makeEventRequest(url)
   }
   
   public func emit(_ key: String, _ score: Double) {
-    let url: URL = createEventUrl(type: key, score: score)
+    let url: URL = createEventUrl(key, score)
     _ = makeEventRequest(url)
   }
   
-  public func confirm(allocations: [JSON]) {
+  public func confirm(_ allocations: [JSON]) {
     sendAllocationEvents(Key.confirm.rawValue, allocations)
   }
   
-  public func contaminate(allocations: [JSON]) {
+  public func contaminate(_ allocations: [JSON]) {
     sendAllocationEvents(Key.contaminate.rawValue, allocations)
   }
   
@@ -50,9 +50,9 @@ public class EventEmitter {
     if !allocations.isEmpty {
       for allocation in allocations {
         // TODO: Perform audience check here
-        let eid = String(describing: allocation["eid"])
-        let cid = String(describing: allocation["cid"])
-        let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
+        let experimentId = String(describing: allocation["eid"])
+        let candidateId = String(describing: allocation["cid"])
+        let url = createEventUrl(key, experimentId, candidateId)
         makeEventRequest(url)
         
         // TODO: Add audience filter logic here
@@ -62,7 +62,7 @@ public class EventEmitter {
     }
   }
   
-  func createEventUrl(type: String, score: Double ) -> URL {
+  func createEventUrl(_ type: String, _ score: Double ) -> URL {
     var components = URLComponents()
     
     components.scheme = config.getHttpScheme()
@@ -80,11 +80,10 @@ public class EventEmitter {
       LOGGER.log(.debug, message: message)
       return URL(string: "")!
     }
-
     return url
   }
   
-  func createEventUrl(type: String, experimentId: String, candidateId: String) -> URL {
+  func createEventUrl(_ type: String, _ experimentId: String, _ candidateId: String) -> URL {
     var components = URLComponents()
     
     components.scheme = config.getHttpScheme()
@@ -103,7 +102,6 @@ public class EventEmitter {
       LOGGER.log(.debug, message: message)
       return URL(string: "")!
     }
-
     return url
   }
   
@@ -113,7 +111,6 @@ public class EventEmitter {
       LOGGER.log(.debug, message: message)
       return
     }
-    
-    _ = httpClient.sendEvents(url: unwrappedUrl)
+    _ = httpClient.sendEvents(unwrappedUrl)
   }
 }

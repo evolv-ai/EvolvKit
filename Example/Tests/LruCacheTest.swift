@@ -66,7 +66,7 @@ class LruCacheTest: XCTestCase {
     let testEntry = self.rawAllocations
     
     let cache = LRUCache(testCacheSize)
-    cache.putEntry(testKey, val: testEntry)
+    cache.putEntry(testKey, testEntry)
     let entry = cache.getEntry(testKey)
     
     XCTAssertNotNil(entry)
@@ -85,15 +85,15 @@ class LruCacheTest: XCTestCase {
     
     let cache = LRUCache(testCacheSize)
     
-    cache.putEntry(keyOne, val: testEntry)
-    cache.putEntry(keyTwo, val: testEntry)
-    cache.putEntry(keyThree, val: testEntry)
+    cache.putEntry(keyOne, testEntry)
+    cache.putEntry(keyTwo, testEntry)
+    cache.putEntry(keyThree, testEntry)
     
     let entryOne = cache.getEntry(keyOne)
     let entryTwo = cache.getEntry(keyTwo)
     let entryThree = cache.getEntry(keyThree)
     
-    cache.putEntry(keyFour, val: testEntry)
+    cache.putEntry(keyFour, testEntry)
     
     let evictedEntry = cache.getEntry(keyOne)
     
@@ -109,8 +109,8 @@ class LruCacheTest: XCTestCase {
     let testEntry = self.rawAllocations
     
     let cache = LRUCache(testCacheSize)
-    cache.putEntry(testKey, val: testEntry)
-    cache.putEntry(testKey, val: testEntry)
+    cache.putEntry(testKey, testEntry)
+    cache.putEntry(testKey, testEntry)
     let entry = cache.getEntry(testKey)
     
     XCTAssertNotNil(entry)

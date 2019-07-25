@@ -20,7 +20,7 @@ public class EvolvClientFactory {
   public init(config: EvolvConfig) {
     LOGGER.log(.debug, message: "Initializing Evolv Client.")
     let participant: EvolvParticipant = EvolvParticipant.builder().build()
-    self.client = EvolvClientFactory.createClient(config: config, participant: participant)
+    self.client = EvolvClientFactory.createClient(config, participant)
   }
   
   /**
@@ -33,20 +33,20 @@ public class EvolvClientFactory {
   
   public init(config: EvolvConfig, participant: EvolvParticipant) {
     LOGGER.log(.debug, message: "Initializing Evolv Client.")
-    self.client = EvolvClientFactory.createClient(config: config, participant: participant)
+    self.client = EvolvClientFactory.createClient(config, participant)
   }
   
-  private static func createClient(config: EvolvConfig, participant: EvolvParticipant) -> EvolvClientProtocol {
+  private static func createClient(_ config: EvolvConfig, _ participant: EvolvParticipant) -> EvolvClientProtocol {
     let store = config.getEvolvAllocationStore()
-    let previousAllocations = store.get(uid: participant.getUserId())
-    let allocator: Allocator = Allocator(config: config, participant: participant)
+    let previousAllocations = store.get(participant.getUserId())
+    let allocator: Allocator = Allocator(config, participant)
     let futureAllocations = allocator.fetchAllocations()
     
     return EvolvClientImpl(config,
-                           EventEmitter(config: config, participant: participant),
+                           EventEmitter(config, participant),
                            futureAllocations,
                            allocator,
-                           Allocator.allocationsNotEmpty(allocations: previousAllocations),
+                           Allocator.allocationsNotEmpty(previousAllocations),
                            participant)
   }
 }

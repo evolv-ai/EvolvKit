@@ -47,9 +47,9 @@ class EvolvConfigTest: XCTestCase {
       let httpScheme = "test"
       
       let config = EvolvConfig.builder(environmentId, mockHttpClient)
-        .setDomain(domain: domain)
-        .setVersion(version: version)
-        .setEvolvAllocationStore(allocationStore: allocationStore)
+        .setDomain(domain)
+        .setVersion(version)
+        .setEvolvAllocationStore(allocationStore)
         .setHttpScheme(scheme: httpScheme)
         .build()
       

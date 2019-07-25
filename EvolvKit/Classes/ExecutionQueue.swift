@@ -19,29 +19,29 @@ public class ExecutionQueue {
   
   static let shared = ExecutionQueue()
   
-  func enqueue<T>(execution: Execution<T>) {
+  func enqueue<T>(_ execution: Execution<T>) {
     self.queue.insert(execution, at: 0)
     self.count += 1
   }
   
-  public func executeAllWithValuesFromAllocations(allocations: [JSON]) throws {
+  public func executeAllWithValuesFromAllocations(_ allocations: [JSON]) throws {
     while !queue.isEmpty {
       var execution = queue.popLast() as Any
       do {
         if let executionString = execution as? Execution<String> {
-          try executionString.executeWithAllocation(rawAllocations: allocations)
+          try executionString.executeWithAllocation(allocations)
           execution = executionString as Execution<String>
         } else if let executionInt = execution as? Execution<Int> {
-          try executionInt.executeWithAllocation(rawAllocations: allocations)
+          try executionInt.executeWithAllocation(allocations)
           execution = executionInt as Execution<Int>
         } else if let executionDbl = execution as? Execution<Double> {
-          try executionDbl.executeWithAllocation(rawAllocations: allocations)
+          try executionDbl.executeWithAllocation(allocations)
           execution = executionDbl as Execution<Double>
         } else if let executionBool = execution as? Execution<Bool> {
-          try executionBool.executeWithAllocation(rawAllocations: allocations)
+          try executionBool.executeWithAllocation(allocations)
           execution = executionBool as Execution<Bool>
         } else if let executionFloat = execution as? Execution<Float> {
-          try executionFloat.executeWithAllocation(rawAllocations: allocations)
+          try executionFloat.executeWithAllocation(allocations)
           execution = executionFloat as Execution<Float>
         } else {
           continue

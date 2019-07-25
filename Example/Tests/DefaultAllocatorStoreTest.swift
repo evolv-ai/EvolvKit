@@ -52,16 +52,16 @@ class DefaultAllocatorStoreTest: XCTestCase {
   func testEmptyStoreRGetsEmptyJsonArray() {
     let store = DefaultAllocationStore(size: 10)
     
-    XCTAssertNotNil(store.get(uid: "test_user"))
-    XCTAssertEqual(0, store.get(uid: "test_user").count)
-    XCTAssertEqual([JSON](), store.get(uid: "test_user"))
+    XCTAssertNotNil(store.get("test_user"))
+    XCTAssertEqual(0, store.get("test_user").count)
+    XCTAssertEqual([JSON](), store.get("test_user"))
   }
   
   func testSetAndGetOnStore() {
     let store = DefaultAllocationStore(size: 10)
     let allocations = self.rawAllocations
-    store.put(uid: "test_user", allocations: allocations)
-    let storedAllocations = store.get(uid: "test_user")
+    store.put("test_user", allocations)
+    let storedAllocations = store.get("test_user")
     
     XCTAssertNotNil(storedAllocations)
     XCTAssertNotEqual([JSON](), storedAllocations)

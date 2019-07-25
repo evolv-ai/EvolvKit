@@ -12,7 +12,7 @@ class ClientImplTest: XCTestCase {
   var mockEventEmitter: EventEmitter!
   var mockAllocator: Allocator!
   
-  private let participant = EvolvParticipant(userId: "test_user", sessionId: "test_session", userAttributes: [
+  private let participant = EvolvParticipant("test_user", "test_session", [
     "userId": "test_user",
     "sessionId": "test_session"
     ])
@@ -64,8 +64,8 @@ class ClientImplTest: XCTestCase {
     self.mockAllocationStore = AllocationStoreMock(testCase: self)
     self.mockConfig = EvolvConfig("https", "test.evolv.ai", "v1", self.environmentId, self.mockAllocationStore, self.mockHttpClient)
     self.mockExecutionQueue = ExecutionQueueMock()
-    self.mockEventEmitter = EmitterMock(config: self.mockConfig, participant: self.participant)
-    self.mockAllocator = AllocatorMock(config: self.mockConfig, participant: self.participant)
+    self.mockEventEmitter = EmitterMock(self.mockConfig, self.participant)
+    self.mockAllocator = AllocatorMock(self.mockConfig, self.participant)
   }
   
   override func tearDown() {
@@ -104,22 +104,20 @@ class ClientImplTest: XCTestCase {
     }
     
     let config = EvolvConfig("https", "test.evolv.ai", "v1", "test_env", self.mockAllocationStore, self.mockHttpClient)
-    let emitter = EventEmitter(config: config, participant: participant)
+    let emitter = EventEmitter(config, participant)
     let allocations = self.rawAllocations
     
     let promise = Promise { resolver in
       resolver.fulfill(allocations)
     }
     
-    // FIXME: this is failing, why????
     let applyFunction: (Double) -> Void = { value in
       XCTAssertNotEqual(defaultValue, value)
       expectation.fulfill()
-      
     }
     
     let client = EvolvClientImpl(config, emitter, promise, mockAllocator, false, participant)
-    client.subscribe(key: subscriptionKey, defaultValue: defaultValue, function: applyFunction)
+    client.subscribe(subscriptionKey, defaultValue, applyFunction)
     
     self.waitForExpectations(timeout: 8)
   }
@@ -130,7 +128,7 @@ class ClientImplTest: XCTestCase {
     let participantId = "id"
     let expectation = XCTestExpectation(description: "Async block executed")
     
-    let participant = EvolvParticipant(userId: participantId, sessionId: "sid", userAttributes: [
+    let participant = EvolvParticipant(participantId, "sid", [
       "userId": "id",
       "sessionId": "sid"
       ])
@@ -143,7 +141,7 @@ class ClientImplTest: XCTestCase {
     }
     
     let config = EvolvConfig("https", "test.evolv.ai", "v1", "test_env", self.mockAllocationStore, self.mockHttpClient)
-    let emitter = EventEmitter(config: config, participant: participant)
+    let emitter = EventEmitter(config, participant)
     let allocations = self.rawAllocations
     
     let promise = Promise { resolver in
@@ -156,7 +154,7 @@ class ClientImplTest: XCTestCase {
     }
     
     let client = EvolvClientImpl(config, emitter, promise, mockAllocator, false, participant)
-    client.subscribe(key: subscriptionKey, defaultValue: defaultValue, function: applyFunction)
+    client.subscribe(subscriptionKey, defaultValue, applyFunction)
     
     // fails exceeding the timeout. Why???
     self.waitForExpectations(timeout: 8)
@@ -176,7 +174,7 @@ class ClientImplTest: XCTestCase {
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
     let key = "testKey"
     let score = 1.3
-    client.emitEvent(key: key, score: score)
+    client.emitEvent(key, score)
     
     XCTAssertTrue(client.emitEventWithScoreWasCalled)
   }
@@ -193,7 +191,7 @@ class ClientImplTest: XCTestCase {
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
     let key = "testKey"
-    client.emitEvent(key: key)
+    client.emitEvent(key)
     
     XCTAssertTrue(client.emitEventWasCalled)
   }
@@ -211,9 +209,9 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(allocations)
     }
     
-    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    let allocator = AllocatorMock(mockConfig, self.participant)
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
-    client.confirm(allocator: allocator)
+    client.confirm(allocator)
     
     XCTAssertTrue(allocator.sandbagConfirmationWasCalled)
   }
@@ -228,11 +226,11 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(allocations)
     }
     
-    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    let allocator = AllocatorMock(mockConfig, self.participant)
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
-    let emitter = EmitterMock(config: self.mockConfig, participant: self.participant)
-    client.confirm(eventEmitter: emitter, allocations: allocations)
+    let emitter = EmitterMock(self.mockConfig, self.participant)
+    client.confirm(emitter, allocations)
     allocator.allocationStatus = Allocator.AllocationStatus.RETRIEVED
     
     XCTAssertEqual(allocator.getAllocationStatus(), Allocator.AllocationStatus.RETRIEVED)
@@ -249,10 +247,10 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(allocations)
     }
     
-    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    let allocator = AllocatorMock(mockConfig, self.participant)
     allocator.allocationStatus = Allocator.AllocationStatus.FETCHING
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
-    client.contaminate(allocator: allocator)
+    client.contaminate(allocator)
     
     XCTAssertEqual(allocator.getAllocationStatus(), Allocator.AllocationStatus.FETCHING)
     XCTAssertTrue(allocator.sandbagContamationWasCalled)
@@ -268,11 +266,11 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(allocations)
     }
     
-    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    let allocator = AllocatorMock(mockConfig, self.participant)
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, mockAllocator, false, self.participant)
-    let emitter = EmitterMock(config: self.mockConfig, participant: self.participant)
-    client.contaminate(eventEmitter: emitter, allocations: allocations)
+    let emitter = EmitterMock(self.mockConfig, self.participant)
+    client.contaminate(emitter, allocations)
     allocator.allocationStatus = Allocator.AllocationStatus.RETRIEVED
     
     XCTAssertEqual(allocator.getAllocationStatus(), Allocator.AllocationStatus.RETRIEVED)
@@ -289,7 +287,7 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(allocations)
     }
     
-    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    let allocator = AllocatorMock(mockConfig, self.participant)
     allocator.allocationStatus = Allocator.AllocationStatus.FETCHING
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, allocator, false, self.participant)
@@ -301,7 +299,7 @@ class ClientImplTest: XCTestCase {
       self.testValue = value
     }
     
-    client.subscribe(key: "search.weighting.distance", defaultValue: defaultValue, function: updateValue)
+    client.subscribe("search.weighting.distance", defaultValue, updateValue)
     
     XCTAssertEqual(expectedTestValue, self.testValue)
     self.testValue = 0.0
@@ -317,7 +315,7 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(allocations)
     }
     
-    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    let allocator = AllocatorMock(mockConfig, self.participant)
     allocator.allocationStatus = Allocator.AllocationStatus.RETRIEVED
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, allocator, false, self.participant)
@@ -332,7 +330,7 @@ class ClientImplTest: XCTestCase {
       self.testValue = value
     }
     
-    client.subscribe(key: "search.weighting.distance", defaultValue: defaultValue, function: updateValue)
+    client.subscribe("search.weighting.distance", defaultValue, updateValue)
     XCTAssertEqual(expected, self.testValue)
     self.testValue = 0.0
   }
@@ -347,7 +345,7 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(allocations)
     }
     
-    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    let allocator = AllocatorMock(mockConfig, self.participant)
     allocator.allocationStatus = Allocator.AllocationStatus.FAILED
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, allocator, false, self.participant)
@@ -362,7 +360,7 @@ class ClientImplTest: XCTestCase {
       self.testValue = value
     }
     
-    client.subscribe(key: "search.weighting.distance", defaultValue: defaultValue, function: updateValue)
+    client.subscribe("search.weighting.distance", defaultValue, updateValue)
     XCTAssertNotEqual(expected, self.testValue)
     self.testValue = 0.0
   }
@@ -377,7 +375,7 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(allocations)
     }
     
-    let allocator = AllocatorMock(config: mockConfig, participant: self.participant)
+    let allocator = AllocatorMock(mockConfig, self.participant)
     allocator.allocationStatus = Allocator.AllocationStatus.FAILED
     
     let client = ClientImplMock(mockConfig, mockEventEmitter, promise, allocator, false, self.participant)
@@ -392,7 +390,7 @@ class ClientImplTest: XCTestCase {
       self.testValue = value
     }
     
-    client.subscribe(key: "not.a.valid.key", defaultValue: defaultValue, function: updateValue)
+    client.subscribe("not.a.valid.key", defaultValue, updateValue)
     XCTAssertNotEqual(expected, self.testValue)
     self.testValue = 0.0
   }

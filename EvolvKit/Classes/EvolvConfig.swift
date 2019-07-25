@@ -94,7 +94,7 @@ public class ConfigBuilder {
       - domain: The domain of the evolvParticipant api.
    - Returns: EvolvConfigBuilder class
    */
-  public func setDomain(domain: String) -> ConfigBuilder {
+  public func setDomain(_ domain: String) -> ConfigBuilder {
     self.domain = domain
     return self
   }
@@ -105,7 +105,7 @@ public class ConfigBuilder {
       - version: Representation of the required evolvParticipant api version.
    - Returns: EvolvConfigBuilder class.
    */
-  public func setVersion(version: String) -> ConfigBuilder {
+  public func setVersion(_ version: String) -> ConfigBuilder {
     self.version = version
     return self
   }
@@ -117,7 +117,7 @@ public class ConfigBuilder {
       - allocationStore: A custom built allocation store.
    - Returns: EvolvConfigBuilder class
    */
-  public func setEvolvAllocationStore(allocationStore: AllocationStoreProtocol) -> ConfigBuilder {
+  public func setEvolvAllocationStore(_ allocationStore: AllocationStoreProtocol) -> ConfigBuilder {
     self.allocationStore = allocationStore
     return self
   }

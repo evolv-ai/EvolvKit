@@ -103,7 +103,7 @@ class ClientFactoryTest: XCTestCase {
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
-    var responsePromise = mockHttpClient.get(url: URL(string: anyString(length: 12))!)
+    var responsePromise = mockHttpClient.get(URL(string: anyString(length: 12))!)
     responsePromise = Promise { resolver in
         resolver.fulfill(rawAllocationString)
     }
@@ -122,7 +122,7 @@ class ClientFactoryTest: XCTestCase {
   }
   
   func testClientInitSameUser() {
-    let participant = EvolvParticipant.builder().setUserId(userId: "test_uid").build()
+    let participant = EvolvParticipant.builder().setUserId("test_uid").build()
     let mockClient = HttpClientMock()
     
     let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
@@ -132,8 +132,8 @@ class ClientFactoryTest: XCTestCase {
     let previousAllocations = self.rawAllocations
     let previousUid = previousAllocations[0]["uid"].rawString()!
     
-    mockAllocationStore.put(uid: previousUid, allocations: previousAllocations)
-    let cachedAllocations = mockAllocationStore.get(uid: previousUid)
+    mockAllocationStore.put(previousUid, previousAllocations)
+    let cachedAllocations = mockAllocationStore.get(previousUid)
     
     XCTAssertEqual(cachedAllocations, previousAllocations)
     

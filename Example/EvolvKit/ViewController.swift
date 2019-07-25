@@ -22,7 +22,7 @@ class ViewController: UIViewController {
   let store: AllocationStoreProtocol
   
   @IBAction func didPressCheckOut(_ sender: Any) {
-    client.emitEvent(key: "conversion")
+    client.emitEvent("conversion")
     textLabel.text = "Conversion!"
   }
   
@@ -82,19 +82,19 @@ class ViewController: UIViewController {
         let message = "Error converting string json to SwiftyJSON"
         LOGGER.log(.error, message: message)
     } else {
-        store.put(uid: "sandbox_user", allocations: rawAllocations)
+      store.put("sandbox_user", rawAllocations)
     }
     
     /// - Build config with custom timeout and custom allocation store
     // set client to use sandbox environment
     let config = EvolvConfig.builder("sandbox", httpClient)
-      .setEvolvAllocationStore(allocationStore: store)
+      .setEvolvAllocationStore(store)
       .build()
     
     /// - Initialize the client with a stored user
     /// fetches allocations from Evolv, and stores them in a custom store
     client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
-      .setUserId(userId: "sandbox_user").build()).client
+      .setUserId("sandbox_user").build()).client
 
     /// - Initialize the client with a new user
     /// - Uncomment this line if you prefer this initialization.
@@ -109,8 +109,8 @@ class ViewController: UIViewController {
     guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
     statusBarView.backgroundColor = UIColor(red: 0.0, green: 0.3, blue: 0.3, alpha: 1.0)
 
-    client.subscribe(key: "ui.layout", defaultValue: "#000000", function: setBackgroundColor)
-    client.subscribe(key: "ui.buttons.checkout.text", defaultValue: "보안 체크 아웃 시작", function: changeButtonText)
+    client.subscribe("ui.layout", "#000000", setBackgroundColor)
+    client.subscribe("ui.buttons.checkout.text", "보안 체크 아웃 시작", changeButtonText)
     client.confirm()
   }
   

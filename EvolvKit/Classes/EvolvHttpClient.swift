@@ -16,7 +16,7 @@ public class EvolvHttpClient: HttpProtocol {
   
   public init () {}
   
-  public func get(url: URL) -> Promise<String> {
+  public func get(_ url: URL) -> Promise<String> {
     return Promise<String> { resolver -> Void in
       
       Alamofire.request(url)
@@ -36,7 +36,7 @@ public class EvolvHttpClient: HttpProtocol {
     }
   }
   
-  public func sendEvents(url: URL) {
+  public func sendEvents(_ url: URL) {
     let headers = [
       "Content-Type": "application/json",
       "Host": "participants.evolv.ai"

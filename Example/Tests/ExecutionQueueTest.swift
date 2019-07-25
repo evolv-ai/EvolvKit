@@ -88,13 +88,13 @@ class ExecutionQueueTest: XCTestCase {
     let defaultValue = "red"
     let execution = ExecutionMock(key, defaultValue, participant, printSomething)
     
-    mockExecutionQueue.enqueue(execution: execution)
+    mockExecutionQueue.enqueue(execution)
     XCTAssertEqual(mockExecutionQueue.count, 1)
     XCTAssertTrue(mockExecutionQueue != nil)
     
-    mockExecutionQueue.enqueue(execution: execution)
-    mockExecutionQueue.enqueue(execution: execution)
-    mockExecutionQueue.enqueue(execution: execution)
+    mockExecutionQueue.enqueue(execution)
+    mockExecutionQueue.enqueue(execution)
+    mockExecutionQueue.enqueue(execution)
     
     XCTAssertEqual(mockExecutionQueue.count, 4)
   }
@@ -107,13 +107,13 @@ class ExecutionQueueTest: XCTestCase {
     
     let allocations = self.rawAllocations
     
-    mockExecutionQueue.enqueue(execution: exMock1)
-    mockExecutionQueue.enqueue(execution: exMock2)
+    mockExecutionQueue.enqueue(exMock1)
+    mockExecutionQueue.enqueue(exMock2)
     
     XCTAssertEqual(mockExecutionQueue.count, 2)
     
     // Should pop an execution from the queue
-    mockExecutionQueue.executeAllWithValuesFromAllocations(allocations: allocations)
+    mockExecutionQueue.executeAllWithValuesFromAllocations(allocations)
     
     XCTAssertEqual(mockExecutionQueue.count, 1)
     XCTAssertTrue(mockExecutionQueue.executeValuesFromAllocationsWasCalled)
@@ -125,8 +125,8 @@ class ExecutionQueueTest: XCTestCase {
     let exMock1 = ExecutionMock(key, defaultValue, participant, printSomething)
     let exMock2 = ExecutionMock(key, defaultValue, participant, doSomething)
     
-    mockExecutionQueue.enqueue(execution: exMock1)
-    mockExecutionQueue.enqueue(execution: exMock2)
+    mockExecutionQueue.enqueue(exMock1)
+    mockExecutionQueue.enqueue(exMock2)
     
     XCTAssertEqual(mockExecutionQueue.count, 2)
     

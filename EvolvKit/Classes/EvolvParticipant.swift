@@ -13,7 +13,7 @@ public class EvolvParticipant {
   private var userId: String
   private var userAttributes: [String: String]
   
-  init(userId: String, sessionId: String, userAttributes: [String: String]) {
+  init(_ userId: String, _ sessionId: String, _ userAttributes: [String: String]) {
     self.userId = userId
     self.sessionId = sessionId
     self.userAttributes = userAttributes
@@ -29,7 +29,7 @@ public class EvolvParticipant {
   
   public func getUserAttributes() -> [String: String] { return userAttributes }
   
-  public func setUserId(userId: String) {
+  public func setUserId(_ userId: String) {
     self.userId = userId
   }
 }
@@ -51,7 +51,7 @@ public class ParticipantBuilder {
       - userId: A unique key.
    - Returns: this instance of the participant
    */
-  public func setUserId(userId: String) -> ParticipantBuilder {
+  public func setUserId(_ userId: String) -> ParticipantBuilder {
     self.userId = userId
     return self
   }
@@ -62,7 +62,7 @@ public class ParticipantBuilder {
       - sessionId: A unique key.
    - Returns: this instance of the participant
    */
-  public func setSessionId(sessionId: String) -> ParticipantBuilder {
+  public func setSessionId(_ sessionId: String) -> ParticipantBuilder {
     self.sessionId = sessionId
     return self
   }
@@ -73,7 +73,7 @@ public class ParticipantBuilder {
       - userAttributes: A map representing specific attributes that describe the participant.
    - Returns: this instance of the participant
    */
-  public func setUserAttributes(userAttributes: [String: String]) -> ParticipantBuilder {
+  public func setUserAttributes(_ userAttributes: [String: String]) -> ParticipantBuilder {
     self.userAttributes = userAttributes
     return self
   }
@@ -85,6 +85,6 @@ public class ParticipantBuilder {
   public func build() -> EvolvParticipant {
     self.userAttributes.updateValue(self.userId, forKey: "uid")
     self.userAttributes.updateValue(self.sessionId, forKey: "sid")
-    return EvolvParticipant(userId: self.userId, sessionId: self.sessionId, userAttributes: self.userAttributes)
+    return EvolvParticipant(self.userId, self.sessionId, self.userAttributes)
   }
 }

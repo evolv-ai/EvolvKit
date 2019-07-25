@@ -6,7 +6,7 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
-public protocol EvolvAction {
+public protocol EvolvActionProtocol {
   /**
    Applies a given value to a set of instructions.
    - Parameters:

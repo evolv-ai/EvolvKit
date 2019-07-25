@@ -13,7 +13,7 @@ public class Allocations {
   let audience: Audience = Audience()
   let LOGGER = Log.logger
   
-  init (allocations: [JSON]) {
+  init (_ allocations: [JSON]) {
     self.allocations = allocations
   }
   
@@ -30,7 +30,7 @@ public class Allocations {
     
     for allocation in self.allocations {
       let genome = allocation["genome"]
-      let element = try getElementFromGenome(genome: genome, keyParts: keyParts)
+      let element = try getElementFromGenome(genome, keyParts)
       if element.error == nil {
         return element
       } else {
@@ -41,7 +41,7 @@ public class Allocations {
     return errorJson
   }
   
-  private func getElementFromGenome(genome: JSON, keyParts: [String]) throws -> JSON {
+  private func getElementFromGenome(_ genome: JSON, _ keyParts: [String]) throws -> JSON {
     var element: JSON = genome
     if element.isEmpty {
       throw EvolvKeyError.genomeEmpty
@@ -59,7 +59,7 @@ public class Allocations {
     return element
   }
   
-  static public func reconcileAllocations(previousAllocations: [JSON], currentAllocations: [JSON]) -> [JSON] {
+  static public func reconcileAllocations(_ previousAllocations: [JSON], _ currentAllocations: [JSON]) -> [JSON] {
     var allocations = [JSON]()
     
     for currentAllocation in currentAllocations {

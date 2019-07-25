@@ -22,9 +22,9 @@ class EvolvParticipantTest: XCTestCase {
     let userAttributes = ["country": "us"]
     
     let participant = EvolvParticipant.builder()
-      .setUserId(userId: userId)
-      .setSessionId(sessionId: sessionId)
-      .setUserAttributes(userAttributes: userAttributes)
+      .setUserId(userId)
+      .setSessionId(sessionId)
+      .setUserAttributes(userAttributes)
       .build()
     
     XCTAssertEqual(userId, participant.getUserId())
@@ -42,14 +42,14 @@ class EvolvParticipantTest: XCTestCase {
     let newUserId = "Testy"
     let participant = EvolvParticipant.builder().build()
     let oldUserId = participant.getUserId()
-    participant.setUserId(userId: newUserId)
+    participant.setUserId(newUserId)
     
     XCTAssertNotEqual(oldUserId, newUserId)
     XCTAssertEqual(newUserId, participant.getUserId())
   }
   
   func testParticipantGetUserAttr() {
-    let participant = EvolvParticipant.builder().setUserId(userId: "test_user").setSessionId(sessionId: "test_session").build()
+    let participant = EvolvParticipant.builder().setUserId("test_user").setSessionId("test_session").build()
     let userAttributes = participant.getUserAttributes()
     let expectedUserAttributes = ["uid": "test_user", "sid": "test_session"]
     XCTAssertEqual(userAttributes["uid"], expectedUserAttributes["uid"])
@@ -58,7 +58,7 @@ class EvolvParticipantTest: XCTestCase {
   
   func testEvolvParticipant() {
     let participant = EvolvParticipant.builder().build()
-    participant.setUserId(userId: "test_user")
+    participant.setUserId("test_user")
     XCTAssertEqual(participant.getUserId(), "test_user")
   }
 }
