@@ -17,7 +17,42 @@ class EventEmitterTest: XCTestCase {
   private let score = 10.0
   private let eid = "test_eid"
   private let cid = "test_cid"
-  private let rawAllocation = "[{\"uid\":\"test_uid\",\"sid\":\"test_sid\",\"eid\":\"test_eid\",\"cid\":\"test_cid\",\"genome\":{\"search\":{\"weighting\":{\"distance\":2.5,\"dealer_score\":2.5}},\"pages\":{\"all_pages\":{\"header_footer\":[\"blue\",\"white\"]},\"testing_page\":{\"megatron\":\"none\",\"header\":\"white\"}},\"algorithms\":{\"feature_importance\":false}},\"excluded\":false}]"
+    private var rawAllocations: [JSON] {
+        let data: [[String: Any]] = [
+            [
+                "uid": "test_uid",
+                "sid": "test_sid",
+                "eid": "test_eid",
+                "cid": "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
   
   private var mockConfig: ConfigMock!
   private var mockExecutionQueue: ExecutionQueueMock!
@@ -25,6 +60,8 @@ class EventEmitterTest: XCTestCase {
   private var mockAllocationStore: DefaultAllocationStore!
   
   override func setUp() {
+    super.setUp()
+    
     mockExecutionQueue = ExecutionQueueMock()
     mockHttpClient = HttpClientMock()
     mockAllocationStore = DefaultAllocationStore(size: 1)
@@ -32,17 +69,19 @@ class EventEmitterTest: XCTestCase {
   }
   
   override func tearDown() {
-    if let _ = mockHttpClient {
-      mockHttpClient = nil
+    super.tearDown()
+    
+    if mockHttpClient != nil {
+        mockHttpClient = nil
     }
-    if let _ = mockAllocationStore {
-      mockAllocationStore = nil
+    if mockAllocationStore != nil {
+        mockAllocationStore = nil
     }
-    if let _ = mockExecutionQueue {
-      mockExecutionQueue = nil
+    if mockExecutionQueue != nil {
+        mockExecutionQueue = nil
     }
-    if let _ = mockConfig {
-      mockConfig = nil
+    if mockConfig != nil {
+        mockConfig = nil
     }
   }
   
@@ -56,7 +95,7 @@ class EventEmitterTest: XCTestCase {
   }
   
   func createAllocationEventUrl(config: EvolvConfig, allocation: JSON, event: String, participant: EvolvParticipant) -> URL {
-    let _ = "%s://%s/%s/%s/events?uid=%s&sid=%s&eid=%s&cid=%s&type=%s"
+//    let _ = "%s://%s/%s/%s/events?uid=%s&sid=%s&eid=%s&cid=%s&type=%s"
     var components = URLComponents()
     
     let eid = allocation["eid"].rawString()!
@@ -77,7 +116,7 @@ class EventEmitterTest: XCTestCase {
   }
   
   func createEventsUrl(config: EvolvConfig, type: String, score: Double, participant: EvolvParticipant) -> URL {
-    let _ = "%s://%s/%s/%s/events?uid=%s&sid=%s&type=%s&score=%s"
+//    let _ = "%s://%s/%s/%s/events?uid=%s&sid=%s&type=%s&score=%s"
     var components = URLComponents()
     
     components.scheme = config.getHttpScheme()
@@ -112,7 +151,7 @@ class EventEmitterTest: XCTestCase {
                                                             mockExecutionQueue, mockHttpClient,
                                                             mockAllocationStore)
     
-    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let allocations = self.rawAllocations
     let participant = EvolvParticipant.builder().build()
     
     let emitter = EventEmitter(config: mockConfig, participant: participant)
@@ -126,7 +165,7 @@ class EventEmitterTest: XCTestCase {
     let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig, mockExecutionQueue,
                                                                              mockHttpClient, mockAllocationStore)
-    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let allocations = self.rawAllocations
     
     let participant = EvolvParticipant.builder().setUserId(userId: "test_user").setSessionId(sessionId: "test_session").build()
     let emitter = EmitterMock(config: mockConfig, participant: participant)
@@ -141,7 +180,7 @@ class EventEmitterTest: XCTestCase {
     let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig, mockExecutionQueue,
                                                                             mockHttpClient, mockAllocationStore)
-    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let allocations = self.rawAllocations
     
     let participant = EvolvParticipant.builder().build()
     let emitter = EmitterMock(config: mockConfig, participant: participant)
@@ -156,7 +195,7 @@ class EventEmitterTest: XCTestCase {
     let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig, mockExecutionQueue,
                                                                             mockHttpClient, mockAllocationStore)
-    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let allocations = self.rawAllocations
     
     let participant = EvolvParticipant.builder().build()
     let emitter = EmitterMock(config: mockConfig, participant: participant)

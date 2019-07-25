@@ -12,17 +12,54 @@ import SwiftyJSON
 
 class ExecutionQueueTest: XCTestCase {
   
-  private var mockExecutionQueue : ExecutionQueueMock!
-  private var participant : EvolvParticipant!
+  private var mockExecutionQueue: ExecutionQueueMock!
+  private var participant: EvolvParticipant!
   
   private let environmentId: String = "test_12345"
-  private let rawAllocation: String = "[{\"uid\":\"test_uid\",\"sid\":\"test_sid\",\"eid\":\"test_eid\",\"cid\":\"test_cid\",\"genome\":{\"search\":{\"weighting\":{\"distance\":2.5,\"dealer_score\":2.5}},\"pages\":{\"all_pages\":{\"header_footer\":[\"blue\",\"white\"]},\"testing_page\":{\"megatron\":\"none\",\"header\":\"white\"}},\"algorithms\":{\"feature_importance\":false}},\"excluded\":false}]"
+    private var rawAllocations: [JSON] {
+        let data: [[String: Any]] = [
+            [
+                "uid": "test_uid",
+                "sid": "test_sid",
+                "eid": "test_eid",
+                "cid": "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
   
   private var mockConfig: EvolvConfig!
-  private var mockHttpClient : HttpClientMock!
-  private var mockAllocationStore : AllocationStoreProtocol!
+  private var mockHttpClient: HttpClientMock!
+  private var mockAllocationStore: AllocationStoreProtocol!
   
   override func setUp() {
+    super.setUp()
+    
     self.mockExecutionQueue = ExecutionQueueMock()
     self.participant = EvolvParticipant.builder().build()
     mockHttpClient = HttpClientMock()
@@ -32,39 +69,32 @@ class ExecutionQueueTest: XCTestCase {
   }
   
   override func tearDown() {
-    if let _ = mockExecutionQueue {
-      self.mockExecutionQueue = nil
+    super.tearDown()
+    
+    if mockExecutionQueue != nil {
+      mockExecutionQueue = nil
     }
-    if let _ = participant {
-      self.participant = nil
+    if participant != nil {
+      participant = nil
     }
-  }
-  
-  func parseRawAllocations(raw: String) -> [JSON] {
-    var allocations = [JSON]()
-    if let dataFromString = raw.data(using: String.Encoding.utf8, allowLossyConversion: false) {
-      allocations = try! JSON(data: dataFromString).arrayValue
-    }
-    return allocations
   }
 
   // Mock executions for the execution queue
   func printSomething<T>(value: T) { print("some value: \(value)") }
-  func doSomething(key: String) -> () { print("Did something with \(key)!") }
-  
+  func doSomething(key: String) { print("Did something with \(key)!") }
   
   func testEnqueue() {
     let key = "pages.testing_page.header"
     let defaultValue = "red"
-    let ex = ExecutionMock(key, defaultValue, participant, printSomething)
+    let execution = ExecutionMock(key, defaultValue, participant, printSomething)
     
-    mockExecutionQueue.enqueue(execution: ex)
+    mockExecutionQueue.enqueue(execution: execution)
     XCTAssertEqual(mockExecutionQueue.count, 1)
     XCTAssertTrue(mockExecutionQueue != nil)
     
-    mockExecutionQueue.enqueue(execution: ex)
-    mockExecutionQueue.enqueue(execution: ex)
-    mockExecutionQueue.enqueue(execution: ex)
+    mockExecutionQueue.enqueue(execution: execution)
+    mockExecutionQueue.enqueue(execution: execution)
+    mockExecutionQueue.enqueue(execution: execution)
     
     XCTAssertEqual(mockExecutionQueue.count, 4)
   }
@@ -75,7 +105,7 @@ class ExecutionQueueTest: XCTestCase {
     let exMock1 = ExecutionMock(key, defaultValue, participant, printSomething)
     let exMock2 = ExecutionMock("pages.testing_page.header", "red", participant, doSomething)
     
-    let allocations = parseRawAllocations(raw: rawAllocation)
+    let allocations = self.rawAllocations
     
     mockExecutionQueue.enqueue(execution: exMock1)
     mockExecutionQueue.enqueue(execution: exMock2)

@@ -11,7 +11,7 @@ import SwiftyJSON
 public class EvolvParticipant {
   private let sessionId: String
   private var userId: String
-  private var userAttributes: [String : String]
+  private var userAttributes: [String: String]
   
   init(userId: String, sessionId: String, userAttributes: [String: String]) {
     self.userId = userId
@@ -34,18 +34,17 @@ public class EvolvParticipant {
   }
 }
 
-
 /// Note: Swift builder pattern is implemented with adjacent classes.
 
 public class ParticipantBuilder {
   private var userId: String
   private var sessionId: String
-  private var userAttributes: [String : String]
+  private var userAttributes: [String: String]
   
-  init(){
+  init() {
     self.userId = UUID().uuidString
     self.sessionId = UUID().uuidString
-    self.userAttributes = ["uid" : userId, "sid": sessionId]
+    self.userAttributes = ["uid": userId, "sid": sessionId]
   }
   
   /**
@@ -54,7 +53,6 @@ public class ParticipantBuilder {
       - userId: A unique key.
    - Returns: this instance of the participant
    */
-  
   public func setUserId(userId: String) -> ParticipantBuilder {
     self.userId = userId
     return self
@@ -77,9 +75,9 @@ public class ParticipantBuilder {
       - userAttributes: A map representing specific attributes that describe the participant.
    - Returns: this instance of the participant
    */
-  public func setUserAttributes(userAttributes: [String : String]) -> ParticipantBuilder {
+  public func setUserAttributes(userAttributes: [String: String]) -> ParticipantBuilder {
     self.userAttributes = userAttributes
-    return self;
+    return self
   }
   
   /**

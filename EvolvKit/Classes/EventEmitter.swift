@@ -9,16 +9,17 @@
 import SwiftyJSON
 
 public class EventEmitter {
+    
+    public enum Key: String {
+        case confirm = "confirmation"
+        case contaminate = "contamination"
+    }
   
   private let LOGGER = Log.logger
-  
-  public let CONFIRM_KEY: String = "confirmation"
-  public let CONTAMINATE_KEY: String = "contamination"
   
   let httpClient: HttpProtocol
   let config: EvolvConfig
   let participant: EvolvParticipant
-  
   let audience = Audience()
   
   init(config: EvolvConfig, participant: EvolvParticipant) {
@@ -27,30 +28,30 @@ public class EventEmitter {
     self.httpClient = config.getHttpClient()
   }
   
-  public func emit(_ key: String) -> Void {
+  public func emit(_ key: String) {
     let url: URL = createEventUrl(type: key, score: 1.0)
     _ = makeEventRequest(url)
   }
   
-  public func emit(_ key: String, _ score: Double) -> Void {
+  public func emit(_ key: String, _ score: Double) {
     let url: URL = createEventUrl(type: key, score: score)
     _ = makeEventRequest(url)
   }
   
-  public func confirm(allocations: [JSON]) -> Void {
-    sendAllocationEvents(CONFIRM_KEY, allocations)
+  public func confirm(allocations: [JSON]) {
+    sendAllocationEvents(Key.confirm.rawValue, allocations)
   }
   
-  public func contaminate(allocations: [JSON]) -> Void {
-    sendAllocationEvents(CONTAMINATE_KEY, allocations)
+  public func contaminate(allocations: [JSON]) {
+    sendAllocationEvents(Key.contaminate.rawValue, allocations)
   }
   
   public func sendAllocationEvents(_ key: String, _ allocations: [JSON]) {
     if !allocations.isEmpty {
-      for a in allocations {
+      for allocation in allocations {
         // TODO: Perform audience check here
-        let eid = String(describing: a["eid"])
-        let cid = String(describing: a["cid"])
+        let eid = String(describing: allocation["eid"])
+        let cid = String(describing: allocation["cid"])
         let url = createEventUrl(type: key, experimentId: eid, candidateId: cid)
         makeEventRequest(url)
         
@@ -61,7 +62,7 @@ public class EventEmitter {
     }
   }
   
-  func createEventUrl(type: String , score: Double ) -> URL {
+  func createEventUrl(type: String, score: Double ) -> URL {
     var components = URLComponents()
     
     components.scheme = config.getHttpScheme()
@@ -106,13 +107,13 @@ public class EventEmitter {
     return url
   }
   
-  private func makeEventRequest(_ url: URL?) -> Void {
+  private func makeEventRequest(_ url: URL?) {
     guard let unwrappedUrl = url else {
       let message = "The event url was nil, skipping event request."
       LOGGER.log(.debug, message: message)
       return
     }
     
-    let _ = httpClient.sendEvents(url: unwrappedUrl)
+    _ = httpClient.sendEvents(url: unwrappedUrl)
   }
 }

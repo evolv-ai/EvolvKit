@@ -19,7 +19,7 @@ class EvolvParticipantTest: XCTestCase {
   func testSetCustomParticipantAttributes() {
     let userId = "Testy"
     let sessionId = "McTestTest"
-    let userAttributes = ["country" : "us"]
+    let userAttributes = ["country": "us"]
     
     let participant = EvolvParticipant.builder()
       .setUserId(userId: userId)
@@ -30,7 +30,7 @@ class EvolvParticipantTest: XCTestCase {
     XCTAssertEqual(userId, participant.getUserId())
     XCTAssertEqual(sessionId, participant.getSessionId())
     
-    var expectedUserAttributes = [String : String]()
+    var expectedUserAttributes = [String: String]()
     expectedUserAttributes["country"] = String("us")
     expectedUserAttributes["uid"] = String(userId)
     expectedUserAttributes["sid"] = String(sessionId)
@@ -48,17 +48,17 @@ class EvolvParticipantTest: XCTestCase {
     XCTAssertEqual(newUserId, participant.getUserId())
   }
   
-  func testParticipantGetUserAttr(){
-    let p = EvolvParticipant.builder().setUserId(userId: "test_user").setSessionId(sessionId: "test_session").build()
-    let userAttributes = p.getUserAttributes()
-    let expectedUserAttributes = ["uid":"test_user", "sid":"test_session"]
+  func testParticipantGetUserAttr() {
+    let participant = EvolvParticipant.builder().setUserId(userId: "test_user").setSessionId(sessionId: "test_session").build()
+    let userAttributes = participant.getUserAttributes()
+    let expectedUserAttributes = ["uid": "test_user", "sid": "test_session"]
     XCTAssertEqual(userAttributes["uid"], expectedUserAttributes["uid"])
     XCTAssertEqual(userAttributes["sid"], expectedUserAttributes["sid"])
   }
   
   func testEvolvParticipant() {
-    let p = EvolvParticipant.builder().build()
-    p.setUserId(userId: "test_user")
-    XCTAssertEqual(p.getUserId(), "test_user")
+    let participant = EvolvParticipant.builder().build()
+    participant.setUserId(userId: "test_user")
+    XCTAssertEqual(participant.getUserId(), "test_user")
   }
 }

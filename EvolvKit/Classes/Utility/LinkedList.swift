@@ -45,12 +45,12 @@ public final class LinkedList<T> {
   
   public var count: Int {
     if var node = head {
-      var c = 1
+      var counter = 1
       while let next = node.next {
         node = next
-        c += 1
+        counter += 1
       }
-      return c
+      return counter
     } else {
       return 0
     }
@@ -59,10 +59,10 @@ public final class LinkedList<T> {
   public func node(atIndex index: Int) -> Node? {
     if index >= 0 {
       var node = head
-      var i = index
+      var currentIndex = index
       while node != nil {
-        if i == 0 { return node }
-        i -= 1
+        if currentIndex == 0 { return node }
+        currentIndex -= 1
         node = node!.next
       }
     }
@@ -101,17 +101,17 @@ public final class LinkedList<T> {
   private func nodesBeforeAndAfter(index: Int) -> (Node?, Node?) {
     assert(index >= 0)
     
-    var i = index
+    var currentIndex = index
     var next = head
     var prev: Node?
     
-    while next != nil && i > 0 {
-      i -= 1
+    while next != nil && currentIndex > 0 {
+      currentIndex -= 1
       prev = next
       next = next!.next
     }
     // if > 0, then specified index was too large
-    assert(i == 0)
+    assert(currentIndex == 0)
     return (prev, next)
   }
   
@@ -187,14 +187,14 @@ public final class LinkedList<T> {
 
 extension LinkedList: CustomStringConvertible {
   public var description: String {
-    var s = "["
+    var str = "["
     var node = head
     while node != nil {
-      s += "\(node!.value)"
+      str += "\(node!.value)"
       node = node!.next
-      if node != nil { s += ", " }
+      if node != nil { str += ", " }
     }
-    return s + "]"
+    return str + "]"
   }
 }
 
@@ -234,7 +234,7 @@ extension LinkedList {
 }
 
 extension LinkedList {
-  convenience init(array: Array<T>) {
+  convenience init(array: [T]) {
     self.init()
     
     for element in array {
@@ -252,4 +252,3 @@ extension LinkedList: ExpressibleByArrayLiteral {
     }
   }
 }
-

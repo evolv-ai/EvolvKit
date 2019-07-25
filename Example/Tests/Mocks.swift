@@ -23,18 +23,15 @@ class AllocationStoreMock: AllocationStoreProtocol {
   }
   
   var expectGetExpectation: XCTestExpectation?
-  var expectPutExpectation : XCTestExpectation?
+  var expectPutExpectation: XCTestExpectation?
   
   private var mockedGet: (String) -> [JSON] = { _ in
-    let rawAllocation = AllocationsTest.rawAllocation
-    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
-    return allocations
+    return AllocationsTest.rawAllocations
   }
   
-  private var mockedPut: (String, [JSON]) -> Void = { _,_  in
+  private var mockedPut: (String, [JSON]) -> Void = { _, _  in
     
   }
-  
   
   @discardableResult
   func expectGet(_ mocked: @escaping (_ uid: String) -> [JSON]) -> XCTestExpectation {
@@ -62,7 +59,7 @@ class AllocationStoreMock: AllocationStoreProtocol {
   }
 }
 
-class ClientFactoryMock : EvolvClientFactory {
+class ClientFactoryMock: EvolvClientFactory {
   
 }
 
@@ -78,8 +75,7 @@ class HttpClientMock: HttpProtocol {
         .validate()
         .responseString { response in
           switch response.result {
-          case .success( _):
-            
+          case .success:
             if let responseString = response.result.value {
               
               resolver.fulfill(responseString)
@@ -96,16 +92,14 @@ class HttpClientMock: HttpProtocol {
     HttpClientMock.httpClientSendEventsWasCalled = true
     let headers = [
       "Content-Type": "application/json",
-      "Host" : "participants.evolv.ai"
+      "Host": "participants.evolv.ai"
     ]
     
     Alamofire.request(url,
-                      method      : .get,
-                      parameters  : nil,
-                      encoding    : JSONEncoding.default ,
-                      headers     : headers).responseData { dataResponse in
-                        
-                        
+                      method: .get,
+                      parameters: nil,
+                      encoding: JSONEncoding.default ,
+                      headers: headers).responseData { dataResponse in
                         if dataResponse.response?.statusCode == 202 {
                           print("All good over here!")
                         } else {
@@ -120,23 +114,23 @@ class ClientImplMock: EvolvClientImpl {
   var emitEventWithScoreWasCalled = false
   let mockHttpClient = EvolvHttpClient()
   
-  override public func emitEvent(key: String) -> Void {
+  override public func emitEvent(key: String) {
     emitEventWasCalled = true
   }
   
-  override public func emitEvent(key: String, score: Double) -> Void {
+  override public func emitEvent(key: String, score: Double) {
     emitEventWithScoreWasCalled = true
   }
   
-  public func confirm(allocator: AllocatorMock) -> Void {
+  public func confirm(allocator: AllocatorMock) {
     allocator.sandbagConfirmation()
   }
   
-  public func confirm(eventEmitter: EmitterMock, allocations: [JSON]) -> Void {
+  public func confirm(eventEmitter: EmitterMock, allocations: [JSON]) {
     eventEmitter.confirm(allocations: allocations)
   }
   
-  public func contaminate(allocator: AllocatorMock) -> Void {
+  public func contaminate(allocator: AllocatorMock) {
     allocator.sandbagContamination()
   }
   
@@ -146,13 +140,13 @@ class ClientImplMock: EvolvClientImpl {
 
 }
 
-class AllocatorMock : Allocator {
+class AllocatorMock: Allocator {
   
   var sandbagConfirmationWasCalled = false
   var sandbagContamationWasCalled = false
   
   var config: EvolvConfig
-  var participant : EvolvParticipant
+  var participant: EvolvParticipant
   
   var allocationStatus: AllocationStatus
   
@@ -178,7 +172,7 @@ class AllocatorMock : Allocator {
   }
 }
 
-class EmitterMock : EventEmitter {
+class EmitterMock: EventEmitter {
   
   let httpClientMock = HttpClientMock()
   var confirmWithAllocationsWasCalled = false
@@ -191,32 +185,31 @@ class EmitterMock : EventEmitter {
     makeEventRequest(url)
   }
   
-  private func makeEventRequest(_ url: URL) -> Void {
-    let _ = httpClientMock.sendEvents(url: url)
+  private func makeEventRequest(_ url: URL) {
+    _ = httpClientMock.sendEvents(url: url)
   }
   
-  override public func contaminate(allocations: [JSON]) -> Void {
+  override public func contaminate(allocations: [JSON]) {
     contaminateWithAllocationsWasCalled = true
   }
   
-  override public func confirm(allocations: [JSON]) -> Void {
+  override public func confirm(allocations: [JSON]) {
     confirmWithAllocationsWasCalled = true
   }
   
-  override public func emit(_ key: String) -> Void {
+  override public func emit(_ key: String) {
     let url: URL = createEventUrl(type: key, score: 1.0)
     self.makeEventRequest(url)
   }
   
-  override public func emit(_ key: String, _ score: Double) -> Void {
+  override public func emit(_ key: String, _ score: Double) {
     let url: URL = createEventUrl(type: key, score: score)
     self.makeEventRequest(url)
   }
   
 }
 
-class ExecutionQueueMock : ExecutionQueue {
-  
+class ExecutionQueueMock: ExecutionQueue {
   var executeAllWithValuesFromAllocationsWasCalled = false
   var executeAllWithValuesFromDefaultsWasCalled = false
   
@@ -237,8 +230,6 @@ class ExecutionMock<T>: Execution<T> {
   
   override func executeWithAllocation(rawAllocations: [JSON]) throws {}
 }
-
-
 
 class ConfigMock: EvolvConfig { }
 

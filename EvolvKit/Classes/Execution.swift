@@ -8,19 +8,18 @@
 
 import SwiftyJSON
 
-
 class Execution<T> {
   
   private let key: String
   private let participant: EvolvParticipant
   private var defaultValue: T
   private var alreadyExecuted: Set<String> = Set()
-  private var closure : (T) -> ()
+  private var closure: (T) -> Void
   
   init(_ key: String,
        _ defaultValue: T,
        _ participant: EvolvParticipant,
-       _ closure: @escaping (T) -> ()) {
+       _ closure: @escaping (T) -> Void) {
     self.key = key
     self.defaultValue = defaultValue
     self.participant = participant
@@ -33,7 +32,7 @@ class Execution<T> {
     return type(of: element)
   }
   
-  func executeWithAllocation(rawAllocations: [JSON]) throws -> Void {
+  func executeWithAllocation(rawAllocations: [JSON]) throws {
     let type = getMyType(defaultValue)
     let allocations = Allocations(allocations: rawAllocations)
     let optionalValue = try allocations.getValueFromAllocations(key, type, participant)
@@ -54,7 +53,7 @@ class Execution<T> {
     alreadyExecuted = activeExperiements
   }
   
-  func executeWithDefault() -> Void {
+  func executeWithDefault() {
     closure(defaultValue)
   }
 }

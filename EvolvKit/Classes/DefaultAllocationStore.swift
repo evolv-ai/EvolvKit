@@ -8,7 +8,7 @@
 
 import SwiftyJSON
 
-public class DefaultAllocationStore : AllocationStoreProtocol {
+public class DefaultAllocationStore: AllocationStoreProtocol {
   public var cache: LRUCache
   
   public init(size: Int) {

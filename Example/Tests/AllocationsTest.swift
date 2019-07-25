@@ -13,24 +13,179 @@ import PromiseKit
 
 class AllocationsTest: XCTestCase {
   
-  public static let rawAllocation: String = "[{\"uid\":\"test_uid\",\"sid\":\"test_sid\",\"eid\":\"test_eid\",\"cid\":\"test_cid\",\"genome\":{\"search\":{\"weighting\":{\"distance\":2.5,\"dealer_score\":2.5}},\"pages\":{\"all_pages\":{\"header_footer\":[\"blue\",\"white\"]},\"testing_page\":{\"megatron\":\"none\",\"header\":\"white\"}},\"algorithms\":{\"feature_importance\":false}},\"excluded\":false}]"
-  private let rawMultiAllocation: String = "[{\"uid\":\"test_uid\",\"sid\":\"test_sid\",\"eid\":\"test_eid\",\"cid\":\"test_cid\",\"genome\":{\"search\":{\"weighting\":{\"distance\":2.5,\"dealer_score\":2.5}},\"pages\":{\"all_pages\":{\"header_footer\":[\"blue\",\"white\"]},\"testing_page\":{\"megatron\":\"none\",\"header\":\"white\"}},\"algorithms\":{\"feature_importance\":false}},\"excluded\":false}," +
-  "{\"uid\":\"test_uid\",\"sid\":\"test_sid\",\"eid\":\"test_eid_2\",\"cid\":\"test_cid_2\",\"genome\":{\"best\":{\"baked\":{\"cookie\":true,\"cake\":false}},\"utensils\":{\"knives\":{\"drawer\":[\"butcher\",\"paring\"]},\"spoons\":{\"wooden\":\"oak\",\"metal\":\"steel\"}},\"measure\":{\"cups\":2.0}},\"excluded\":false}]"
-  private let rawMultiAllocationWithDups: String = "[{\"uid\":\"test_uid\",\"sid\":\"test_sid\",\"eid\":\"test_eid\",\"cid\":\"test_cid\",\"genome\":{\"search\":{\"weighting\":{\"distance\":2.5,\"dealer_score\":2.5}},\"pages\":{\"all_pages\":{\"header_footer\":[\"blue\",\"white\"]},\"testing_page\":{\"megatron\":\"none\",\"header\":\"white\"}},\"algorithms\":{\"feature_importance\":false}},\"excluded\":false}," +
-  "{\"uid\":\"test_uid\",\"sid\":\"test_sid\",\"eid\":\"test_eid_2\",\"cid\":\"test_cid_2\",\"genome\":{\"best\":{\"baked\":{\"cookie\":true,\"cake\":false}},\"utensils\":{\"knives\":{\"drawer\":[\"butcher\",\"paring\"]},\"spoons\":{\"wooden\":\"oak\",\"metal\":\"steel\"}},\"algorithms\":{\"feature_importance\":true}},\"excluded\":false}]"
-    
-  func parseRawAllocations(raw: String) -> [JSON] {
-    var allocations = [JSON]()
-    if let dataFromString = raw.data(using: String.Encoding.utf8, allowLossyConversion: false) {
-      allocations = try! JSON(data: dataFromString).arrayValue
+    public static var rawAllocations: [JSON] {
+        let data: [[String: Any]] = [
+            [
+                "uid": "test_uid",
+                "sid": "test_sid",
+                "eid": "test_eid",
+                "cid": "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
     }
-    return allocations
-  }
+    private var rawMultiAllocations: [JSON] {
+        let data: [[String: Any]] = [
+            [
+                "uid": "test_uid",
+                "sid": "test_sid",
+                "eid": "test_eid",
+                "cid": "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ],
+            [
+                "uid": "test_uid",
+                "sid": "test_sid",
+                "eid": "test_eid_2",
+                "cid": "test_cid_2",
+                "genome": [
+                    "best": [
+                        "baked": [
+                            "cookie": true,
+                            "cake": false
+                        ]
+                    ],
+                    "utensils": [
+                        "knives": [
+                            "drawer": [
+                                "butcher",
+                                "paring"
+                            ]
+                        ],
+                        "spoons": [
+                            "wooden": "oak",
+                            "metal": "steel"
+                        ]
+                    ],
+                    "measure": [
+                        "cups": 2.0
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
+    private var rawMultiAllocationsWithDups: [JSON] {
+        let data: [[String: Any]] = [
+            [
+                "uid": "test_uid",
+                "sid": "test_sid",
+                "eid": "test_eid",
+                "cid": "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ],
+            [
+                "uid": "test_uid",
+                "sid": "test_sid",
+                "eid": "test_eid_2",
+                "cid": "test_cid_2",
+                "genome": [
+                    "best": [
+                        "baked": [
+                            "cookie": true,
+                            "cake": false
+                        ]
+                    ],
+                    "utensils": [
+                        "knives": [
+                            "drawer": [
+                                "butcher",
+                                "paring"
+                            ]
+                        ],
+                        "spoons": [
+                            "wooden": "oak",
+                            "metal": "steel"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": true
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
 
   func testGetValueFromAllocationGenome() {
     do {
       let participant = EvolvParticipant.builder().build()
-      let allocations = Allocations(allocations: parseRawAllocations(raw: AllocationsTest.rawAllocation))
+      let allocations = Allocations(allocations: AllocationsTest.rawAllocations)
       let defaultBool: Bool = true
       let defaultDouble: Double = 10.0
       let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
@@ -47,7 +202,7 @@ class AllocationsTest: XCTestCase {
   func testGetValueFromMultiAllocationGenome() {
     do {
       let participant: EvolvParticipant = EvolvParticipant.builder().build()
-      let allocations: Allocations = Allocations(allocations: parseRawAllocations(raw: rawMultiAllocation))
+      let allocations = Allocations(allocations: AllocationsTest.rawAllocations)
       let defaultBool: Bool = true
       let defaultDouble: Double = 10.0
       let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
@@ -56,15 +211,15 @@ class AllocationsTest: XCTestCase {
                                                                       defaultDouble, participant)
       XCTAssertEqual(featureImportance, false)
       XCTAssertEqual(weightingDistance, 2.5)
-    } catch (let e) {
-      XCTFail(e.localizedDescription)
+    } catch let error {
+      XCTFail(error.localizedDescription)
     }
   }
 
   func testGetValueFromMultiAllocationWithDupsGenome() {
     do {
       let participant: EvolvParticipant = EvolvParticipant.builder().build()
-      let allocations: Allocations = Allocations(allocations: parseRawAllocations(raw: rawMultiAllocationWithDups))
+      let allocations = Allocations(allocations: self.rawMultiAllocations)
       let defaultBool: Bool = true
       let defaultDouble: Double = 10.0
       let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
@@ -73,13 +228,13 @@ class AllocationsTest: XCTestCase {
                                                                       defaultDouble, participant)
       XCTAssertEqual(featureImportance, false)
       XCTAssertEqual(weightingDistance, 2.5)
-    } catch (let e) {
-      XCTFail(e.localizedDescription)
+    } catch let error {
+      XCTFail(error.localizedDescription)
     }
   }
   
   func testGetActiveExperiments () {
-    let allocations: Allocations = Allocations(allocations: parseRawAllocations(raw: rawMultiAllocation))
+    let allocations = Allocations(allocations: self.rawMultiAllocationsWithDups)
     let activeExperiments: Set<String> = allocations.getActiveExperiments()
     var expected: Set<String> = Set()
     expected.update(with: "test_eid")

@@ -13,7 +13,6 @@ enum NetworkingError: String, Error {
   case data = "No data"
 }
 
-
 extension NetworkingError: LocalizedError {
   var errorDescription: String? { return NSLocalizedString(rawValue, comment: "") }
 }

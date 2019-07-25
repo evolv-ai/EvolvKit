@@ -17,7 +17,7 @@ public class CustomAllocationStore: AllocationStoreProtocol {
   
   typealias JsonArray = [JSON]
   
-  private var allocations: Dictionary<String, [JSON]>
+  private var allocations: [String: [JSON]]
   
   init() {
     self.allocations = Dictionary()

@@ -37,5 +37,5 @@ public protocol HttpProtocol {
    - Returns: Void
    */
   
-  func sendEvents(url: URL) -> Void
+  func sendEvents(url: URL)
 }

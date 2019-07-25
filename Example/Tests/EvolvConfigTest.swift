@@ -12,27 +12,30 @@ import PromiseKit
 
 class EvolvConfigTest: XCTestCase {
   
-  private let ENVIRONMENT_ID = "test_12345"
-  private var mockHttpClient: HttpProtocol!
+    private let environmentId: String = "test_12345"
+    private var mockHttpClient: HttpProtocol!
 
     override func setUp() {
-        self.mockHttpClient = HttpClientMock()
+        super.setUp()
+        
+        mockHttpClient = HttpClientMock()
     }
 
     override func tearDown() {
-      if let _ = self.mockHttpClient {
-        self.mockHttpClient = nil
+        super.tearDown()
+        
+      if self.mockHttpClient != nil {
+        mockHttpClient = nil
       }
     }
 
     func testBuildDefaultConfig() {
-      let config = EvolvConfig.builder(environmentId: ENVIRONMENT_ID, httpClient: mockHttpClient).build()
+      let config = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
       
-      XCTAssertEqual(ENVIRONMENT_ID, config.getEnvironmentId())
-      XCTAssertEqual(EvolvConfig.DEFAULT_HTTP_SCHEME, config.getHttpScheme())
-      XCTAssertEqual(EvolvConfig.DEFAULT_DOMAIN, config.getDomain())
-      XCTAssertEqual(EvolvConfig.DEFAULT_API_VERSION, config.getVersion())
-      XCTAssertEqual(EvolvConfig.DEFAULT_HTTP_SCHEME, config.getHttpScheme())
+      XCTAssertEqual(environmentId, config.getEnvironmentId())
+      XCTAssertEqual(EvolvConfig.Default.httpScheme, config.getHttpScheme())
+      XCTAssertEqual(EvolvConfig.Default.domain, config.getDomain())
+      XCTAssertEqual(EvolvConfig.Default.apiVersion, config.getVersion())
       XCTAssertNotNil(config.getHttpClient)
       XCTAssertNotNil(config.getExecutionQueue())
     }
@@ -43,14 +46,14 @@ class EvolvConfigTest: XCTestCase {
       let allocationStore = DefaultAllocationStore(size: 10)
       let httpScheme = "test"
       
-      let config = EvolvConfig.builder(environmentId: ENVIRONMENT_ID, httpClient: mockHttpClient)
+      let config = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient)
         .setDomain(domain: domain)
         .setVersion(version: version)
         .setEvolvAllocationStore(allocationStore: allocationStore)
         .setHttpScheme(scheme: httpScheme)
         .build()
       
-      XCTAssertEqual(ENVIRONMENT_ID, config.getEnvironmentId())
+      XCTAssertEqual(environmentId, config.getEnvironmentId())
       XCTAssertEqual(domain, config.getDomain())
       XCTAssertEqual(version, config.getVersion())
       XCTAssertNotNil(config.getEvolvAllocationStore())

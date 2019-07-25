@@ -10,7 +10,7 @@ import SwiftyJSON
 
 public class Allocations {
   let allocations: [JSON]
-  let audience : Audience = Audience()
+  let audience: Audience = Audience()
   let LOGGER = Log.logger
   
   init (allocations: [JSON]) {
@@ -24,12 +24,12 @@ public class Allocations {
   func getValueFromAllocations<T>(_ key: String, _ type: T, _ participant: EvolvParticipant) throws -> JSON? {
     let keyParts = key.components(separatedBy: ".")
     
-    if (keyParts.isEmpty) {
+    if keyParts.isEmpty {
       throw EvolvKeyError(rawValue: "Key provided was empty.")!
     }
     
-    for a in self.allocations {
-      let genome = a["genome"]
+    for allocation in self.allocations {
+      let genome = allocation["genome"]
       let element = try getElementFromGenome(genome: genome, keyParts: keyParts)
       if element.error == nil {
         return element
@@ -51,7 +51,7 @@ public class Allocations {
       let object = element[part]
       element = object
     
-      if (element.error != nil) {
+      if element.error != nil {
         throw EvolvKeyError.elementFails
         LOGGER.log(.error, message: "Element fails")
       }
@@ -62,28 +62,27 @@ public class Allocations {
   static public func reconcileAllocations(previousAllocations: [JSON], currentAllocations: [JSON]) -> [JSON] {
     var allocations = [JSON]()
     
-    for ca in currentAllocations {
-      let currentEid = String(describing: ca["eid"])
+    for currentAllocation in currentAllocations {
+      let currentEid = String(describing: currentAllocation["eid"])
       var previousFound = false
       
-      for pa in previousAllocations {
-        let previousEid = String(describing: pa["eid"])
+      for previousAllocation in previousAllocations {
+        let previousEid = String(describing: previousAllocation["eid"])
         
         if currentEid.elementsEqual(previousEid) {
-          allocations.append(pa)
+          allocations.append(previousAllocation)
           previousFound = true
         }
       }
-      if !previousFound { allocations.append(ca) }
+      if !previousFound { allocations.append(currentAllocation) }
     }
     return allocations
   }
   
-  
   public func getActiveExperiments() -> Set<String> {
     var activeExperiments = Set<String>()
-    for a in allocations {
-      let eid = String(describing: a["eid"])
+    for allocation in allocations {
+      let eid = String(describing: allocation["eid"])
       activeExperiments.insert(eid)
     }
     return activeExperiments

@@ -14,15 +14,54 @@ import PromiseKit
 class ClientFactoryTest: XCTestCase {
   
   private let environmentId: String = "test_12345"
-  private let rawAllocation: String = "[{\"uid\":\"test_uid\",\"sid\":\"test_sid\",\"eid\":\"test_eid\",\"cid\":\"test_cid\",\"genome\":{\"search\":{\"weighting\":{\"distance\":2.5,\"dealer_score\":2.5}},\"pages\":{\"all_pages\":{\"header_footer\":[\"blue\",\"white\"]},\"testing_page\":{\"megatron\":\"none\",\"header\":\"white\"}},\"algorithms\":{\"feature_importance\":false}},\"excluded\":false}]"
+    private var rawAllocations: [JSON] {
+        let data: [[String: Any]] = [
+            [
+                "uid": "test_uid",
+                "sid": "test_sid",
+                "eid": "test_eid",
+                "cid": "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
+    private var rawAllocationString: String {
+        return "[\(rawAllocations.compactMap({ $0.rawString() }).joined(separator: ","))]"
+    }
 
-  
-  private var mockHttpClient : HttpProtocol!
-  private var mockAllocationStore : AllocationStoreProtocol!
-  private var mockExecutionQueue : ExecutionQueue!
-  private var mockConfig : EvolvConfig!
+  private var mockHttpClient: HttpProtocol!
+  private var mockAllocationStore: AllocationStoreProtocol!
+  private var mockExecutionQueue: ExecutionQueue!
+  private var mockConfig: EvolvConfig!
   
     override func setUp() {
+        super.setUp()
+        
       mockHttpClient = HttpClientMock()
       mockAllocationStore = AllocationStoreMock(testCase: self)
       mockExecutionQueue = ExecutionQueueMock()
@@ -30,16 +69,18 @@ class ClientFactoryTest: XCTestCase {
     }
 
     override func tearDown() {
-      if let _ = mockHttpClient {
+        super.tearDown()
+        
+      if mockHttpClient != nil {
         mockHttpClient = nil
       }
-      if let _ = mockAllocationStore {
+      if mockAllocationStore != nil {
         mockAllocationStore = nil
       }
-      if let _ = mockExecutionQueue {
+      if mockExecutionQueue != nil {
         mockExecutionQueue = nil
       }
-      if let _ = mockConfig {
+      if mockConfig != nil {
         mockConfig = nil
       }
     }
@@ -64,7 +105,7 @@ class ClientFactoryTest: XCTestCase {
                                                                             mockAllocationStore)
     var responsePromise = mockHttpClient.get(url: URL(string: anyString(length: 12))!)
     responsePromise = Promise { resolver in
-      resolver.fulfill(rawAllocation)
+        resolver.fulfill(rawAllocationString)
     }
     
     XCTAssertNotNil(responsePromise)
@@ -77,7 +118,7 @@ class ClientFactoryTest: XCTestCase {
 
   fileprivate func anyString(length: Int) -> String {
     let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    return String((0..<length).map{ _ in letters.randomElement()! })
+    return String((0..<length).map { _ in letters.randomElement()! })
   }
   
   func testClientInitSameUser() {
@@ -88,7 +129,7 @@ class ClientFactoryTest: XCTestCase {
     mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(mockConfig, actualConfig,
                                                                              mockExecutionQueue, mockClient, mockAllocationStore)
     
-    let previousAllocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let previousAllocations = self.rawAllocations
     let previousUid = previousAllocations[0]["uid"].rawString()!
     
     mockAllocationStore.put(uid: previousUid, allocations: previousAllocations)

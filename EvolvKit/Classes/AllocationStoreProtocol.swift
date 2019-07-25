@@ -31,5 +31,5 @@ public protocol AllocationStoreProtocol {
       - uid: The participant's unique id.
       - allocations: The participant's allocations.
    */
-  func put(uid: String, allocations: [JSON]) -> ()
+  func put(uid: String, allocations: [JSON])
 }

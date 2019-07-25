@@ -9,7 +9,7 @@
 import SwiftyJSON
 import PromiseKit
 
-public class EvolvClientImpl : EvolvClientProtocol {
+public class EvolvClientImpl: EvolvClientProtocol {
   private let LOGGER = Log.logger
   
   private let eventEmitter: EventEmitter
@@ -40,7 +40,7 @@ public class EvolvClientImpl : EvolvClientProtocol {
     return type(of: element)
   }
   
-  public func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> ()) {
+  public func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> Void) {
     let execution = Execution(key, defaultValue, participant, function)
     let previous = self.store.get(uid: self.participant.getUserId())
     
@@ -70,29 +70,29 @@ public class EvolvClientImpl : EvolvClientProtocol {
     execution.executeWithDefault()
   }
   
-  public func emitEvent(key: String) -> Void {
+  public func emitEvent(key: String) {
     self.eventEmitter.emit(key)
   }
   
-  public func emitEvent(key: String, score: Double) -> Void {
+  public func emitEvent(key: String, score: Double) {
     self.eventEmitter.emit(key, score)
   }
   
-  public func confirm() -> Void {
+  public func confirm() {
     let allocationStatus: Allocator.AllocationStatus = allocator.getAllocationStatus()
-    if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
+    if allocationStatus == Allocator.AllocationStatus.FETCHING {
       allocator.sandbagConfirmation()
-    } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
+    } else if allocationStatus == Allocator.AllocationStatus.RETRIEVED {
       let allocations = store.get(uid: participant.getUserId())
       eventEmitter.confirm(allocations: allocations)
     }
   }
   
-  public func contaminate() -> Void {
+  public func contaminate() {
     let allocationStatus: Allocator.AllocationStatus = allocator.getAllocationStatus()
-    if (allocationStatus == Allocator.AllocationStatus.FETCHING) {
+    if allocationStatus == Allocator.AllocationStatus.FETCHING {
       allocator.sandbagContamination()
-    } else if (allocationStatus == Allocator.AllocationStatus.RETRIEVED) {
+    } else if allocationStatus == Allocator.AllocationStatus.RETRIEVED {
       let allocations = store.get(uid: participant.getUserId())
       eventEmitter.contaminate(allocations: allocations)
     }

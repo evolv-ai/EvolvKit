@@ -12,15 +12,42 @@ import SwiftyJSON
 
 class LruCacheTest: XCTestCase {
   
-  private let rawAllocation: String = "[{\"uid\":\"test_uid\",\"sid\":\"test_sid\",\"eid\":\"test_eid\",\"cid\":\"test_cid\",\"genome\":{\"search\":{\"weighting\":{\"distance\":2.5,\"dealer_score\":2.5}},\"pages\":{\"all_pages\":{\"header_footer\":[\"blue\",\"white\"]},\"testing_page\":{\"megatron\":\"none\",\"header\":\"white\"}},\"algorithms\":{\"feature_importance\":false}},\"excluded\":false}]"
-  
-  func parseRawAllocations(raw: String) -> [JSON] {
-    var allocations = [JSON]()
-    if let dataFromString = raw.data(using: String.Encoding.utf8, allowLossyConversion: false) {
-      allocations = try! JSON(data: dataFromString).arrayValue
+    private var rawAllocations: [JSON] {
+        let data: [[String: Any]] = [
+            [
+                "uid": "test_uid",
+                "sid": "test_sid",
+                "eid": "test_eid",
+                "cid": "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
     }
-    return allocations
-  }
   
   func testGetEntryEmptyCache() {
     let testCacheSize = 10
@@ -36,7 +63,7 @@ class LruCacheTest: XCTestCase {
   func testGetEntry() {
     let testCacheSize = 10
     let testKey = "test_key"
-    let testEntry = parseRawAllocations(raw: rawAllocation)
+    let testEntry = self.rawAllocations
     
     let cache = LRUCache(testCacheSize)
     cache.putEntry(testKey, val: testEntry)
@@ -54,7 +81,7 @@ class LruCacheTest: XCTestCase {
     let keyThree = "Key_three"
     let keyFour = "key_four"
     
-    let testEntry = parseRawAllocations(raw: rawAllocation)
+    let testEntry = self.rawAllocations
     
     let cache = LRUCache(testCacheSize)
     
@@ -79,7 +106,7 @@ class LruCacheTest: XCTestCase {
   func testPutEntryTwice() {
     let testCacheSize = 10
     let testKey = "test_key"
-    let testEntry = parseRawAllocations(raw: rawAllocation)
+    let testEntry = self.rawAllocations
     
     let cache = LRUCache(testCacheSize)
     cache.putEntry(testKey, val: testEntry)

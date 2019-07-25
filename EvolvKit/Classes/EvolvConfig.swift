@@ -7,10 +7,13 @@
 //
 
 public class EvolvConfig {
-  
-  static public let DEFAULT_HTTP_SCHEME = "https"
-  static public let DEFAULT_DOMAIN = "participants.evolv.ai"
-  static public let DEFAULT_API_VERSION = "v1"
+    
+    public enum Default {
+        static let httpScheme: String = "https"
+        static let domain: String = "participants.evolv.ai"
+        static let apiVersion: String = "v1"
+        fileprivate static let allocationStoreSize: Int = 1000
+    }
   
   private let httpScheme: String
   private let domain: String
@@ -19,8 +22,6 @@ public class EvolvConfig {
   private let evolvAllocationStore: AllocationStoreProtocol
   private let httpClient: HttpProtocol
   private let executionQueue = ExecutionQueue.shared
-  
-  fileprivate static var DEFAULT_ALLOCATION_STORE_SIZE = 1000
   
   init(_ httpScheme: String, _ domain: String, _ version: String,
        _ environmentId: String, _ evolvAllocationStore: AllocationStoreProtocol,
@@ -57,15 +58,14 @@ public class EvolvConfig {
   public func getExecutionQueue() -> ExecutionQueue { return self.executionQueue }
 }
 
-
 /// Note: Swift builder pattern is implemented with adjacent classes.
 
 public class ConfigBuilder {
 
-  private var allocationStoreSize = EvolvConfig.DEFAULT_ALLOCATION_STORE_SIZE
-  private var httpScheme: String = EvolvConfig.DEFAULT_HTTP_SCHEME
-  private var domain: String = EvolvConfig.DEFAULT_DOMAIN
-  private var version: String = EvolvConfig.DEFAULT_API_VERSION
+  private var allocationStoreSize = EvolvConfig.Default.allocationStoreSize
+  private var httpScheme: String = EvolvConfig.Default.httpScheme
+  private var domain: String = EvolvConfig.Default.domain
+  private var version: String = EvolvConfig.Default.apiVersion
   private var allocationStore: AllocationStoreProtocol?
   
   private var environmentId: String
@@ -81,7 +81,6 @@ public class ConfigBuilder {
       - httpClient: You may pass in any http client of your choice, defaults to EvolvHttpClient.
       - allocationStore: You may pass in any LruCache of your choice, defaults to EvolvAllocationStore.
    */
-  
   fileprivate init(environmentId: String, httpClient: HttpProtocol = EvolvHttpClient(),
                    allocationStore: AllocationStoreProtocol = DefaultAllocationStore(size: 1000)) {
     self.environmentId = environmentId
@@ -95,7 +94,6 @@ public class ConfigBuilder {
       - domain: The domain of the evolvParticipant api.
    - Returns: EvolvConfigBuilder class
    */
-  
   public func setDomain(domain: String) -> ConfigBuilder {
     self.domain = domain
     return self
@@ -119,7 +117,6 @@ public class ConfigBuilder {
       - allocationStore: A custom built allocation store.
    - Returns: EvolvConfigBuilder class
    */
-  
   public func setEvolvAllocationStore(allocationStore: AllocationStoreProtocol) -> ConfigBuilder {
     self.allocationStore = allocationStore
     return self
@@ -131,7 +128,6 @@ public class ConfigBuilder {
    - scheme: either http or https
    - Returns: EvolvConfigBuilder class
    */
-  
   public func setHttpScheme(scheme: String) -> ConfigBuilder {
     self.httpScheme = scheme
     return self
@@ -143,7 +139,6 @@ public class ConfigBuilder {
    - size: number of entries allowed in the default allocation store
    - Returns: EvolvClientBuilder class
    */
-  
   public func setDefaultAllocationStoreSize(size: Int) -> ConfigBuilder {
     self.allocationStoreSize = size
     return self
@@ -155,11 +150,10 @@ public class ConfigBuilder {
    */
   
   public func build() -> EvolvConfig {
-    var store : AllocationStoreProtocol = DefaultAllocationStore(size: allocationStoreSize)
+    var store: AllocationStoreProtocol = DefaultAllocationStore(size: allocationStoreSize)
     if let allocStore = self.allocationStore {
       store = allocStore
     }
     return EvolvConfig(self.httpScheme, self.domain, self.version, self.environmentId, store, self.httpClient)
   }
 }
-

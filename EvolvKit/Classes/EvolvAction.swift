@@ -12,5 +12,5 @@ public protocol EvolvAction {
    - Parameters:
       - value: Any value that was requested.
    */
-  func apply<T>(value: T) -> Void
+  func apply<T>(value: T)
 }

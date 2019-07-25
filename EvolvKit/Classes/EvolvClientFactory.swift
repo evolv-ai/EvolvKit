@@ -43,7 +43,7 @@ public class EvolvClientFactory {
     let futureAllocations = allocator.fetchAllocations()
     
     return EvolvClientImpl(config,
-                           EventEmitter(config: config,participant: participant),
+                           EventEmitter(config: config, participant: participant),
                            futureAllocations,
                            allocator,
                            Allocator.allocationsNotEmpty(allocations: previousAllocations),

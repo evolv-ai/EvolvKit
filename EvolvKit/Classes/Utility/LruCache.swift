@@ -15,7 +15,6 @@ public class LRUCache {
   private var priority: LinkedList<String> = LinkedList<String>()
   private var key2node: [String: LinkedList<String>.LinkedListNode<String>] = [:]
   
-  
   public init(_ maxSize: Int) {
     self.maxSize = maxSize
   }

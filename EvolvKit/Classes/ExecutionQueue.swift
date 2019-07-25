@@ -11,7 +11,7 @@ import SwiftyJSON
 public class ExecutionQueue {
   private let LOGGER = Log.logger
   private var queue = [Any]()
-  public var count : Int!
+  public var count: Int!
   
   init () {
     self.count = self.queue.count

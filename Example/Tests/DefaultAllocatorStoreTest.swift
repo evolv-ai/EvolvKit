@@ -12,7 +12,42 @@ import SwiftyJSON
 
 class DefaultAllocatorStoreTest: XCTestCase {
   
-  private let rawAllocation: String = "[{\"uid\":\"test_uid\",\"sid\":\"test_sid\",\"eid\":\"test_eid\",\"cid\":\"test_cid\",\"genome\":{\"search\":{\"weighting\":{\"distance\":2.5,\"dealer_score\":2.5}},\"pages\":{\"all_pages\":{\"header_footer\":[\"blue\",\"white\"]},\"testing_page\":{\"megatron\":\"none\",\"header\":\"white\"}},\"algorithms\":{\"feature_importance\":false}},\"excluded\":false}]"
+    private var rawAllocations: [JSON] {
+        let data: [[String: Any]] = [
+            [
+                "uid": "test_uid",
+                "sid": "test_sid",
+                "eid": "test_eid",
+                "cid": "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
   
   func testEmptyStoreRGetsEmptyJsonArray() {
     let store = DefaultAllocationStore(size: 10)
@@ -24,7 +59,7 @@ class DefaultAllocatorStoreTest: XCTestCase {
   
   func testSetAndGetOnStore() {
     let store = DefaultAllocationStore(size: 10)
-    let allocations = AllocationsTest().parseRawAllocations(raw: rawAllocation)
+    let allocations = self.rawAllocations
     store.put(uid: "test_user", allocations: allocations)
     let storedAllocations = store.get(uid: "test_user")
     

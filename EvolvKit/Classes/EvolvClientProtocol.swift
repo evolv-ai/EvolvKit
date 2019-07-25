@@ -7,7 +7,6 @@
 //
 
 public protocol EvolvClientProtocol {
-  
   /**
    Retrieves a value from Evolv asynchronously and applies some custom action.
    
@@ -24,8 +23,7 @@ public protocol EvolvClientProtocol {
    - <T>: type of value to be returned
    - Returns: a value associated with the given key
    */
-  func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> ())
-  
+  func subscribe<T>(key: String, defaultValue: T, function: @escaping (T) -> Void)
   
   /**
    Emits a generic event to be recorded by Evolv.
@@ -35,8 +33,7 @@ public protocol EvolvClientProtocol {
        - key: The identifier of the event.
        - score: A score to be associated with the event.
    */
-  
-  func emitEvent(key: String, score: Double) -> Void
+  func emitEvent(key: String, score: Double)
   
   /**
    Emits a generic event to be recorded by Evolv.
@@ -44,7 +41,7 @@ public protocol EvolvClientProtocol {
    - Parameters:
       - key: The identifier of the event.
    */
-  func emitEvent(key: String) -> Void
+  func emitEvent(key: String)
   
   /**
    Sends a confirmed event to Evolv.
@@ -52,7 +49,7 @@ public protocol EvolvClientProtocol {
    allocation. Method will not do anything in the event that the allocation
    timed out or failed.
    */
-  func confirm() -> Void
+  func confirm()
   
   /**
    Sends a contamination event to Evolv.
@@ -60,5 +57,5 @@ public protocol EvolvClientProtocol {
    participant's allocation. Method will not do anything in the event
    that the allocation timed out or failed.
    */
-  func contaminate() -> Void
+  func contaminate()
 }
