@@ -51,8 +51,7 @@ let participant = EvolvParticipant.builder().build()
 
 or 
 
-let participant = EvolvParticipant.builder()
-.setUserId(userId: <custom_id>).build()
+let participant = EvolvParticipant.builder().setUserId(<custom_id>).build()
 ```
 *Note: If you do not set the participant's userId, the builder will create a unique id for you.*
 
@@ -61,7 +60,7 @@ let participant = EvolvParticipant.builder()
 
 1. Build an EvolvConfig instance.
 ```swift
-let config: EvolvConfig = EvolvConfig.builder(eid: <environment_id>, httpClient: <http_client>).build()
+let config: EvolvConfig = EvolvConfig.builder(<environment_id>, <http_client>).build()
 ```
 
 2. Initialize the EvolvClient.
@@ -86,7 +85,7 @@ subscribe to a value and apply any actions as a result of it asynchronously.
 
 1. Subscribe to a value from Evolv.
 ```swift
-client.subscribe(key: <key_for_value>, defaultValue: <default_value>, function: <closure>)
+client.subscribe(<key_for_value>, <default_value>, <closure>)
 ```
 
 *Note: The return value's type is decided by the provided default value's type. If there is an issue retrieving the
@@ -103,14 +102,14 @@ thats important to record is a "conversion" event. If you implemented the SDK in
 
 1. Emit a custom event.
 ```swift
-client.emitEvent(key: <event_type>)
+client.emitEvent(<event_type>)
 ```
 
 AND / OR
 
 2. Emit a custom event with an associated score.
 ```swift
-client.emitEvent(key: <event_type>, score: <score>)
+client.emitEvent(<event_type>, <score>)
 ```
 
 ### Contaminate the Allocation (optional)
@@ -129,16 +128,14 @@ implementing the EvolvAllocationStore interface. You can supply the custom alloc
 
 1. Supply the allocation store to the client.
 ```swift
-let config = EvolvConfig.Builder(eid: <environment_id>)
-  .setEvolvAllocationStore(allocationStore: <custom_store>)
-  .build()
+let config = EvolvConfig.Builder(<environment_id>)
+  .setEvolvAllocationStore(<custom_store>).build()
 
 let client = EvolvClientImpl(<config>, <eventEmitter>, <futureAllocations>, <previousAllocations>, <participant>)
 
 or
 
-let client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
-      .setUserId(userId: "sandbox_user").build()).client as! EvolvClientImpl
+let client = EvolvClientFactory(<config>, EvolvParticipant.builder().setUserId("sandbox_user").build())
 ```
 
 
