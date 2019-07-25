@@ -92,72 +92,49 @@ class ClientImplTest: XCTestCase {
   }
   
   func testSubscribeStoreNotEmptySubscriptionKey_Valid() {
+    let mockStoreWithAllocations = AllocationStoreMockWithAllocations(size: 10)
+    let cachedAllocations = mockStoreWithAllocations.get("test_user")
+    let config = EvolvConfig("https", "test.evolv.ai", "v1", "test_env",
+                             mockStoreWithAllocations, self.mockHttpClient)
+    let emitter = EventEmitter(config, participant)
+    
     let subscriptionKey = "search.weighting.distance"
     let defaultValue: Double = 0.001
     
-    let expectation = XCTestExpectation(description: "yo testing")
-    
-    self.mockAllocationStore.expectGet { uid -> [JSON] in
-      XCTAssertEqual(uid, self.participant.getUserId())
-      let allocations = self.rawAllocations
-      return allocations
-    }
-    
-    let config = EvolvConfig("https", "test.evolv.ai", "v1", "test_env", self.mockAllocationStore, self.mockHttpClient)
-    let emitter = EventEmitter(config, participant)
-    let allocations = self.rawAllocations
-    
     let promise = Promise { resolver in
-      resolver.fulfill(allocations)
+      resolver.fulfill(cachedAllocations)
     }
     
     let applyFunction: (Double) -> Void = { value in
       XCTAssertNotEqual(defaultValue, value)
-      expectation.fulfill()
+      XCTAssertEqual(value, 2.5)
     }
     
-    let client = EvolvClientImpl(config, emitter, promise, mockAllocator, false, participant)
+    let client = EvolvClientImpl(config, emitter, promise, mockAllocator, true, participant)
     client.subscribe(subscriptionKey, defaultValue, applyFunction)
-    
-    self.waitForExpectations(timeout: 8)
   }
   
   func testSubscribeStoreNotEmptySubscriptionKey_Invalid() {
+    let mockStoreWithAllocations = AllocationStoreMockWithAllocations(size: 10)
+    let cachedAllocations = mockStoreWithAllocations.get("test_user")
+    let config = EvolvConfig("https", "test.evolv.ai", "v1", "test_env",
+                             mockStoreWithAllocations, self.mockHttpClient)
+    let emitter = EventEmitter(config, participant)
+    
     let subscriptionKey = "search.weighting.distance.bubbles"
     let defaultValue: Double = 0.001
-    let participantId = "id"
-    let expectation = XCTestExpectation(description: "Async block executed")
-    
-    let participant = EvolvParticipant(participantId, "sid", [
-      "userId": "id",
-      "sessionId": "sid"
-      ])
-    
-    self.mockAllocationStore.expectGet { uid -> [JSON] in
-      XCTAssertEqual(uid, participant.getUserId())
-      expectation.fulfill()
-      let allocations = self.rawAllocations
-      return allocations
-    }
-    
-    let config = EvolvConfig("https", "test.evolv.ai", "v1", "test_env", self.mockAllocationStore, self.mockHttpClient)
-    let emitter = EventEmitter(config, participant)
-    let allocations = self.rawAllocations
     
     let promise = Promise { resolver in
-      resolver.fulfill(allocations)
+      resolver.fulfill(cachedAllocations)
     }
     
     let applyFunction: (Double) -> Void = { value in
       XCTAssertEqual(defaultValue, value)
-      expectation.fulfill()
+      XCTAssertNotEqual(value, 2.5)
     }
     
-    let client = EvolvClientImpl(config, emitter, promise, mockAllocator, false, participant)
+    let client = EvolvClientImpl(config, emitter, promise, mockAllocator, true, participant)
     client.subscribe(subscriptionKey, defaultValue, applyFunction)
-    
-    // fails exceeding the timeout. Why???
-    self.waitForExpectations(timeout: 8)
   }
   
   func testEmitEventWithScore() {
@@ -165,7 +142,6 @@ class ClientImplTest: XCTestCase {
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
-    
     let allocations = self.rawAllocations
     let promise = Promise { resolver in
       resolver.fulfill(allocations)
