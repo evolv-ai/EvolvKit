@@ -105,13 +105,16 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(cachedAllocations)
     }
     
+    let expect = expectation(description: "key valid")
     let applyFunction: (Double) -> Void = { value in
       XCTAssertNotEqual(defaultValue, value)
       XCTAssertEqual(value, 2.5)
+      expect.fulfill()
     }
     
     let client = EvolvClientImpl(config, emitter, promise, mockAllocator, true, participant)
     client.subscribe(subscriptionKey, defaultValue, applyFunction)
+    waitForExpectations(timeout: 3, handler: nil)
   }
   
   func testSubscribeStoreNotEmptySubscriptionKey_Invalid() {
@@ -128,13 +131,16 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(cachedAllocations)
     }
     
+    let expect = expectation(description: "call back method key invalid")
     let applyFunction: (Double) -> Void = { value in
       XCTAssertEqual(defaultValue, value)
       XCTAssertNotEqual(value, 2.5)
+      expect.fulfill()
     }
     
     let client = EvolvClientImpl(config, emitter, promise, mockAllocator, true, participant)
     client.subscribe(subscriptionKey, defaultValue, applyFunction)
+    waitForExpectations(timeout: 3, handler: nil)
   }
   
   func testEmitEventWithScore() {
