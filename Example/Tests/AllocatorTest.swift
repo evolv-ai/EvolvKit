@@ -91,23 +91,25 @@ class AllocatorTest: XCTestCase {
                        mockAllocationStore, mockHttpClient)
   }
   
-  func createAllocationsUrl(config: EvolvConfig, participant: EvolvParticipant) -> URL {
+  func createUrlComponents(_ config: EvolvConfig) -> URLComponents {
     var components = URLComponents()
     components.scheme = config.getHttpScheme()
     components.host = config.getDomain()
+    return components
+  }
+  
+  func createAllocationsUrl(config: EvolvConfig, participant: EvolvParticipant) -> URL {
+    var components = createUrlComponents(config)
     components.path = "/\(config.getVersion())/\(config.getEnvironmentId())/allocations"
     components.queryItems = [
       URLQueryItem(name: "uid", value: "\(participant.getUserId())")
     ]
     
-    guard let url = components.url else { return URL(string: "")! }
-    return url
+    return components.url!
   }
   
-  func createConfirmationUrl(_ config: EvolvConfig, _ allocation: JSON, _ participant: EvolvParticipant) -> URL {
-    var components = URLComponents()
-    components.scheme = config.getHttpScheme()
-    components.host = config.getDomain()
+  func createConfirmationUrl(_ config: EvolvConfig, _ allocation: [JSON], _ participant: EvolvParticipant) -> URL {
+    var components = createUrlComponents(config)
     components.path = "/\(config.getVersion())/\(config.getEnvironmentId())/events"
     components.queryItems = [
       URLQueryItem(name: "uid", value: "\(participant.getUserId())"),
@@ -117,15 +119,11 @@ class AllocatorTest: XCTestCase {
       URLQueryItem(name: "type", value: "confirmation")
     ]
     
-    guard let url = components.url else { return URL(string: "")! }
-    print("URL: \(url)")
-    return url
+    return components.url!
   }
   
-  func createContaminationUrl(config: EvolvConfig, allocation: [JSON], participant: EvolvParticipant) -> URL {
-    var components = URLComponents()
-    components.scheme = config.getHttpScheme()
-    components.host = config.getDomain()
+  func createContaminationUrl(_ config: EvolvConfig, _ allocation: [JSON], _ participant: EvolvParticipant) -> URL {
+    var components = createUrlComponents(config)
     components.path = "/\(config.getVersion())/\(config.getEnvironmentId())/events"
     components.queryItems = [
       URLQueryItem(name: "uid", value: "\(participant.getUserId())"),
@@ -135,13 +133,11 @@ class AllocatorTest: XCTestCase {
       URLQueryItem(name: "type", value: "contamination")
     ]
     
-    guard let url = components.url else { return URL(string: "")! }
-    print("URL: \(url)")
-    return url
+    return components.url!
   }
   
   func testCreateAllocationsUrl() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                             mockExecutionQueue, mockHttpClient,
                                                             mockAllocationStore)
@@ -165,7 +161,7 @@ class AllocatorTest: XCTestCase {
   
   func testResolveAllocationFailureWithAllocationsInStore() {
     let participant = EvolvParticipant.builder().build()
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let allocations = self.rawAllocations
 
     mockAllocationStore.put(uid: participant.getUserId(), allocations: allocations)
@@ -187,7 +183,7 @@ class AllocatorTest: XCTestCase {
   
   func testResolveAllocationFailureWithAllocationsInStoreWithSandbaggedConfirmation() {
     let participant = EvolvParticipant.builder().build()
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let allocations = self.rawAllocations
 
     mockAllocationStore.put(uid: participant.getUserId(), allocations: allocations)
@@ -200,7 +196,7 @@ class AllocatorTest: XCTestCase {
     let actualAllocations = allocator.resolveAllocationsFailure()
     
     let exp = expectation(description: "Create Confirmation Url, Get Allocations From Store")
-    mockHttpClient.get(url: createConfirmationUrl(actualConfig, allocations[0], participant))
+    mockHttpClient.get(url: createConfirmationUrl(actualConfig, allocations, participant))
     exp.fulfill()
     waitForExpectations(timeout: 3)
     
@@ -217,7 +213,7 @@ class AllocatorTest: XCTestCase {
   
   func testResolveAllocationFailureWithAllocationsInStoreWithSandbaggedContamination() {
     let participant = EvolvParticipant.builder().build()
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let allocations = self.rawAllocations
 
     mockAllocationStore.put(uid: participant.getUserId(), allocations: allocations)
@@ -229,7 +225,7 @@ class AllocatorTest: XCTestCase {
     let actualAllocations = allocator.resolveAllocationsFailure()
     
     let exp = expectation(description: "Create Contaminatin Url, Get Allocations From Store")
-    mockHttpClient.get(url: createConfirmationUrl(actualConfig, allocations[0], participant))
+    mockHttpClient.get(url: createConfirmationUrl(actualConfig, allocations, participant))
     exp.fulfill()
     waitForExpectations(timeout: 3)
     
@@ -246,7 +242,7 @@ class AllocatorTest: XCTestCase {
   
   func testResolveAllocationFailureWithNoAllocationsInStore() {
     let participant = EvolvParticipant.builder().build()
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let allocations = mockAllocationStore.get(uid: participant.getUserId())
     
     let mockConfig = setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig, mockExecutionQueue, mockHttpClient, mockAllocationStore)

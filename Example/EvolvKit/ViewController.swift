@@ -87,7 +87,7 @@ class ViewController: UIViewController {
     
     /// - Build config with custom timeout and custom allocation store
     // set client to use sandbox environment
-    let config = EvolvConfig.builder(environmentId: "sandbox", httpClient: httpClient)
+    let config = EvolvConfig.builder("sandbox", httpClient)
       .setEvolvAllocationStore(allocationStore: store)
       .build()
     

@@ -34,8 +34,6 @@ public class EvolvParticipant {
   }
 }
 
-/// Note: Swift builder pattern is implemented with adjacent classes.
-
 public class ParticipantBuilder {
   private var userId: String
   private var sessionId: String

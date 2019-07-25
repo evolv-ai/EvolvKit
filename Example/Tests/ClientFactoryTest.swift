@@ -98,8 +98,8 @@ class ClientFactoryTest: XCTestCase {
   }
 
   func testClientInit() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId,
-                                           httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId,
+                                           mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
@@ -125,7 +125,7 @@ class ClientFactoryTest: XCTestCase {
     let participant = EvolvParticipant.builder().setUserId(userId: "test_uid").build()
     let mockClient = HttpClientMock()
     
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(mockConfig, actualConfig,
                                                                              mockExecutionQueue, mockClient, mockAllocationStore)
     

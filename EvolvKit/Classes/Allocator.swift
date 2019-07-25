@@ -10,8 +10,6 @@ import Alamofire
 import SwiftyJSON
 import PromiseKit
 
-public typealias JsonArray = [JSON]?
-
 public class Allocator {
   
   enum AllocationStatus {
@@ -41,15 +39,28 @@ public class Allocator {
     self.allocationStatus = AllocationStatus.FETCHING
     self.eventEmitter = EventEmitter(config: config, participant: participant)
   }
+
+  func getAllocationStatus() -> AllocationStatus {
+    return allocationStatus
+  }
   
-  func getAllocationStatus() -> AllocationStatus { return allocationStatus }
-  func sandbagConfirmation() { confirmationSandbagged = true }
-  func sandbagContamination() { contaminationSandbagged = true }
+  func sandbagConfirmation() {
+    confirmationSandbagged = true
+  }
   
-  public func createAllocationsUrl() -> URL {
+  func sandbagContamination() {
+    contaminationSandbagged = true
+  }
+  
+  private func createUrlComponents(_ config: EvolvConfig) -> URLComponents {
     var components = URLComponents()
     components.scheme = config.getHttpScheme()
     components.host = config.getDomain()
+    return components
+  }
+  
+  public func createAllocationsUrl() -> URL {
+    var components = createUrlComponents(config)
     components.path = "/\(config.getVersion())/\(config.getEnvironmentId())/allocations"
     components.queryItems = [
       URLQueryItem(name: "uid", value: "\(participant.getUserId())")
@@ -58,8 +69,6 @@ public class Allocator {
     guard let url = components.url else { return URL(string: "")! }
     return url
   }
-  
-  public typealias JsonArray = [JSON]
   
   public func fetchAllocations() -> Promise<[JSON]> {
     
@@ -125,7 +134,6 @@ public class Allocator {
       executionQueue.executeAllWithValuesFromDefaults()
       return previous
     }
-  
     return previous
   }
   

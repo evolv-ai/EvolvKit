@@ -133,7 +133,7 @@ class EventEmitterTest: XCTestCase {
   }
   
   func testGetEventUrl() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                             mockExecutionQueue, mockHttpClient,
                                                             mockAllocationStore)
@@ -146,7 +146,7 @@ class EventEmitterTest: XCTestCase {
   }
   
   func testGetEventUrlWithEidAndCid() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                             mockExecutionQueue, mockHttpClient,
                                                             mockAllocationStore)
@@ -162,7 +162,7 @@ class EventEmitterTest: XCTestCase {
   }
   
   func testSendAllocationEvents() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig, mockExecutionQueue,
                                                                              mockHttpClient, mockAllocationStore)
     let allocations = self.rawAllocations
@@ -177,7 +177,7 @@ class EventEmitterTest: XCTestCase {
   }
   
   func testContaminateEvent() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig, mockExecutionQueue,
                                                                             mockHttpClient, mockAllocationStore)
     let allocations = self.rawAllocations
@@ -185,14 +185,14 @@ class EventEmitterTest: XCTestCase {
     let participant = EvolvParticipant.builder().build()
     let emitter = EmitterMock(config: mockConfig, participant: participant)
     
-    /// contaminate => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
+    /// emitter.contaminate => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
     emitter.contaminate(allocations: allocations)
     
     XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
   }
   
   func testConfirmEvent() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig, mockExecutionQueue,
                                                                             mockHttpClient, mockAllocationStore)
     let allocations = self.rawAllocations
@@ -200,14 +200,14 @@ class EventEmitterTest: XCTestCase {
     let participant = EvolvParticipant.builder().build()
     let emitter = EmitterMock(config: mockConfig, participant: participant)
     
-    /// confirm => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
+    /// emitter.confirm => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
     emitter.confirm(allocations: allocations)
     
     XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
   }
   
   func testGenericEvent() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let participant = EvolvParticipant.builder().build()
     let emitter = EmitterMock(config: actualConfig, participant: participant)
     
@@ -217,7 +217,7 @@ class EventEmitterTest: XCTestCase {
   }
   
   func testGenericEventWithScore() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let participant = EvolvParticipant.builder().build()
     let emitter = EmitterMock(config: actualConfig, participant: participant)
     

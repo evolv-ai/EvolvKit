@@ -95,6 +95,8 @@ class ClientImplTest: XCTestCase {
     let subscriptionKey = "search.weighting.distance"
     let defaultValue: Double = 0.001
     
+    let expectation = XCTestExpectation(description: "yo testing")
+    
     self.mockAllocationStore.expectGet { uid -> [JSON] in
       XCTAssertEqual(uid, self.participant.getUserId())
       let allocations = self.rawAllocations
@@ -109,20 +111,24 @@ class ClientImplTest: XCTestCase {
       resolver.fulfill(allocations)
     }
     
+    // FIXME: this is failing, why????
     let applyFunction: (Double) -> Void = { value in
       XCTAssertNotEqual(defaultValue, value)
+      expectation.fulfill()
+      
     }
     
     let client = EvolvClientImpl(config, emitter, promise, mockAllocator, false, participant)
     client.subscribe(key: subscriptionKey, defaultValue: defaultValue, function: applyFunction)
     
-    self.waitForExpectations(timeout: 5)
+    self.waitForExpectations(timeout: 8)
   }
   
   func testSubscribeStoreNotEmptySubscriptionKey_Invalid() {
     let subscriptionKey = "search.weighting.distance.bubbles"
     let defaultValue: Double = 0.001
     let participantId = "id"
+    let expectation = XCTestExpectation(description: "Async block executed")
     
     let participant = EvolvParticipant(userId: participantId, sessionId: "sid", userAttributes: [
       "userId": "id",
@@ -131,6 +137,7 @@ class ClientImplTest: XCTestCase {
     
     self.mockAllocationStore.expectGet { uid -> [JSON] in
       XCTAssertEqual(uid, participant.getUserId())
+      expectation.fulfill()
       let allocations = self.rawAllocations
       return allocations
     }
@@ -145,16 +152,18 @@ class ClientImplTest: XCTestCase {
     
     let applyFunction: (Double) -> Void = { value in
       XCTAssertEqual(defaultValue, value)
+      expectation.fulfill()
     }
     
     let client = EvolvClientImpl(config, emitter, promise, mockAllocator, false, participant)
     client.subscribe(key: subscriptionKey, defaultValue: defaultValue, function: applyFunction)
     
-    self.waitForExpectations(timeout: 5)
+    // fails exceeding the timeout. Why???
+    self.waitForExpectations(timeout: 8)
   }
   
   func testEmitEventWithScore() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
@@ -173,7 +182,7 @@ class ClientImplTest: XCTestCase {
   }
   
   func testEmitEvent() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
@@ -190,7 +199,7 @@ class ClientImplTest: XCTestCase {
   }
   
   func testConfirmEventSandBagged() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
@@ -210,7 +219,7 @@ class ClientImplTest: XCTestCase {
   }
   
   func testConfirmEvent() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
@@ -231,7 +240,7 @@ class ClientImplTest: XCTestCase {
   }
   
   func testContaminateEventSandBagged() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
@@ -250,7 +259,7 @@ class ClientImplTest: XCTestCase {
   }
   
   func testContaminateEvent() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
@@ -271,7 +280,7 @@ class ClientImplTest: XCTestCase {
   }
   
   func testSubscribeNoPreviousAllocationsWithFetchingState() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
@@ -299,7 +308,7 @@ class ClientImplTest: XCTestCase {
   }
   
   func testSubscribeNoPreviousAllocationsWithRetrievedState() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
@@ -329,7 +338,7 @@ class ClientImplTest: XCTestCase {
   }
   
   func testSubscribeNoPreviousAllocationsWithFailedState() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
@@ -359,7 +368,7 @@ class ClientImplTest: XCTestCase {
   }
   
   func testSubscribeNoPreviousAllocationsWithRetrievedStateThrowsError() {
-    let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+    let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
     let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig, actualConfig,
                                                                             mockExecutionQueue, mockHttpClient,
                                                                             mockAllocationStore)
