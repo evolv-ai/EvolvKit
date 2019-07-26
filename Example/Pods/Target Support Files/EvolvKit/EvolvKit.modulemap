@@ -1,6 +1,0 @@
-framework module EvolvKit {
-  umbrella header "EvolvKit-umbrella.h"
-
-  export *
-  module * { export * }
-}

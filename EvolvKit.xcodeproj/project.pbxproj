@@ -1,0 +1,789 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		E26DB28722EB1CE8007B997F /* SwiftLint */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = E26DB28822EB1CE8007B997F /* Build configuration list for PBXAggregateTarget "SwiftLint" */;
+			buildPhases = (
+				E26DB28B22EB1D22007B997F /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = SwiftLint;
+			productName = asdad;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		9527433A760E8C6363F0F1C2 /* Pods_EvolvKit_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B71664BE37E11FE103370618 /* Pods_EvolvKit_iOS.framework */; };
+		D79D13969FB59F3BDE5C2384 /* Pods_EvolvKit_iOS_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86B027F555D40B7ABE5615F0 /* Pods_EvolvKit_iOS_Tests.framework */; };
+		E26DB23822EB04E5007B997F /* AllocationStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22122EB04E5007B997F /* AllocationStoreProtocol.swift */; };
+		E26DB23922EB04E5007B997F /* Execution.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22222EB04E5007B997F /* Execution.swift */; };
+		E26DB23A22EB04E5007B997F /* Allocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22322EB04E5007B997F /* Allocations.swift */; };
+		E26DB23B22EB04E5007B997F /* EvolvClientImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22422EB04E5007B997F /* EvolvClientImpl.swift */; };
+		E26DB23C22EB04E5007B997F /* Audience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22522EB04E5007B997F /* Audience.swift */; };
+		E26DB23D22EB04E5007B997F /* EvolvErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22622EB04E5007B997F /* EvolvErrorHandling.swift */; };
+		E26DB23E22EB04E5007B997F /* EvolvConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22722EB04E5007B997F /* EvolvConfig.swift */; };
+		E26DB23F22EB04E5007B997F /* Allocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22822EB04E5007B997F /* Allocator.swift */; };
+		E26DB24022EB04E5007B997F /* EvolvActionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22922EB04E5007B997F /* EvolvActionProtocol.swift */; };
+		E26DB24122EB04E5007B997F /* EvolvParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22A22EB04E5007B997F /* EvolvParticipant.swift */; };
+		E26DB24222EB04E5007B997F /* DefaultAllocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22B22EB04E5007B997F /* DefaultAllocationStore.swift */; };
+		E26DB24322EB04E5007B997F /* ExecutionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22C22EB04E5007B997F /* ExecutionQueue.swift */; };
+		E26DB24422EB04E5007B997F /* EvolvHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22D22EB04E5007B997F /* EvolvHttpClient.swift */; };
+		E26DB24522EB04E5007B997F /* EvolvClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22E22EB04E5007B997F /* EvolvClientProtocol.swift */; };
+		E26DB24622EB04E5007B997F /* EvolvClientFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB22F22EB04E5007B997F /* EvolvClientFactory.swift */; };
+		E26DB24722EB04E5007B997F /* HttpProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB23022EB04E5007B997F /* HttpProtocol.swift */; };
+		E26DB24822EB04E5007B997F /* EventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB23122EB04E5007B997F /* EventEmitter.swift */; };
+		E26DB24922EB04E5007B997F /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB23322EB04E5007B997F /* Log.swift */; };
+		E26DB24A22EB04E5007B997F /* LruCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB23422EB04E5007B997F /* LruCache.swift */; };
+		E26DB24B22EB04E5007B997F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB23522EB04E5007B997F /* Extensions.swift */; };
+		E26DB24C22EB04E5007B997F /* LinkedQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB23622EB04E5007B997F /* LinkedQueue.swift */; };
+		E26DB24D22EB04E5007B997F /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB23722EB04E5007B997F /* LinkedList.swift */; };
+		E26DB26222EB0DDA007B997F /* EvolvKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E26DB1EC22EB0470007B997F /* EvolvKit.framework */; };
+		E26DB26822EB0E34007B997F /* AllocatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20922EB04BC007B997F /* AllocatorTest.swift */; };
+		E26DB26922EB0E34007B997F /* EventEmitterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20722EB04BC007B997F /* EventEmitterTest.swift */; };
+		E26DB26A22EB0E34007B997F /* EvolvParticipantTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20B22EB04BC007B997F /* EvolvParticipantTest.swift */; };
+		E26DB26B22EB0E34007B997F /* ClientFactoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB21022EB04BC007B997F /* ClientFactoryTest.swift */; };
+		E26DB26C22EB0E34007B997F /* LruCacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20C22EB04BC007B997F /* LruCacheTest.swift */; };
+		E26DB26D22EB0E34007B997F /* ExecutionQueueTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20A22EB04BC007B997F /* ExecutionQueueTest.swift */; };
+		E26DB26E22EB0E34007B997F /* DefaultAllocatorStoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20E22EB04BC007B997F /* DefaultAllocatorStoreTest.swift */; };
+		E26DB26F22EB0E34007B997F /* AllocationsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB21122EB04BC007B997F /* AllocationsTest.swift */; };
+		E26DB27022EB0E34007B997F /* ClientImplTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20D22EB04BC007B997F /* ClientImplTest.swift */; };
+		E26DB27122EB0E34007B997F /* EvolvConfigTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20822EB04BC007B997F /* EvolvConfigTest.swift */; };
+		E26DB27222EB0E34007B997F /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20F22EB04BC007B997F /* Mocks.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E26DB26322EB0DDA007B997F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E26DB1E322EB0470007B997F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E26DB1EB22EB0470007B997F;
+			remoteInfo = "EvolvKit iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		63EE5583F8A0C3182628E556 /* Pods-EvolvKit iOS Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EvolvKit iOS Tests.debug.xcconfig"; path = "Target Support Files/Pods-EvolvKit iOS Tests/Pods-EvolvKit iOS Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		86B027F555D40B7ABE5615F0 /* Pods_EvolvKit_iOS_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EvolvKit_iOS_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B09E122CD19BB0F7048DE2F5 /* Pods-EvolvKit iOS Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EvolvKit iOS Tests.release.xcconfig"; path = "Target Support Files/Pods-EvolvKit iOS Tests/Pods-EvolvKit iOS Tests.release.xcconfig"; sourceTree = "<group>"; };
+		B71664BE37E11FE103370618 /* Pods_EvolvKit_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EvolvKit_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E26DB1EC22EB0470007B997F /* EvolvKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EvolvKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E26DB20722EB04BC007B997F /* EventEmitterTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEmitterTest.swift; sourceTree = "<group>"; };
+		E26DB20822EB04BC007B997F /* EvolvConfigTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvConfigTest.swift; sourceTree = "<group>"; };
+		E26DB20922EB04BC007B997F /* AllocatorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllocatorTest.swift; sourceTree = "<group>"; };
+		E26DB20A22EB04BC007B997F /* ExecutionQueueTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutionQueueTest.swift; sourceTree = "<group>"; };
+		E26DB20B22EB04BC007B997F /* EvolvParticipantTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvParticipantTest.swift; sourceTree = "<group>"; };
+		E26DB20C22EB04BC007B997F /* LruCacheTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LruCacheTest.swift; sourceTree = "<group>"; };
+		E26DB20D22EB04BC007B997F /* ClientImplTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientImplTest.swift; sourceTree = "<group>"; };
+		E26DB20E22EB04BC007B997F /* DefaultAllocatorStoreTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAllocatorStoreTest.swift; sourceTree = "<group>"; };
+		E26DB20F22EB04BC007B997F /* Mocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
+		E26DB21022EB04BC007B997F /* ClientFactoryTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientFactoryTest.swift; sourceTree = "<group>"; };
+		E26DB21122EB04BC007B997F /* AllocationsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllocationsTest.swift; sourceTree = "<group>"; };
+		E26DB22122EB04E5007B997F /* AllocationStoreProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllocationStoreProtocol.swift; sourceTree = "<group>"; };
+		E26DB22222EB04E5007B997F /* Execution.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Execution.swift; sourceTree = "<group>"; };
+		E26DB22322EB04E5007B997F /* Allocations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Allocations.swift; sourceTree = "<group>"; };
+		E26DB22422EB04E5007B997F /* EvolvClientImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvClientImpl.swift; sourceTree = "<group>"; };
+		E26DB22522EB04E5007B997F /* Audience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Audience.swift; sourceTree = "<group>"; };
+		E26DB22622EB04E5007B997F /* EvolvErrorHandling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvErrorHandling.swift; sourceTree = "<group>"; };
+		E26DB22722EB04E5007B997F /* EvolvConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvConfig.swift; sourceTree = "<group>"; };
+		E26DB22822EB04E5007B997F /* Allocator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Allocator.swift; sourceTree = "<group>"; };
+		E26DB22922EB04E5007B997F /* EvolvActionProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvActionProtocol.swift; sourceTree = "<group>"; };
+		E26DB22A22EB04E5007B997F /* EvolvParticipant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvParticipant.swift; sourceTree = "<group>"; };
+		E26DB22B22EB04E5007B997F /* DefaultAllocationStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAllocationStore.swift; sourceTree = "<group>"; };
+		E26DB22C22EB04E5007B997F /* ExecutionQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutionQueue.swift; sourceTree = "<group>"; };
+		E26DB22D22EB04E5007B997F /* EvolvHttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvHttpClient.swift; sourceTree = "<group>"; };
+		E26DB22E22EB04E5007B997F /* EvolvClientProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvClientProtocol.swift; sourceTree = "<group>"; };
+		E26DB22F22EB04E5007B997F /* EvolvClientFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvClientFactory.swift; sourceTree = "<group>"; };
+		E26DB23022EB04E5007B997F /* HttpProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpProtocol.swift; sourceTree = "<group>"; };
+		E26DB23122EB04E5007B997F /* EventEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventEmitter.swift; sourceTree = "<group>"; };
+		E26DB23322EB04E5007B997F /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		E26DB23422EB04E5007B997F /* LruCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LruCache.swift; sourceTree = "<group>"; };
+		E26DB23522EB04E5007B997F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E26DB23622EB04E5007B997F /* LinkedQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedQueue.swift; sourceTree = "<group>"; };
+		E26DB23722EB04E5007B997F /* LinkedList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
+		E26DB25D22EB0DD9007B997F /* EvolvKit iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "EvolvKit iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E26DB26122EB0DDA007B997F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E26DB27622EB1113007B997F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E26DB27722EB1113007B997F /* EvolvKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EvolvKit.h; sourceTree = "<group>"; };
+		E26DB27A22EB1AFC007B997F /* EvolvKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = EvolvKit.podspec; sourceTree = "<group>"; };
+		E26DB27B22EB1AFC007B997F /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		F331EE08CA597B3615E2480F /* Pods-EvolvKit iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EvolvKit iOS.debug.xcconfig"; path = "Target Support Files/Pods-EvolvKit iOS/Pods-EvolvKit iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		F6F757CD263654347E21B2EE /* Pods-EvolvKit iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EvolvKit iOS.release.xcconfig"; path = "Target Support Files/Pods-EvolvKit iOS/Pods-EvolvKit iOS.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E26DB1E922EB0470007B997F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9527433A760E8C6363F0F1C2 /* Pods_EvolvKit_iOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E26DB25A22EB0DD9007B997F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E26DB26222EB0DDA007B997F /* EvolvKit.framework in Frameworks */,
+				D79D13969FB59F3BDE5C2384 /* Pods_EvolvKit_iOS_Tests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00F6EB2005818CFB4B53427A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B71664BE37E11FE103370618 /* Pods_EvolvKit_iOS.framework */,
+				86B027F555D40B7ABE5615F0 /* Pods_EvolvKit_iOS_Tests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		182DE4ED40903BB7D2DD3B27 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F331EE08CA597B3615E2480F /* Pods-EvolvKit iOS.debug.xcconfig */,
+				F6F757CD263654347E21B2EE /* Pods-EvolvKit iOS.release.xcconfig */,
+				63EE5583F8A0C3182628E556 /* Pods-EvolvKit iOS Tests.debug.xcconfig */,
+				B09E122CD19BB0F7048DE2F5 /* Pods-EvolvKit iOS Tests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		E26DB1E222EB0470007B997F = {
+			isa = PBXGroup;
+			children = (
+				E26DB27922EB1ADE007B997F /* Deployment */,
+				E26DB22022EB04E5007B997F /* Source */,
+				E26DB25E22EB0DDA007B997F /* Tests */,
+				E26DB1ED22EB0470007B997F /* Products */,
+				182DE4ED40903BB7D2DD3B27 /* Pods */,
+				00F6EB2005818CFB4B53427A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E26DB1ED22EB0470007B997F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E26DB1EC22EB0470007B997F /* EvolvKit.framework */,
+				E26DB25D22EB0DD9007B997F /* EvolvKit iOS Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E26DB22022EB04E5007B997F /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				E26DB22322EB04E5007B997F /* Allocations.swift */,
+				E26DB22122EB04E5007B997F /* AllocationStoreProtocol.swift */,
+				E26DB22822EB04E5007B997F /* Allocator.swift */,
+				E26DB22522EB04E5007B997F /* Audience.swift */,
+				E26DB22B22EB04E5007B997F /* DefaultAllocationStore.swift */,
+				E26DB23122EB04E5007B997F /* EventEmitter.swift */,
+				E26DB22922EB04E5007B997F /* EvolvActionProtocol.swift */,
+				E26DB22F22EB04E5007B997F /* EvolvClientFactory.swift */,
+				E26DB22422EB04E5007B997F /* EvolvClientImpl.swift */,
+				E26DB22E22EB04E5007B997F /* EvolvClientProtocol.swift */,
+				E26DB22722EB04E5007B997F /* EvolvConfig.swift */,
+				E26DB22622EB04E5007B997F /* EvolvErrorHandling.swift */,
+				E26DB22D22EB04E5007B997F /* EvolvHttpClient.swift */,
+				E26DB22A22EB04E5007B997F /* EvolvParticipant.swift */,
+				E26DB22222EB04E5007B997F /* Execution.swift */,
+				E26DB22C22EB04E5007B997F /* ExecutionQueue.swift */,
+				E26DB23022EB04E5007B997F /* HttpProtocol.swift */,
+				E26DB25322EB057F007B997F /* Supporting Files */,
+				E26DB23222EB04E5007B997F /* Utility */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		E26DB23222EB04E5007B997F /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				E26DB23322EB04E5007B997F /* Log.swift */,
+				E26DB23422EB04E5007B997F /* LruCache.swift */,
+				E26DB23522EB04E5007B997F /* Extensions.swift */,
+				E26DB23622EB04E5007B997F /* LinkedQueue.swift */,
+				E26DB23722EB04E5007B997F /* LinkedList.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		E26DB25322EB057F007B997F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E26DB27722EB1113007B997F /* EvolvKit.h */,
+				E26DB27622EB1113007B997F /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E26DB25E22EB0DDA007B997F /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E26DB21122EB04BC007B997F /* AllocationsTest.swift */,
+				E26DB20922EB04BC007B997F /* AllocatorTest.swift */,
+				E26DB21022EB04BC007B997F /* ClientFactoryTest.swift */,
+				E26DB20D22EB04BC007B997F /* ClientImplTest.swift */,
+				E26DB20E22EB04BC007B997F /* DefaultAllocatorStoreTest.swift */,
+				E26DB20722EB04BC007B997F /* EventEmitterTest.swift */,
+				E26DB20822EB04BC007B997F /* EvolvConfigTest.swift */,
+				E26DB20B22EB04BC007B997F /* EvolvParticipantTest.swift */,
+				E26DB20A22EB04BC007B997F /* ExecutionQueueTest.swift */,
+				E26DB20C22EB04BC007B997F /* LruCacheTest.swift */,
+				E26DB20F22EB04BC007B997F /* Mocks.swift */,
+				E26DB27322EB10CB007B997F /* Supporting Files */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		E26DB27322EB10CB007B997F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E26DB26122EB0DDA007B997F /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E26DB27922EB1ADE007B997F /* Deployment */ = {
+			isa = PBXGroup;
+			children = (
+				E26DB27A22EB1AFC007B997F /* EvolvKit.podspec */,
+				E26DB27B22EB1AFC007B997F /* LICENSE */,
+			);
+			name = Deployment;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E26DB1E722EB0470007B997F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E26DB1EB22EB0470007B997F /* EvolvKit iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E26DB20022EB0470007B997F /* Build configuration list for PBXNativeTarget "EvolvKit iOS" */;
+			buildPhases = (
+				363844C6845B554E4D61272F /* [CP] Check Pods Manifest.lock */,
+				E26DB1E722EB0470007B997F /* Headers */,
+				E26DB1E822EB0470007B997F /* Sources */,
+				E26DB1E922EB0470007B997F /* Frameworks */,
+				E26DB1EA22EB0470007B997F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "EvolvKit iOS";
+			productName = EvolvKit;
+			productReference = E26DB1EC22EB0470007B997F /* EvolvKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		E26DB25C22EB0DD9007B997F /* EvolvKit iOS Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E26DB26522EB0DDA007B997F /* Build configuration list for PBXNativeTarget "EvolvKit iOS Tests" */;
+			buildPhases = (
+				F178621DE0F83AE2E2D95FA6 /* [CP] Check Pods Manifest.lock */,
+				E26DB25922EB0DD9007B997F /* Sources */,
+				E26DB25A22EB0DD9007B997F /* Frameworks */,
+				E26DB25B22EB0DD9007B997F /* Resources */,
+				E901D686FAC50A329E1E8500 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E26DB26422EB0DDA007B997F /* PBXTargetDependency */,
+			);
+			name = "EvolvKit iOS Tests";
+			productName = "EvolvKit iOS Tests 2";
+			productReference = E26DB25D22EB0DD9007B997F /* EvolvKit iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E26DB1E322EB0470007B997F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1030;
+				LastUpgradeCheck = 1030;
+				ORGANIZATIONNAME = Evolv;
+				TargetAttributes = {
+					E26DB1EB22EB0470007B997F = {
+						CreatedOnToolsVersion = 10.3;
+					};
+					E26DB25C22EB0DD9007B997F = {
+						CreatedOnToolsVersion = 10.3;
+					};
+					E26DB28722EB1CE8007B997F = {
+						CreatedOnToolsVersion = 10.3;
+					};
+				};
+			};
+			buildConfigurationList = E26DB1E622EB0470007B997F /* Build configuration list for PBXProject "EvolvKit" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E26DB1E222EB0470007B997F;
+			productRefGroup = E26DB1ED22EB0470007B997F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E26DB1EB22EB0470007B997F /* EvolvKit iOS */,
+				E26DB25C22EB0DD9007B997F /* EvolvKit iOS Tests */,
+				E26DB28722EB1CE8007B997F /* SwiftLint */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E26DB1EA22EB0470007B997F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E26DB25B22EB0DD9007B997F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		363844C6845B554E4D61272F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EvolvKit iOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E26DB28B22EB1D22007B997F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		E901D686FAC50A329E1E8500 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-EvolvKit iOS Tests/Pods-EvolvKit iOS Tests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-EvolvKit iOS Tests/Pods-EvolvKit iOS Tests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EvolvKit iOS Tests/Pods-EvolvKit iOS Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F178621DE0F83AE2E2D95FA6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EvolvKit iOS Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E26DB1E822EB0470007B997F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E26DB24C22EB04E5007B997F /* LinkedQueue.swift in Sources */,
+				E26DB23A22EB04E5007B997F /* Allocations.swift in Sources */,
+				E26DB23B22EB04E5007B997F /* EvolvClientImpl.swift in Sources */,
+				E26DB24922EB04E5007B997F /* Log.swift in Sources */,
+				E26DB23C22EB04E5007B997F /* Audience.swift in Sources */,
+				E26DB23F22EB04E5007B997F /* Allocator.swift in Sources */,
+				E26DB24422EB04E5007B997F /* EvolvHttpClient.swift in Sources */,
+				E26DB24322EB04E5007B997F /* ExecutionQueue.swift in Sources */,
+				E26DB24022EB04E5007B997F /* EvolvActionProtocol.swift in Sources */,
+				E26DB23922EB04E5007B997F /* Execution.swift in Sources */,
+				E26DB24A22EB04E5007B997F /* LruCache.swift in Sources */,
+				E26DB23D22EB04E5007B997F /* EvolvErrorHandling.swift in Sources */,
+				E26DB24522EB04E5007B997F /* EvolvClientProtocol.swift in Sources */,
+				E26DB24222EB04E5007B997F /* DefaultAllocationStore.swift in Sources */,
+				E26DB23822EB04E5007B997F /* AllocationStoreProtocol.swift in Sources */,
+				E26DB24822EB04E5007B997F /* EventEmitter.swift in Sources */,
+				E26DB24B22EB04E5007B997F /* Extensions.swift in Sources */,
+				E26DB24122EB04E5007B997F /* EvolvParticipant.swift in Sources */,
+				E26DB24622EB04E5007B997F /* EvolvClientFactory.swift in Sources */,
+				E26DB23E22EB04E5007B997F /* EvolvConfig.swift in Sources */,
+				E26DB24D22EB04E5007B997F /* LinkedList.swift in Sources */,
+				E26DB24722EB04E5007B997F /* HttpProtocol.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E26DB25922EB0DD9007B997F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E26DB27022EB0E34007B997F /* ClientImplTest.swift in Sources */,
+				E26DB26F22EB0E34007B997F /* AllocationsTest.swift in Sources */,
+				E26DB26C22EB0E34007B997F /* LruCacheTest.swift in Sources */,
+				E26DB26A22EB0E34007B997F /* EvolvParticipantTest.swift in Sources */,
+				E26DB26D22EB0E34007B997F /* ExecutionQueueTest.swift in Sources */,
+				E26DB26B22EB0E34007B997F /* ClientFactoryTest.swift in Sources */,
+				E26DB26922EB0E34007B997F /* EventEmitterTest.swift in Sources */,
+				E26DB26E22EB0E34007B997F /* DefaultAllocatorStoreTest.swift in Sources */,
+				E26DB26822EB0E34007B997F /* AllocatorTest.swift in Sources */,
+				E26DB27122EB0E34007B997F /* EvolvConfigTest.swift in Sources */,
+				E26DB27222EB0E34007B997F /* Mocks.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E26DB26422EB0DDA007B997F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E26DB1EB22EB0470007B997F /* EvolvKit iOS */;
+			targetProxy = E26DB26322EB0DDA007B997F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E26DB1FE22EB0470007B997F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E26DB1FF22EB0470007B997F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		E26DB20122EB0470007B997F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F331EE08CA597B3615E2480F /* Pods-EvolvKit iOS.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.EvolvKit;
+				PRODUCT_NAME = EvolvKit;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E26DB20222EB0470007B997F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6F757CD263654347E21B2EE /* Pods-EvolvKit iOS.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.EvolvKit;
+				PRODUCT_NAME = EvolvKit;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E26DB26622EB0DDA007B997F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63EE5583F8A0C3182628E556 /* Pods-EvolvKit iOS Tests.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.EvolvKit-iOS-Tests-2";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E26DB26722EB0DDA007B997F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B09E122CD19BB0F7048DE2F5 /* Pods-EvolvKit iOS Tests.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.EvolvKit-iOS-Tests-2";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E26DB28922EB1CE8007B997F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		E26DB28A22EB1CE8007B997F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E26DB1E622EB0470007B997F /* Build configuration list for PBXProject "EvolvKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E26DB1FE22EB0470007B997F /* Debug */,
+				E26DB1FF22EB0470007B997F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E26DB20022EB0470007B997F /* Build configuration list for PBXNativeTarget "EvolvKit iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E26DB20122EB0470007B997F /* Debug */,
+				E26DB20222EB0470007B997F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E26DB26522EB0DDA007B997F /* Build configuration list for PBXNativeTarget "EvolvKit iOS Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E26DB26622EB0DDA007B997F /* Debug */,
+				E26DB26722EB0DDA007B997F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E26DB28822EB1CE8007B997F /* Build configuration list for PBXAggregateTarget "SwiftLint" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E26DB28922EB1CE8007B997F /* Debug */,
+				E26DB28A22EB1CE8007B997F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E26DB1E322EB0470007B997F /* Project object */;
+}
