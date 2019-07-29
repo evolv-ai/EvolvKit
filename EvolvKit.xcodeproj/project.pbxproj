@@ -112,7 +112,7 @@
 		E26DB26122EB0DDA007B997F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E26DB27622EB1113007B997F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E26DB27722EB1113007B997F /* EvolvKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EvolvKit.h; sourceTree = "<group>"; };
-		E26DB27A22EB1AFC007B997F /* EvolvKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = EvolvKit.podspec; sourceTree = "<group>"; };
+		E26DB27A22EB1AFC007B997F /* EvolvKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = EvolvKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		E26DB27B22EB1AFC007B997F /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		F331EE08CA597B3615E2480F /* Pods-EvolvKit iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EvolvKit iOS.debug.xcconfig"; path = "Target Support Files/Pods-EvolvKit iOS/Pods-EvolvKit iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		F6F757CD263654347E21B2EE /* Pods-EvolvKit iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EvolvKit iOS.release.xcconfig"; path = "Target Support Files/Pods-EvolvKit iOS/Pods-EvolvKit iOS.release.xcconfig"; sourceTree = "<group>"; };

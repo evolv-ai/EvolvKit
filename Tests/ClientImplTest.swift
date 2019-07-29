@@ -343,7 +343,7 @@ class ClientImplTest: XCTestCase {
     }
     
     client.subscribe("search.weighting.distance", defaultValue, updateValue)
-    XCTAssertNotEqual(expected, self.testValue)
+    XCTAssertEqual(expected, self.testValue)
     self.testValue = 0.0
   }
   

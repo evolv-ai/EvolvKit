@@ -57,10 +57,10 @@ class ViewController: UIViewController {
             "cid": "candidate_3",
             "genome": [
                 "ui": [
-                    "layout": "option_4",
+                    "layout": "option_7",
                     "buttons": [
                         "checkout": [
-                            "text": "option_4     ",
+                            "text": "option_2",
                             "color": "#f3b36d"
                         ],
                         "info": [
