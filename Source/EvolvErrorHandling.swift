@@ -9,24 +9,32 @@
 import Foundation
 
 enum NetworkingError: String, Error {
-  case invalidRequest = "Invalid request"
-  case invalidUrl
-  case response
-  case data = "No data"
+    case invalidRequest = "Invalid request"
+    case invalidUrl
+    case response
+    case data = "No data"
 }
 
 extension NetworkingError: LocalizedError {
-  var errorDescription: String? { return NSLocalizedString(rawValue, comment: "") }
+    
+    var errorDescription: String? {
+        return NSLocalizedString(rawValue, comment: "")
+    }
+    
 }
 
 enum EvolvKeyError: String, Error {
-  case errorMessage
-  case elementFails = "Element Fails"
-  case genomeEmpty = "Genome Empty"
-  case mismatchTypes = "Mismatched Types"
-  case keyError = "Key Error"
+    case errorMessage
+    case elementFails = "Element Fails"
+    case genomeEmpty = "Genome Empty"
+    case mismatchTypes = "Mismatched Types"
+    case keyError = "Key Error"
 }
 
 extension EvolvKeyError: LocalizedError {
-  var errorDescription: String? { return NSLocalizedString(rawValue, comment: "") }
+    
+    var errorDescription: String? {
+        return NSLocalizedString(rawValue, comment: "")
+    }
+    
 }

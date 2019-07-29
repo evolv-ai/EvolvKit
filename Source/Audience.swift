@@ -9,13 +9,13 @@
 import SwiftyJSON
 
 protocol Function {
-  associatedtype A
-  associatedtype B
-  func apply(one: A, two: B) -> Bool
+    associatedtype A
+    associatedtype B
+    func apply(one: A, two: B) -> Bool
 }
 
 public class Audience {
-  
-  public init () {}
-  
+    
+    public init() {}
+    
 }

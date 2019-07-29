@@ -9,16 +9,19 @@
 import SwiftyJSON
 
 public class DefaultAllocationStore: AllocationStoreProtocol {
-  public var cache: LRUCache
-  
-  public init(size: Int) {
-    self.cache = LRUCache(size)
-  }
-  public func get(_ participantId: String) -> [JSON] {
-    return cache.getEntry(participantId)
-  }
-  
-  public func put(_ participantId: String, _ allocations: [JSON]) {
-    cache.putEntry(participantId, allocations)
-  }
+    
+    public var cache: LRUCache
+    
+    public init(size: Int) {
+        self.cache = LRUCache(size)
+    }
+    
+    public func get(_ participantId: String) -> [JSON] {
+        return cache.getEntry(participantId)
+    }
+    
+    public func put(_ participantId: String, _ allocations: [JSON]) {
+        cache.putEntry(participantId, allocations)
+    }
+    
 }

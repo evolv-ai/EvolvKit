@@ -7,10 +7,10 @@
 //
 
 public protocol EvolvActionProtocol {
-  /**
-   Applies a given value to a set of instructions.
-   - Parameters:
-      - value: Any value that was requested.
-   */
-  func apply<T>(value: T)
+    /**
+     Applies a given value to a set of instructions.
+     - Parameters:
+     - value: Any value that was requested.
+     */
+    func apply<T>(value: T)
 }
