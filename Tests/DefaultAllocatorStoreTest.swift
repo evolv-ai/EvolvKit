@@ -11,7 +11,7 @@ import SwiftyJSON
 @testable import EvolvKit
 
 class DefaultAllocatorStoreTest: XCTestCase {
-  
+    
     private var rawAllocations: [JSON] {
         let data: [[String: Any]] = [
             [
@@ -48,24 +48,24 @@ class DefaultAllocatorStoreTest: XCTestCase {
         
         return JSON(data).arrayValue
     }
-  
-  func testEmptyStoreRGetsEmptyJsonArray() {
-    let store = DefaultAllocationStore(size: 10)
     
-    XCTAssertNotNil(store.get("test_user"))
-    XCTAssertEqual(0, store.get("test_user").count)
-    XCTAssertEqual([JSON](), store.get("test_user"))
-  }
-  
-  func testSetAndGetOnStore() {
-    let store = DefaultAllocationStore(size: 10)
-    let allocations = self.rawAllocations
-    store.put("test_user", allocations)
-    let storedAllocations = store.get("test_user")
+    func testEmptyStoreRGetsEmptyJsonArray() {
+        let store = DefaultAllocationStore(size: 10)
+        
+        XCTAssertNotNil(store.get("test_user"))
+        XCTAssertEqual(0, store.get("test_user").count)
+        XCTAssertEqual([JSON](), store.get("test_user"))
+    }
     
-    XCTAssertNotNil(storedAllocations)
-    XCTAssertNotEqual([JSON](), storedAllocations)
-    XCTAssertEqual(allocations, storedAllocations)
-  }
-  
+    func testSetAndGetOnStore() {
+        let store = DefaultAllocationStore(size: 10)
+        let allocations = self.rawAllocations
+        store.put("test_user", allocations)
+        let storedAllocations = store.get("test_user")
+        
+        XCTAssertNotNil(storedAllocations)
+        XCTAssertNotEqual([JSON](), storedAllocations)
+        XCTAssertEqual(allocations, storedAllocations)
+    }
+    
 }

@@ -12,7 +12,7 @@ import PromiseKit
 @testable import EvolvKit
 
 class AllocationsTest: XCTestCase {
-  
+    
     public static var rawAllocations: [JSON] {
         let data: [[String: Any]] = [
             [
@@ -181,65 +181,65 @@ class AllocationsTest: XCTestCase {
         
         return JSON(data).arrayValue
     }
-
-  func testGetValueFromAllocationGenome() {
-    do {
-      let participant = EvolvParticipant.builder().build()
-      let allocations = Allocations(AllocationsTest.rawAllocations)
-      let defaultBool: Bool = true
-      let defaultDouble: Double = 10.0
-      let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
-                                                                      defaultBool, participant)
-      let weightingDistance = try allocations.getValueFromAllocations("search.weighting.distance",
-                                                                      defaultDouble, participant)
-      XCTAssertEqual(featureImportance, false)
-      XCTAssertEqual(weightingDistance, 2.5)
-    } catch let error {
-      XCTFail(error.localizedDescription)
+    
+    func testGetValueFromAllocationGenome() {
+        do {
+            let participant = EvolvParticipant.builder().build()
+            let allocations = Allocations(AllocationsTest.rawAllocations)
+            let defaultBool: Bool = true
+            let defaultDouble: Double = 10.0
+            let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
+                                                                            defaultBool, participant)
+            let weightingDistance = try allocations.getValueFromAllocations("search.weighting.distance",
+                                                                            defaultDouble, participant)
+            XCTAssertEqual(featureImportance, false)
+            XCTAssertEqual(weightingDistance, 2.5)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
     }
-  }
-
-  func testGetValueFromMultiAllocationGenome() {
-    do {
-      let participant: EvolvParticipant = EvolvParticipant.builder().build()
-      let allocations = Allocations(AllocationsTest.rawAllocations)
-      let defaultBool: Bool = true
-      let defaultDouble: Double = 10.0
-      let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
-                                                                      defaultBool, participant)
-      let weightingDistance = try allocations.getValueFromAllocations("search.weighting.distance",
-                                                                      defaultDouble, participant)
-      XCTAssertEqual(featureImportance, false)
-      XCTAssertEqual(weightingDistance, 2.5)
-    } catch let error {
-      XCTFail(error.localizedDescription)
+    
+    func testGetValueFromMultiAllocationGenome() {
+        do {
+            let participant: EvolvParticipant = EvolvParticipant.builder().build()
+            let allocations = Allocations(AllocationsTest.rawAllocations)
+            let defaultBool: Bool = true
+            let defaultDouble: Double = 10.0
+            let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
+                                                                            defaultBool, participant)
+            let weightingDistance = try allocations.getValueFromAllocations("search.weighting.distance",
+                                                                            defaultDouble, participant)
+            XCTAssertEqual(featureImportance, false)
+            XCTAssertEqual(weightingDistance, 2.5)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
     }
-  }
-
-  func testGetValueFromMultiAllocationWithDupsGenome() {
-    do {
-      let participant: EvolvParticipant = EvolvParticipant.builder().build()
-      let allocations = Allocations(self.rawMultiAllocations)
-      let defaultBool: Bool = true
-      let defaultDouble: Double = 10.0
-      let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
-                                                                      defaultBool, participant)
-      let weightingDistance = try allocations.getValueFromAllocations("search.weighting.distance",
-                                                                      defaultDouble, participant)
-      XCTAssertEqual(featureImportance, false)
-      XCTAssertEqual(weightingDistance, 2.5)
-    } catch let error {
-      XCTFail(error.localizedDescription)
+    
+    func testGetValueFromMultiAllocationWithDupsGenome() {
+        do {
+            let participant: EvolvParticipant = EvolvParticipant.builder().build()
+            let allocations = Allocations(self.rawMultiAllocations)
+            let defaultBool: Bool = true
+            let defaultDouble: Double = 10.0
+            let featureImportance = try allocations.getValueFromAllocations("algorithms.feature_importance",
+                                                                            defaultBool, participant)
+            let weightingDistance = try allocations.getValueFromAllocations("search.weighting.distance",
+                                                                            defaultDouble, participant)
+            XCTAssertEqual(featureImportance, false)
+            XCTAssertEqual(weightingDistance, 2.5)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
     }
-  }
-  
-  func testGetActiveExperiments () {
-    let allocations = Allocations(self.rawMultiAllocationsWithDups)
-    let activeExperiments: Set<String> = allocations.getActiveExperiments()
-    var expected: Set<String> = Set()
-    expected.update(with: "test_eid")
-    expected.update(with: "test_eid_2")
-    XCTAssertEqual(expected, activeExperiments)
-  }
-
+    
+    func testGetActiveExperiments () {
+        let allocations = Allocations(self.rawMultiAllocationsWithDups)
+        let activeExperiments: Set<String> = allocations.getActiveExperiments()
+        var expected: Set<String> = Set()
+        expected.update(with: "test_eid")
+        expected.update(with: "test_eid_2")
+        XCTAssertEqual(expected, activeExperiments)
+    }
+    
 }
