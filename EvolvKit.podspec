@@ -1,4 +1,5 @@
 Pod::Spec.new do |s|
+
   s.name             = 'EvolvKit'
   s.version          = '1.0.0'
   s.summary          = 'Autonomous Optimizations Tool'
