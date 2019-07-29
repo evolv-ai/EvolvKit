@@ -1,0 +1,46 @@
+disabled_rules:
+- trailing_whitespace
+opt_in_rules:
+- empty_count
+- empty_string
+- unused_private_declaration
+- operator_usage_whitespace
+- unused_import
+- overridden_super_call
+included:
+- Source
+- Tests
+line_length:
+    warning: 150
+    error: 200
+    ignores_function_declarations: true
+    ignores_comments: true
+    ignores_urls: true
+function_body_length:
+    warning: 300
+    error: 500
+function_parameter_count:
+    warning: 6
+    error: 8
+type_name:
+    min_length: 2
+    max_length:
+        warning: 50
+        error: 60
+type_body_length:
+    warning: 300
+    error: 500
+file_length:
+    warning: 1000
+    error: 1500
+    ignore_comment_only_lines: true
+cyclomatic_complexity:
+    warning: 30
+    error: 40
+identifier_name:
+  excluded: # excluded via string array
+    - id
+    - ok
+    - no
+    - on
+reporter: "xcode"
