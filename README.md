@@ -131,10 +131,6 @@ implementing the EvolvAllocationStore interface. You can supply the custom alloc
 let config = EvolvConfig.Builder(<environment_id>)
   .setEvolvAllocationStore(<custom_store>).build()
 
-let client = EvolvClientImpl(<config>, <eventEmitter>, <futureAllocations>, <previousAllocations>, <participant>)
-
-or
-
 let client = EvolvClientFactory(<config>, EvolvParticipant.builder().setUserId("sandbox_user").build())
 ```
 
