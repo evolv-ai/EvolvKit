@@ -5,61 +5,64 @@ import PromiseKit
 
 class EvolvParticipantTest: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-    }
-    
     func testBuildDefaultParticipant() {
         let participant = EvolvParticipant.builder().build()
-        XCTAssertNotNil(participant.getUserId)
-        XCTAssertNotNil(participant.getSessionId)
-        XCTAssertNotNil(participant.getUserAttributes)
+        
+        XCTAssertNotNil(participant.userId)
+        XCTAssertNotNil(participant.sessionId)
+        XCTAssertNotNil(participant.userAttributes)
     }
     
     func testSetCustomParticipantAttributes() {
         let userId = "Testy"
         let sessionId = "McTestTest"
-        let userAttributes = ["country": "us"]
+        let userAttributes = [EvolvRawAllocations.Key.country.rawValue: "us"]
         
         let participant = EvolvParticipant.builder()
-            .setUserId(userId)
-            .setSessionId(sessionId)
-            .setUserAttributes(userAttributes)
+            .set(userId: userId)
+            .set(sessionId: sessionId)
+            .set(userAttributes: userAttributes)
             .build()
         
-        XCTAssertEqual(userId, participant.getUserId())
-        XCTAssertEqual(sessionId, participant.getSessionId())
+        XCTAssertEqual(userId, participant.userId)
+        XCTAssertEqual(sessionId, participant.sessionId)
         
-        var expectedUserAttributes = [String: String]()
-        expectedUserAttributes["country"] = String("us")
-        expectedUserAttributes["uid"] = String(userId)
-        expectedUserAttributes["sid"] = String(sessionId)
+        var expectedUserAttributes: [String: String] = [:]
+        expectedUserAttributes[EvolvRawAllocations.Key.country.rawValue] = String("us")
+        expectedUserAttributes[EvolvRawAllocations.Key.userId.rawValue] = String(userId)
+        expectedUserAttributes[EvolvRawAllocations.Key.sessionId.rawValue] = String(sessionId)
         
-        XCTAssertEqual(expectedUserAttributes, participant.getUserAttributes())
+        XCTAssertEqual(expectedUserAttributes, participant.userAttributes)
     }
     
     func testSetUserIdAfterParticipantCreated() {
         let newUserId = "Testy"
         let participant = EvolvParticipant.builder().build()
-        let oldUserId = participant.getUserId()
-        participant.setUserId(newUserId)
+        let oldUserId = participant.userId
+        participant.userId = newUserId
         
         XCTAssertNotEqual(oldUserId, newUserId)
-        XCTAssertEqual(newUserId, participant.getUserId())
+        XCTAssertEqual(newUserId, participant.userId)
     }
     
     func testParticipantGetUserAttr() {
-        let participant = EvolvParticipant.builder().setUserId("test_user").setSessionId("test_session").build()
-        let userAttributes = participant.getUserAttributes()
-        let expectedUserAttributes = ["uid": "test_user", "sid": "test_session"]
-        XCTAssertEqual(userAttributes["uid"], expectedUserAttributes["uid"])
-        XCTAssertEqual(userAttributes["sid"], expectedUserAttributes["sid"])
+        let participant = EvolvParticipant.builder()
+            .set(userId: "test_user")
+            .set(sessionId: "test_session")
+            .build()
+        let userAttributes = participant.userAttributes
+        let expectedUserAttributes = [EvolvRawAllocations.Key.userId.rawValue: "test_user",
+                                      EvolvRawAllocations.Key.sessionId.rawValue: "test_session"]
+        XCTAssertEqual(userAttributes[EvolvRawAllocations.Key.userId.rawValue],
+                       expectedUserAttributes[EvolvRawAllocations.Key.userId.rawValue])
+        XCTAssertEqual(userAttributes[EvolvRawAllocations.Key.sessionId.rawValue],
+                       expectedUserAttributes[EvolvRawAllocations.Key.sessionId.rawValue])
     }
     
     func testEvolvParticipant() {
         let participant = EvolvParticipant.builder().build()
-        participant.setUserId("test_user")
-        XCTAssertEqual(participant.getUserId(), "test_user")
+        participant.userId = "test_user"
+        XCTAssertEqual(participant.userId, "test_user")
     }
     
 }

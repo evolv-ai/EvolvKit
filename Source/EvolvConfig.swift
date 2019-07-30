@@ -12,73 +12,48 @@ public class EvolvConfig {
         public static let httpScheme: String = "https"
         public static let domain: String = "participants.evolv.ai"
         public static let apiVersion: String = "v1"
-        fileprivate static let allocationStoreSize: Int = 1000
+        static let allocationStoreSize: Int = 1000
     }
     
-    private let httpScheme: String
-    private let domain: String
-    private let version: String
-    private let environmentId: String
-    private let evolvAllocationStore: AllocationStoreProtocol
-    private let httpClient: HttpProtocol
-    private let executionQueue = ExecutionQueue.shared
+    let httpScheme: String
+    let domain: String
+    let version: String
+    let environmentId: String
+    let allocationStore: EvolvAllocationStore
+    let httpClient: EvolvHttpClient
+    let executionQueue = EvolvExecutionQueue.shared
     
-    public init(_ httpScheme: String, _ domain: String, _ version: String,
-                _ environmentId: String, _ evolvAllocationStore: AllocationStoreProtocol,
-                _ httpClient: HttpProtocol
+    init(httpScheme: String,
+         domain: String,
+         version: String,
+         environmentId: String,
+         evolvAllocationStore: EvolvAllocationStore,
+         httpClient: EvolvHttpClient
         ) {
         self.httpScheme = httpScheme
         self.domain = domain
         self.version = version
         self.environmentId = environmentId
-        self.evolvAllocationStore = evolvAllocationStore
+        self.allocationStore = evolvAllocationStore
         self.httpClient = httpClient
     }
     
-    static public func builder(_ environmentId: String, _ httpClient: HttpProtocol) -> ConfigBuilder {
-        return ConfigBuilder(environmentId, httpClient)
-    }
-    
-    public func getHttpScheme() -> String {
-        return self.httpScheme
-    }
-    
-    public func getDomain() -> String {
-        return self.domain
-    }
-    
-    public func getVersion() -> String {
-        return self.version
-    }
-    
-    public func getEnvironmentId() -> String {
-        return self.environmentId
-    }
-    
-    public func getEvolvAllocationStore() -> AllocationStoreProtocol {
-        return self.evolvAllocationStore
-    }
-    
-    public func getHttpClient() -> HttpProtocol {
-        return self.httpClient
-    }
-    
-    public func getExecutionQueue() -> ExecutionQueue {
-        return self.executionQueue
+    static public func builder(environmentId: String, httpClient: EvolvHttpClient) -> EvolvConfigBuilder {
+        return EvolvConfigBuilder(environmentId: environmentId, httpClient: httpClient)
     }
     
 }
 
-public class ConfigBuilder {
+public class EvolvConfigBuilder {
     
     private var allocationStoreSize = EvolvConfig.Default.allocationStoreSize
     private var httpScheme: String = EvolvConfig.Default.httpScheme
     private var domain: String = EvolvConfig.Default.domain
     private var version: String = EvolvConfig.Default.apiVersion
-    private var allocationStore: AllocationStoreProtocol?
+    private var allocationStore: EvolvAllocationStore?
     
     private var environmentId: String
-    private var httpClient: HttpProtocol
+    private var httpClient: EvolvHttpClient
     
     /**
      Responsible for creating an instance of EvolvConfig.
@@ -90,8 +65,9 @@ public class ConfigBuilder {
      - httpClient: You may pass in any http client of your choice, defaults to EvolvHttpClient.
      - allocationStore: You may pass in any LruCache of your choice, defaults to EvolvAllocationStore.
      */
-    fileprivate init(_ environmentId: String, _ httpClient: HttpProtocol = EvolvHttpClient(),
-                     _ allocationStore: AllocationStoreProtocol = DefaultAllocationStore(size: 1000)) {
+    init(environmentId: String,
+         httpClient: EvolvHttpClient = DefaultEvolvHttpClient(),
+         allocationStore: EvolvAllocationStore = DefaultEvolvAllocationStore(size: 1000)) {
         self.environmentId = environmentId
         self.httpClient = httpClient
         self.allocationStore = allocationStore
@@ -103,7 +79,7 @@ public class ConfigBuilder {
      - domain: The domain of the evolvParticipant api.
      - Returns: EvolvConfigBuilder class
      */
-    public func setDomain(_ domain: String) -> ConfigBuilder {
+    public func set(domain: String) -> EvolvConfigBuilder {
         self.domain = domain
         return self
     }
@@ -114,7 +90,7 @@ public class ConfigBuilder {
      - version: Representation of the required evolvParticipant api version.
      - Returns: EvolvConfigBuilder class.
      */
-    public func setVersion(_ version: String) -> ConfigBuilder {
+    public func set(version: String) -> EvolvConfigBuilder {
         self.version = version
         return self
     }
@@ -126,7 +102,7 @@ public class ConfigBuilder {
      - allocationStore: A custom built allocation store.
      - Returns: EvolvConfigBuilder class
      */
-    public func setEvolvAllocationStore(_ allocationStore: AllocationStoreProtocol) -> ConfigBuilder {
+    public func set(allocationStore: EvolvAllocationStore) -> EvolvConfigBuilder {
         self.allocationStore = allocationStore
         return self
     }
@@ -137,19 +113,19 @@ public class ConfigBuilder {
      - scheme: either http or https
      - Returns: EvolvConfigBuilder class
      */
-    public func setHttpScheme(scheme: String) -> ConfigBuilder {
-        self.httpScheme = scheme
+    public func set(httpScheme: String) -> EvolvConfigBuilder {
+        self.httpScheme = httpScheme
         return self
     }
     
     /**
      - Sets the DefaultAllocationStores size.
      - Parameters:
-     - size: number of entries allowed in the default allocation store
+     - allocationStoreSize: number of entries allowed in the default allocation store
      - Returns: EvolvClientBuilder class
      */
-    public func setDefaultAllocationStoreSize(size: Int) -> ConfigBuilder {
-        self.allocationStoreSize = size
+    public func set(allocationStoreSize: Int) -> EvolvConfigBuilder {
+        self.allocationStoreSize = allocationStoreSize
         return self
     }
     
@@ -158,13 +134,18 @@ public class ConfigBuilder {
      - Returns: an EvolvConfig instance
      */
     public func build() -> EvolvConfig {
-        var store: AllocationStoreProtocol = DefaultAllocationStore(size: allocationStoreSize)
+        var store: EvolvAllocationStore = DefaultEvolvAllocationStore(size: allocationStoreSize)
         
-        if let allocStore = self.allocationStore {
-            store = allocStore
+        if let allocationStore = allocationStore {
+            store = allocationStore
         }
         
-        return EvolvConfig(self.httpScheme, self.domain, self.version, self.environmentId, store, self.httpClient)
+        return EvolvConfig(httpScheme: httpScheme,
+                           domain: domain,
+                           version: version,
+                           environmentId: environmentId,
+                           evolvAllocationStore: store,
+                           httpClient: httpClient)
     }
     
 }

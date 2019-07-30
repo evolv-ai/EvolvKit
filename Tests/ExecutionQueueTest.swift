@@ -15,13 +15,13 @@ class ExecutionQueueTest: XCTestCase {
     private var mockExecutionQueue: ExecutionQueueMock!
     private var participant: EvolvParticipant!
     private let environmentId: String = "test_12345"
-    private var rawAllocations: [JSON] {
+    private var rawAllocations: EvolvRawAllocations {
         let data: [[String: Any]] = [
             [
-                "uid": "test_uid",
-                "sid": "test_sid",
-                "eid": "test_eid",
-                "cid": "test_cid",
+                EvolvRawAllocations.Key.userId.rawValue: "test_uid",
+                EvolvRawAllocations.Key.sessionId.rawValue: "test_sid",
+                EvolvRawAllocations.Key.experimentId.rawValue: "test_eid",
+                EvolvRawAllocations.Key.candidateId.rawValue: "test_cid",
                 "genome": [
                     "search": [
                         "weighting": [
@@ -53,7 +53,7 @@ class ExecutionQueueTest: XCTestCase {
     }
     private var mockConfig: EvolvConfig!
     private var mockHttpClient: HttpClientMock!
-    private var mockAllocationStore: AllocationStoreProtocol!
+    private var mockAllocationStore: EvolvAllocationStore!
     
     override func setUp() {
         super.setUp()
@@ -61,21 +61,21 @@ class ExecutionQueueTest: XCTestCase {
         self.mockExecutionQueue = ExecutionQueueMock()
         self.participant = EvolvParticipant.builder().build()
         mockHttpClient = HttpClientMock()
-        mockAllocationStore = DefaultAllocationStore(size: 10)
+        mockAllocationStore = DefaultEvolvAllocationStore(size: 10)
         
-        mockConfig = ConfigMock("https", "test_domain", "test_v", "test_eid", mockAllocationStore, mockHttpClient)
+        mockConfig = ConfigMock(httpScheme: "https",
+                                domain: "test_domain",
+                                version: "test_v",
+                                environmentId: "test_eid",
+                                evolvAllocationStore: mockAllocationStore,
+                                httpClient: mockHttpClient)
     }
     
     override func tearDown() {
         super.tearDown()
         
-        if mockExecutionQueue != nil {
-            mockExecutionQueue = nil
-        }
-        
-        if participant != nil {
-            participant = nil
-        }
+        mockExecutionQueue = nil
+        participant = nil
     }
     
     // Mock executions for the execution queue
@@ -90,7 +90,10 @@ class ExecutionQueueTest: XCTestCase {
     func testEnqueue() {
         let key = "pages.testing_page.header"
         let defaultValue = "red"
-        let execution = ExecutionMock(key, defaultValue, participant, printSomething)
+        let execution = ExecutionMock(key: key,
+                                      defaultValue: defaultValue,
+                                      participant: participant,
+                                      closure: printSomething)
         
         mockExecutionQueue.enqueue(execution)
         XCTAssertEqual(mockExecutionQueue.count, 1)
@@ -106,8 +109,8 @@ class ExecutionQueueTest: XCTestCase {
     func testExecuteAllWithValuesFromAllocations() {
         let key = "pages.testing_page.header"
         let defaultValue = "red"
-        let exMock1 = ExecutionMock(key, defaultValue, participant, printSomething)
-        let exMock2 = ExecutionMock("pages.testing_page.header", "red", participant, doSomething)
+        let exMock1 = ExecutionMock(key: key, defaultValue: defaultValue, participant: participant, closure: printSomething)
+        let exMock2 = ExecutionMock(key: "pages.testing_page.header", defaultValue: "red", participant: participant, closure: doSomething)
         
         let allocations = self.rawAllocations
         
@@ -117,7 +120,7 @@ class ExecutionQueueTest: XCTestCase {
         XCTAssertEqual(mockExecutionQueue.count, 2)
         
         // Should pop an execution from the queue
-        mockExecutionQueue.executeAllWithValuesFromAllocations(allocations)
+        mockExecutionQueue.executeAllWithValues(from: allocations)
         
         XCTAssertEqual(mockExecutionQueue.count, 1)
         XCTAssertTrue(mockExecutionQueue.executeValuesFromAllocationsWasCalled)
@@ -126,8 +129,8 @@ class ExecutionQueueTest: XCTestCase {
     func testExecuteAllWithValuesFromDefaults() {
         let key = "pages.testing_page_typo.header_typo"
         let defaultValue = "red"
-        let exMock1 = ExecutionMock(key, defaultValue, participant, printSomething)
-        let exMock2 = ExecutionMock(key, defaultValue, participant, doSomething)
+        let exMock1 = ExecutionMock(key: key, defaultValue: defaultValue, participant: participant, closure: printSomething)
+        let exMock2 = ExecutionMock(key: key, defaultValue: defaultValue, participant: participant, closure: doSomething)
         
         mockExecutionQueue.enqueue(exMock1)
         mockExecutionQueue.enqueue(exMock2)

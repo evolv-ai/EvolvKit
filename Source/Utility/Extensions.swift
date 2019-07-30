@@ -5,35 +5,24 @@
 //  Created by phyllis.wong on 7/9/19.
 //
 
-import Foundation
 import UIKit
-
-public func getQueryStringParameter(url: String, param: String) -> String? {
-    guard let url = URLComponents(string: url) else {
-        return nil
-    }
-    
-    return url.queryItems?.first(where: { $0.name == param })?.value
-}
 
 extension UIColor {
     
     public convenience init(hexString: String, alpha: CGFloat = 1.0) {
-        let hexString: String = hexString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        let scanner = Scanner(string: hexString)
+        let hexString: String = hexString
+            .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            .replacingOccurrences(of: "#", with: "")
         
-        if hexString.hasPrefix("#") {
-            scanner.scanLocation = 1
+        guard let hex = Int(hexString, radix: 16) else {
+            self.init(red: 0, green: 0, blue: 0, alpha: alpha)
+            return
         }
         
-        var color: UInt32 = 0
-        scanner.scanHexInt32(&color)
-        let mask = 0x000000FF
-        let red = CGFloat(Int(color >> 16) & mask) / 255.0
-        let green = CGFloat(Int(color >> 8) & mask) / 255.0
-        let blue = CGFloat(Int(color) & mask) / 255.0
-        
-        self.init(red: red, green: green, blue: blue, alpha: alpha)
+        self.init(red: CGFloat((hex >> 16) & 0xff),
+                  green: CGFloat((hex >> 8) & 0xff),
+                  blue: CGFloat(hex & 0xff),
+                  alpha: alpha)
     }
     
     func toHexString() -> String {

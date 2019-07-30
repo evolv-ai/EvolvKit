@@ -12,13 +12,13 @@ import SwiftyJSON
 
 class LruCacheTest: XCTestCase {
     
-    private var rawAllocations: [JSON] {
+    private var rawAllocations: EvolvRawAllocations {
         let data: [[String: Any]] = [
             [
-                "uid": "test_uid",
-                "sid": "test_sid",
-                "eid": "test_eid",
-                "cid": "test_cid",
+                EvolvRawAllocations.Key.userId.rawValue: "test_uid",
+                EvolvRawAllocations.Key.sessionId.rawValue: "test_sid",
+                EvolvRawAllocations.Key.experimentId.rawValue: "test_eid",
+                EvolvRawAllocations.Key.candidateId.rawValue: "test_cid",
                 "genome": [
                     "search": [
                         "weighting": [

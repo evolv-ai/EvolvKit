@@ -1,5 +1,5 @@
 //
-//  Execution.swift
+//  EvolvExecution.swift
 //  EvolvKit_Example
 //
 //  Created by phyllis.wong on 7/3/19.
@@ -8,36 +8,27 @@
 
 import SwiftyJSON
 
-public class Execution<T> {
+class EvolvExecution<T> {
     
-    private let key: String
+    let key: String
     private let participant: EvolvParticipant
     private var defaultValue: T
     private var alreadyExecuted: Set<String> = Set()
     private var closure: (T) -> Void
     
-    public init(_ key: String,
-                _ defaultValue: T,
-                _ participant: EvolvParticipant,
-                _ closure: @escaping (T) -> Void) {
+    init(key: String,
+         defaultValue: T,
+         participant: EvolvParticipant,
+         closure: @escaping (T) -> Void) {
         self.key = key
         self.defaultValue = defaultValue
         self.participant = participant
         self.closure = closure
     }
     
-    func getKey() -> String {
-        return key
-    }
-    
-    func getMyType(_ element: Any) -> Any.Type {
-        return type(of: element)
-    }
-    
-    func executeWithAllocation(_ allocations: [JSON]) throws {
-        let type = getMyType(defaultValue)
-        let allocations = Allocations(allocations)
-        let optionalValue = try allocations.getValueFromAllocations(key, type, participant)
+    func execute(with rawAllocations: EvolvRawAllocations) throws {
+        let allocations = EvolvAllocations(rawAllocations)
+        let optionalValue = try allocations.value(forKey: key, participant: participant)
         
         guard let value = optionalValue else {
             throw EvolvKeyError.errorMessage
@@ -49,7 +40,7 @@ public class Execution<T> {
         
         let activeExperiements = allocations.getActiveExperiments()
         
-        if alreadyExecuted.isEmpty || alreadyExecuted == activeExperiements {
+        if alreadyExecuted.isEmpty || alreadyExecuted != activeExperiements {
             // there was a change to the allocations after reconciliation, apply changes
             closure(genericValue)
         }

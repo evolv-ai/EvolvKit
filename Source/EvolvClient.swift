@@ -1,12 +1,12 @@
 //
-//  EvolvClientProtocol.swift
+//  EvolvClient.swift
 //  EvolvKit_Example
 //
 //  Created by phyllis.wong on 7/3/19.
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
-public protocol EvolvClientProtocol {
+public protocol EvolvClient {
     /**
      Retrieves a value from Evolv asynchronously and applies some custom action.
      
@@ -19,10 +19,10 @@ public protocol EvolvClientProtocol {
      - Parameters:
      - key: A unique key identifying a specific value in the participants allocation.
      - defaultValue: A default value to return upon error.
-     - function:  a handler that is invoked when the allocation is updated
+     - closure: a handler that is invoked when the allocation is updated
      - <T>: type of value to be applied to the execution.
      */
-    func subscribe<T>(_ key: String, _ defaultValue: T, _ function: @escaping (T) -> Void)
+    func subscribe<T>(forKey key: String, defaultValue: T, closure: @escaping (T) -> Void)
     
     /**
      Emits a generic event to be recorded by Evolv.
@@ -32,7 +32,7 @@ public protocol EvolvClientProtocol {
      - key: The identifier of the event.
      - score: A score to be associated with the event.
      */
-    func emitEvent(_ key: String, _ score: Double)
+    func emitEvent(forKey key: String, score: Double)
     
     /**
      Emits a generic event to be recorded by Evolv.
@@ -40,7 +40,7 @@ public protocol EvolvClientProtocol {
      - Parameters:
      - key: The identifier of the event.
      */
-    func emitEvent(_ key: String)
+    func emitEvent(forKey key: String)
     
     /**
      Sends a confirmed event to Evolv.

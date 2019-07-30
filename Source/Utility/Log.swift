@@ -21,8 +21,6 @@ public struct Log {
     }
     
     struct BasicLogger: Logger {
-        static let sharedInstance = BasicLogger()
-        
         func log(_ level: Level, message: String) {
             var prefix = ""
             
@@ -34,6 +32,7 @@ public struct Log {
             case .error:
                 prefix = "Error"
             }
+            
             NSLog("%@", "\(prefix): \(message)")
         }
     }

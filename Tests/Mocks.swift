@@ -14,7 +14,7 @@ import PromiseKit
 
 class Mocks: XCTestCase {}
 
-class AllocationStoreMockWithAllocations: AllocationStoreProtocol {
+class AllocationStoreMockWithAllocations: EvolvAllocationStore {
     
     public var cache: LRUCache
     
@@ -24,20 +24,20 @@ class AllocationStoreMockWithAllocations: AllocationStoreProtocol {
         cache.putEntry("test_user", allocationsForMockStore)
     }
     
-    public func get(_ uid: String) -> [JSON] {
+    public func get(_ uid: String) -> EvolvRawAllocations {
         return cache.getEntry(uid)
     }
     
-    public func put(_ uid: String, _ allocations: [JSON]) {
+    public func put(_ uid: String, _ allocations: EvolvRawAllocations) {
         cache.putEntry(uid, allocations)
     }
     
 }
 
-class AllocationStoreMock: AllocationStoreProtocol {
+class AllocationStoreMock: EvolvAllocationStore {
     
     let testCase: XCTestCase
-    var mockedCache = DefaultAllocationStore(size: 10)
+    var mockedCache = DefaultEvolvAllocationStore(size: 10)
     
     init (testCase: XCTestCase) {
         self.testCase = testCase
@@ -46,24 +46,24 @@ class AllocationStoreMock: AllocationStoreProtocol {
     var expectGetExpectation: XCTestExpectation?
     var expectPutExpectation: XCTestExpectation?
     
-    private var mockedGet: (String) -> [JSON] = { _ in
+    private var mockedGet: (String) -> EvolvRawAllocations = { _ in
         return AllocationsTest.rawAllocations
     }
     
-    private var mockedPut: (String, [JSON]) -> Void = { _, _  in
+    private var mockedPut: (String, EvolvRawAllocations) -> Void = { _, _  in
         let rawAllocation = AllocationsTest.rawAllocations
         let allocations = AllocationsTest.rawAllocations
-        DefaultAllocationStore(size: 10).put("test_user", allocations)
+        DefaultEvolvAllocationStore(size: 10).put("test_user", allocations)
     }
     
     @discardableResult
-    func expectGet(_ mocked: @escaping (_ uid: String) -> [JSON]) -> XCTestExpectation {
+    func expectGet(_ mocked: @escaping (_ uid: String) -> EvolvRawAllocations) -> XCTestExpectation {
         self.expectGetExpectation = self.testCase.expectation(description: "expect get")
         self.mockedGet = mocked
         return expectGetExpectation!
     }
     
-    func expectPut(_ mocked: @escaping (_ uid: String, _ allocations: [JSON]) -> Void) -> XCTestExpectation {
+    func expectPut(_ mocked: @escaping (_ uid: String, _ allocations: EvolvRawAllocations) -> Void) -> XCTestExpectation {
         self.expectPutExpectation = self.testCase.expectation(description: "expect put")
         self.mockedPut = mocked
         return expectPutExpectation!
@@ -71,12 +71,12 @@ class AllocationStoreMock: AllocationStoreProtocol {
     
     /// conform to protocol
     @discardableResult
-    func get(_ uid: String) -> [JSON] {
+    func get(_ uid: String) -> EvolvRawAllocations {
         self.expectGetExpectation?.fulfill()
         return mockedGet(uid)
     }
     
-    func put(_ uid: String, _ allocations: [JSON]) {
+    func put(_ uid: String, _ allocations: EvolvRawAllocations) {
         self.expectGetExpectation?.fulfill()
         return mockedPut(uid, allocations)
     }
@@ -85,7 +85,7 @@ class AllocationStoreMock: AllocationStoreProtocol {
 
 class ClientFactoryMock: EvolvClientFactory {}
 
-class HttpClientMock: HttpProtocol {
+class HttpClientMock: EvolvHttpClient {
     
     public static var httpClientSendEventsWasCalled = false
     
@@ -133,17 +133,17 @@ class HttpClientMock: HttpProtocol {
     
 }
 
-class ClientImplMock: EvolvClientImpl {
+class ClientMock: DefaultEvolvClient {
     
     var emitEventWasCalled = false
     var emitEventWithScoreWasCalled = false
-    let mockHttpClient = EvolvHttpClient()
+    let mockHttpClient = DefaultEvolvHttpClient()
     
-    override public func emitEvent(_ key: String) {
+    override public func emitEvent(forKey key: String) {
         emitEventWasCalled = true
     }
     
-    override public func emitEvent(_ key: String, _ score: Double) {
+    override public func emitEvent(forKey key: String, score: Double) {
         emitEventWithScoreWasCalled = true
     }
     
@@ -151,21 +151,21 @@ class ClientImplMock: EvolvClientImpl {
         allocator.sandbagConfirmation()
     }
     
-    public func confirm(_ eventEmitter: EmitterMock, _ allocations: [JSON]) {
-        eventEmitter.confirm(allocations)
+    public func confirm(_ eventEmitter: EventEmitterMock, _ allocations: EvolvRawAllocations) {
+        eventEmitter.confirm(rawAllocations: allocations)
     }
     
     public func contaminate(_ allocator: AllocatorMock) {
         allocator.sandbagContamination()
     }
     
-    public func contaminate(_ eventEmitter: EmitterMock, _ allocations: [JSON]) {
-        eventEmitter.confirm(allocations)
+    public func contaminate(_ eventEmitter: EventEmitterMock, _ allocations: EvolvRawAllocations) {
+        eventEmitter.confirm(rawAllocations: allocations)
     }
     
 }
 
-class AllocatorMock: Allocator {
+class AllocatorMock: EvolvAllocator {
     
     var sandbagConfirmationWasCalled = false
     var sandbagContamationWasCalled = false
@@ -175,12 +175,12 @@ class AllocatorMock: Allocator {
     
     var allocationStatus: AllocationStatus
     
-    override init(_ config: EvolvConfig, _ participant: EvolvParticipant) {
+    override init(config: EvolvConfig, participant: EvolvParticipant) {
         self.config = config
         self.participant = participant
         self.allocationStatus = .fetching
         
-        super.init(config, participant)
+        super.init(config: config, participant: participant)
     }
     
     override func sandbagConfirmation() {
@@ -194,55 +194,65 @@ class AllocatorMock: Allocator {
     
 }
 
-class EmitterMock: EventEmitter {
+class EventEmitterMock: EvolvEventEmitter {
     
     let httpClientMock = HttpClientMock()
     var confirmWithAllocationsWasCalled = false
     var contaminateWithAllocationsWasCalled = false
     
-    override func sendAllocationEvents(_ key: String, _ allocations: [JSON]) {
-        let eid = allocations[0]["eid"].rawString()!
-        let cid = allocations[0]["cid"].rawString()!
-        let url = createEventUrl(key, eid, cid)
+    override func sendAllocationEvents(forKey key: String, rawAllocations allocations: EvolvRawAllocations) {
+        let eid = allocations[0][EvolvRawAllocations.Key.experimentId.rawValue].rawString()!
+        let cid = allocations[0][EvolvRawAllocations.Key.candidateId.rawValue].rawString()!
+        
+        guard let url = createEventUrl(type: key, experimentId: eid, candidateId: cid) else {
+            return
+        }
+        
         makeEventRequest(url)
     }
     
     private func makeEventRequest(_ url: URL) {
-        _ = httpClientMock.sendEvents(url)
+        httpClientMock.sendEvents(url)
     }
     
     /// emitter.contaminate => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
-    override public func contaminate(_ allocations: [JSON]) {
+    override public func contaminate(rawAllocations allocations: EvolvRawAllocations) {
         let testKey = "test_key"
-        sendAllocationEvents(testKey, allocations)
+        sendAllocationEvents(forKey: testKey, rawAllocations: allocations)
         contaminateWithAllocationsWasCalled = true
     }
     
     /// emitter.confirm => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
-    override public func confirm(_ allocations: [JSON]) {
+    override public func confirm(rawAllocations allocations: EvolvRawAllocations) {
         let testKey = "test_key"
-        sendAllocationEvents(testKey, allocations)
+        sendAllocationEvents(forKey: testKey, rawAllocations: allocations)
         confirmWithAllocationsWasCalled = true
     }
     
-    override public func emit(_ key: String) {
-        let url: URL = createEventUrl(key, 1.0)
-        self.makeEventRequest(url)
+    override public func emit(forKey key: String) {
+        guard let url = createEventUrl(type: key, score: 1.0) else {
+            return
+        }
+        
+        makeEventRequest(url)
     }
     
-    override public func emit(_ key: String, _ score: Double) {
-        let url: URL = createEventUrl(key, score)
-        self.makeEventRequest(url)
+    override public func emit(forKey key: String, score: Double) {
+        guard let url = createEventUrl(type: key, score: score) else {
+            return
+        }
+        
+        makeEventRequest(url)
     }
     
 }
 
-class ExecutionQueueMock: ExecutionQueue {
+class ExecutionQueueMock: EvolvExecutionQueue {
     
     var executeValuesFromAllocationsWasCalled = false
     var executeWithDefaultsWasCalled = false
     
-    override func executeAllWithValuesFromAllocations(_ allocations: [JSON]) {
+    override func executeAllWithValues(from allocations: EvolvRawAllocations) {
         self.count -= 1
         executeValuesFromAllocationsWasCalled = true
     }
@@ -254,21 +264,9 @@ class ExecutionQueueMock: ExecutionQueue {
     
 }
 
-class ExecutionMock<T>: Execution<T> {
+class ExecutionMock<T>: EvolvExecution<T> {
     override func executeWithDefault() {}
-    override func executeWithAllocation(_ rawAllocations: [JSON]) throws {}
+    override func execute(with rawAllocations: EvolvRawAllocations) throws {}
 }
 
 class ConfigMock: EvolvConfig {}
-
-class ClientHttpMock: HttpProtocol {
-    
-    func get(_ url: URL) -> Promise<String> {
-        fatalError()
-    }
-    
-    func sendEvents(_ url: URL) {
-        fatalError()
-    }
-    
-}

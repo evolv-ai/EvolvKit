@@ -1,5 +1,5 @@
 //
-//  Audience.swift
+//  EvolvAudience.swift
 //  EvolvKit_Example
 //
 //  Created by phyllis.wong on 7/3/19.
@@ -14,7 +14,7 @@ protocol Function {
     func apply(one: A, two: B) -> Bool
 }
 
-public class Audience {
+public class EvolvAudience {
     
     public init() {}
     

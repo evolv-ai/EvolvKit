@@ -1,5 +1,5 @@
 //
-//  AllocationStoreProtocol.swift
+//  EvolvAllocationStore.swift
 //  EvolvKit_Example
 //
 //  Created by phyllis.wong on 7/3/19.
@@ -8,7 +8,7 @@
 
 import SwiftyJSON
 
-public protocol AllocationStoreProtocol {
+public protocol EvolvAllocationStore {
     /**
      Retrieves a JsonArray.
      - SwiftyJSON is a required package for
@@ -20,7 +20,7 @@ public protocol AllocationStoreProtocol {
      - uid: The participant's unique id.
      - Returns: a SwiftyJSON array of allocation if one exists, else an empty SwiftyJSON array.
      */
-    func get(_ participantId: String) -> [JSON]
+    func get(_ participantId: String) -> EvolvRawAllocations
     
     /**
      Stores a JsonArray.
@@ -29,5 +29,5 @@ public protocol AllocationStoreProtocol {
      - uid: The participant's unique id.
      - allocations: The participant's allocations.
      */
-    func put(_ participantId: String, _ allocations: [JSON])
+    func put(_ participantId: String, _ rawAllocations: EvolvRawAllocations)
 }

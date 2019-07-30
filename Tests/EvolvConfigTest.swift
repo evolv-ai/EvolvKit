@@ -13,7 +13,7 @@ import PromiseKit
 class EvolvConfigTest: XCTestCase {
     
     private let environmentId: String = "test_12345"
-    private var mockHttpClient: HttpProtocol!
+    private var mockHttpClient: EvolvHttpClient!
     
     override func setUp() {
         super.setUp()
@@ -24,40 +24,38 @@ class EvolvConfigTest: XCTestCase {
     override func tearDown() {
         super.tearDown()
         
-        if self.mockHttpClient != nil {
-            mockHttpClient = nil
-        }
+        mockHttpClient = nil
     }
     
     func testBuildDefaultConfig() {
-        let config = EvolvConfig.builder(environmentId, mockHttpClient).build()
+        let config = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
         
-        XCTAssertEqual(environmentId, config.getEnvironmentId())
-        XCTAssertEqual(EvolvConfig.Default.httpScheme, config.getHttpScheme())
-        XCTAssertEqual(EvolvConfig.Default.domain, config.getDomain())
-        XCTAssertEqual(EvolvConfig.Default.apiVersion, config.getVersion())
-        XCTAssertNotNil(config.getHttpClient)
-        XCTAssertNotNil(config.getExecutionQueue())
+        XCTAssertEqual(environmentId, config.environmentId)
+        XCTAssertEqual(EvolvConfig.Default.httpScheme, config.httpScheme)
+        XCTAssertEqual(EvolvConfig.Default.domain, config.domain)
+        XCTAssertEqual(EvolvConfig.Default.apiVersion, config.version)
+        XCTAssertNotNil(config.httpClient)
+        XCTAssertNotNil(config.executionQueue)
     }
     
     func testBuildConfig() {
         let domain = "test.evolv.ai"
         let version = "test"
-        let allocationStore = DefaultAllocationStore(size: 10)
+        let allocationStore = DefaultEvolvAllocationStore(size: 10)
         let httpScheme = "test"
         
-        let config = EvolvConfig.builder(environmentId, mockHttpClient)
-            .setDomain(domain)
-            .setVersion(version)
-            .setEvolvAllocationStore(allocationStore)
-            .setHttpScheme(scheme: httpScheme)
+        let config = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient)
+            .set(domain: domain)
+            .set(version: version)
+            .set(allocationStore: allocationStore)
+            .set(httpScheme: httpScheme)
             .build()
         
-        XCTAssertEqual(environmentId, config.getEnvironmentId())
-        XCTAssertEqual(domain, config.getDomain())
-        XCTAssertEqual(version, config.getVersion())
-        XCTAssertNotNil(config.getEvolvAllocationStore())
-        XCTAssertEqual(httpScheme, config.getHttpScheme())
+        XCTAssertEqual(environmentId, config.environmentId)
+        XCTAssertEqual(domain, config.domain)
+        XCTAssertEqual(version, config.version)
+        XCTAssertNotNil(config.allocationStore)
+        XCTAssertEqual(httpScheme, config.httpScheme)
     }
     
 }

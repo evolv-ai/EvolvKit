@@ -14,13 +14,13 @@ public class EvolvClientFactory {
      - config: General configurations for the SDK.
      - Returns:  an instance of EvolvClient
      */
-    public var client: EvolvClientProtocol
-    public let LOGGER = Log.logger
+    public var client: EvolvClient
+    public let logger = Log.logger
     
     public init(config: EvolvConfig) {
-        LOGGER.log(.debug, message: "Initializing Evolv Client.")
+        logger.log(.debug, message: "Initializing Evolv Client.")
         let participant: EvolvParticipant = EvolvParticipant.builder().build()
-        self.client = EvolvClientFactory.createClient(config, participant)
+        client = EvolvClientFactory.createClient(config: config, participant: participant)
     }
     
     /**
@@ -31,22 +31,22 @@ public class EvolvClientFactory {
      - Returns: an instance of EvolvClient
      */
     public init(config: EvolvConfig, participant: EvolvParticipant) {
-        LOGGER.log(.debug, message: "Initializing Evolv Client.")
-        self.client = EvolvClientFactory.createClient(config, participant)
+        logger.log(.debug, message: "Initializing Evolv Client.")
+        client = EvolvClientFactory.createClient(config: config, participant: participant)
     }
     
-    private static func createClient(_ config: EvolvConfig, _ participant: EvolvParticipant) -> EvolvClientProtocol {
-        let store = config.getEvolvAllocationStore()
-        let previousAllocations = store.get(participant.getUserId())
-        let allocator: Allocator = Allocator(config, participant)
+    private static func createClient(config: EvolvConfig, participant: EvolvParticipant) -> EvolvClient {
+        let store = config.allocationStore
+        let previousAllocations = store.get(participant.userId)
+        let allocator: EvolvAllocator = EvolvAllocator(config: config, participant: participant)
         let futureAllocations = allocator.fetchAllocations()
         
-        return EvolvClientImpl(config,
-                               EventEmitter(config, participant),
-                               futureAllocations,
-                               allocator,
-                               Allocator.allocationsNotEmpty(previousAllocations),
-                               participant)
+        return DefaultEvolvClient(config: config,
+                                  eventEmitter: EvolvEventEmitter(config: config, participant: participant),
+                                  futureAllocations: futureAllocations,
+                                  allocator: allocator,
+                                  previousAllocations: !previousAllocations.isEmpty,
+                                  participant: participant)
     }
     
 }

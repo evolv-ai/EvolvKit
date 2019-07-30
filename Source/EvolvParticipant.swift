@@ -6,43 +6,27 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
-import SwiftyJSON
+import Foundation
 
 public class EvolvParticipant {
     
-    private let sessionId: String
-    private var userId: String
-    private var userAttributes: [String: String]
+    let sessionId: String
+    var userId: String
+    private(set) var userAttributes: [String: String]
     
-    public init(_ userId: String, _ sessionId: String, _ userAttributes: [String: String]) {
+    init(userId: String, sessionId: String, userAttributes: [String: String]) {
         self.userId = userId
         self.sessionId = sessionId
         self.userAttributes = userAttributes
     }
     
-    public static func builder() -> ParticipantBuilder {
-        return ParticipantBuilder()
-    }
-    
-    public func getUserId() -> String {
-        return userId
-    }
-    
-    public func getSessionId() -> String {
-        return sessionId
-    }
-    
-    public func getUserAttributes() -> [String: String] {
-        return userAttributes
-    }
-    
-    public func setUserId(_ userId: String) {
-        self.userId = userId
+    public static func builder() -> EvolvParticipantBuilder {
+        return EvolvParticipantBuilder()
     }
     
 }
 
-public class ParticipantBuilder {
+public class EvolvParticipantBuilder {
     
     private var userId: String
     private var sessionId: String
@@ -51,7 +35,10 @@ public class ParticipantBuilder {
     init() {
         self.userId = UUID().uuidString
         self.sessionId = UUID().uuidString
-        self.userAttributes = ["uid": userId, "sid": sessionId]
+        self.userAttributes = [
+            EvolvRawAllocations.Key.userId.rawValue: userId,
+            EvolvRawAllocations.Key.sessionId.rawValue: sessionId
+        ]
     }
     
     /**
@@ -60,7 +47,7 @@ public class ParticipantBuilder {
      - userId: A unique key.
      - Returns: this instance of the participant
      */
-    public func setUserId(_ userId: String) -> ParticipantBuilder {
+    public func set(userId: String) -> EvolvParticipantBuilder {
         self.userId = userId
         return self
     }
@@ -71,7 +58,7 @@ public class ParticipantBuilder {
      - sessionId: A unique key.
      - Returns: this instance of the participant
      */
-    public func setSessionId(_ sessionId: String) -> ParticipantBuilder {
+    public func set(sessionId: String) -> EvolvParticipantBuilder {
         self.sessionId = sessionId
         return self
     }
@@ -82,7 +69,7 @@ public class ParticipantBuilder {
      - userAttributes: A map representing specific attributes that describe the participant.
      - Returns: this instance of the participant
      */
-    public func setUserAttributes(_ userAttributes: [String: String]) -> ParticipantBuilder {
+    public func set(userAttributes: [String: String]) -> EvolvParticipantBuilder {
         self.userAttributes = userAttributes
         return self
     }
@@ -92,9 +79,9 @@ public class ParticipantBuilder {
      - Returns: an EvolvParticipant instance.
      */
     public func build() -> EvolvParticipant {
-        self.userAttributes.updateValue(self.userId, forKey: "uid")
-        self.userAttributes.updateValue(self.sessionId, forKey: "sid")
-        return EvolvParticipant(self.userId, self.sessionId, self.userAttributes)
+        userAttributes.updateValue(userId, forKey: EvolvRawAllocations.Key.userId.rawValue)
+        userAttributes.updateValue(sessionId, forKey: EvolvRawAllocations.Key.sessionId.rawValue)
+        return EvolvParticipant(userId: userId, sessionId: sessionId, userAttributes: userAttributes)
     }
     
 }

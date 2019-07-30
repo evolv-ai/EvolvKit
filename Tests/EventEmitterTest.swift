@@ -17,13 +17,13 @@ class EventEmitterTest: XCTestCase {
     private let score = 10.0
     private let eid = "test_eid"
     private let cid = "test_cid"
-    private var rawAllocations: [JSON] {
+    private var rawAllocations: EvolvRawAllocations {
         let data: [[String: Any]] = [
             [
-                "uid": "test_uid",
-                "sid": "test_sid",
-                "eid": "test_eid",
-                "cid": "test_cid",
+                EvolvRawAllocations.Key.userId.rawValue: "test_uid",
+                EvolvRawAllocations.Key.sessionId.rawValue: "test_sid",
+                EvolvRawAllocations.Key.experimentId.rawValue: "test_eid",
+                EvolvRawAllocations.Key.candidateId.rawValue: "test_cid",
                 "genome": [
                     "search": [
                         "weighting": [
@@ -56,60 +56,60 @@ class EventEmitterTest: XCTestCase {
     private var mockConfig: ConfigMock!
     private var mockExecutionQueue: ExecutionQueueMock!
     private var mockHttpClient: HttpClientMock!
-    private var mockAllocationStore: DefaultAllocationStore!
+    private var mockAllocationStore: DefaultEvolvAllocationStore!
     
     override func setUp() {
         super.setUp()
         
         mockExecutionQueue = ExecutionQueueMock()
         mockHttpClient = HttpClientMock()
-        mockAllocationStore = DefaultAllocationStore(size: 1)
-        mockConfig = ConfigMock("https", "test_domain", "test_v", "test_eid", mockAllocationStore, mockHttpClient)
+        mockAllocationStore = DefaultEvolvAllocationStore(size: 1)
+        mockConfig = ConfigMock(httpScheme: "https",
+                                domain: "test_domain",
+                                version: "test_v",
+                                environmentId: "test_eid",
+                                evolvAllocationStore: mockAllocationStore,
+                                httpClient: mockHttpClient)
     }
     
     override func tearDown() {
         super.tearDown()
         
-        if mockHttpClient != nil {
-            mockHttpClient = nil
-        }
-        if mockAllocationStore != nil {
-            mockAllocationStore = nil
-        }
-        if mockExecutionQueue != nil {
-            mockExecutionQueue = nil
-        }
-        if mockConfig != nil {
-            mockConfig = nil
-        }
+        mockHttpClient = nil
+        mockAllocationStore = nil
+        mockExecutionQueue = nil
+        mockConfig = nil
     }
     
-    func setUpMockedEvolvConfigWithMockedClient(_ mockedConfig: EvolvConfig,
-                                                _ actualConfig: EvolvConfig,
-                                                _ mockExecutionQueue: ExecutionQueue,
-                                                _ mockHttpClient: HttpProtocol,
-                                                _ mockAllocationStore: AllocationStoreProtocol) -> EvolvConfig {
-        return EvolvConfig(actualConfig.getHttpScheme(), actualConfig.getDomain(),
-                           actualConfig.getVersion(), actualConfig.getEnvironmentId(),
-                           mockAllocationStore, mockHttpClient)
+    func setUpMockedEvolvConfigWithMockedClient(mockedConfig: EvolvConfig,
+                                                actualConfig: EvolvConfig,
+                                                mockExecutionQueue: EvolvExecutionQueue,
+                                                mockHttpClient: EvolvHttpClient,
+                                                mockAllocationStore: EvolvAllocationStore) -> EvolvConfig {
+        return EvolvConfig(httpScheme: actualConfig.httpScheme,
+                           domain: actualConfig.domain,
+                           version: actualConfig.version,
+                           environmentId: actualConfig.environmentId,
+                           evolvAllocationStore: mockAllocationStore,
+                           httpClient: mockHttpClient)
     }
     
-    func createAllocationEventUrl(config: EvolvConfig, allocation: JSON, event: String, participant: EvolvParticipant) -> URL {
+    func createAllocationEventUrl(config: EvolvConfig, rawAllocation: JSON, event: String, participant: EvolvParticipant) -> URL {
         //    let _ = "%s://%s/%s/%s/events?uid=%s&sid=%s&eid=%s&cid=%s&type=%s"
         var components = URLComponents()
         
-        let eid = allocation["eid"].rawString()!
-        let cid = allocation["cid"].rawString()!
+        let eid = rawAllocation[EvolvRawAllocations.Key.experimentId.rawValue].rawString()!
+        let cid = rawAllocation[EvolvRawAllocations.Key.candidateId.rawValue].rawString()!
         
-        components.scheme = config.getHttpScheme()
-        components.host = config.getDomain()
-        components.path = "/\(config.getVersion())/\(config.getEnvironmentId())/events"
+        components.scheme = config.httpScheme
+        components.host = config.domain
+        components.path = "/\(config.version)/\(config.environmentId)/events"
         components.queryItems = [
-            URLQueryItem(name: "uid", value: "\(participant.getUserId())"),
-            URLQueryItem(name: "sid", value: "\(participant.getSessionId())"),
-            URLQueryItem(name: "eid", value: "\(eid)"),
-            URLQueryItem(name: "cid", value: "\(cid)"),
-            URLQueryItem(name: "type", value: "\(event)")
+            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue, value: "\(participant.userId)"),
+            URLQueryItem(name: EvolvRawAllocations.Key.sessionId.rawValue, value: "\(participant.sessionId)"),
+            URLQueryItem(name: EvolvRawAllocations.Key.experimentId.rawValue, value: "\(eid)"),
+            URLQueryItem(name: EvolvRawAllocations.Key.candidateId.rawValue, value: "\(cid)"),
+            URLQueryItem(name: EvolvRawAllocations.Key.type.rawValue, value: "\(event)")
         ]
         
         return components.url ?? URL(string: "")!
@@ -119,120 +119,123 @@ class EventEmitterTest: XCTestCase {
         //    let _ = "%s://%s/%s/%s/events?uid=%s&sid=%s&type=%s&score=%s"
         var components = URLComponents()
         
-        components.scheme = config.getHttpScheme()
-        components.host = config.getDomain()
-        components.path = "/\(config.getVersion())/\(config.getEnvironmentId())/events"
+        components.scheme = config.httpScheme
+        components.host = config.domain
+        components.path = "/\(config.version)/\(config.environmentId)/events"
         components.queryItems = [
-            URLQueryItem(name: "uid", value: "\(participant.getUserId())"),
-            URLQueryItem(name: "sid", value: "\(participant.getSessionId())"),
-            URLQueryItem(name: "type", value: "\(type)"),
-            URLQueryItem(name: "score", value: "\(String(score))")
+            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue, value: "\(participant.userId)"),
+            URLQueryItem(name: EvolvRawAllocations.Key.sessionId.rawValue, value: "\(participant.sessionId)"),
+            URLQueryItem(name: EvolvRawAllocations.Key.type.rawValue, value: "\(type)"),
+            URLQueryItem(name: EvolvRawAllocations.Key.score.rawValue, value: "\(String(score))")
         ]
         
         return components.url ?? URL(string: "")!
     }
     
     func testGetEventUrl() {
-        let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
-        let mockConfig = setUpMockedEvolvConfigWithMockedClient(self.mockConfig,
-                                                                actualConfig,
-                                                                mockExecutionQueue,
-                                                                mockHttpClient,
-                                                                mockAllocationStore)
+        let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+        let mockConfig = setUpMockedEvolvConfigWithMockedClient(mockedConfig: self.mockConfig,
+                                                                actualConfig: actualConfig,
+                                                                mockExecutionQueue: mockExecutionQueue,
+                                                                mockHttpClient: mockHttpClient,
+                                                                mockAllocationStore: mockAllocationStore)
         let participant = EvolvParticipant.builder().build()
-        let emitter = EventEmitter(mockConfig, participant)
-        let url = emitter.createEventUrl(type, score)
+        let emitter = EvolvEventEmitter(config: mockConfig, participant: participant)
+        let url = emitter.createEventUrl(type: type, score: score)
         
         XCTAssertEqual(createEventsUrl(config: actualConfig, type: type, score: score, participant: participant), url)
     }
     
     func testGetEventUrlWithEidAndCid() {
-        let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
-        let mockConfig = setUpMockedEvolvConfigWithMockedClient(self.mockConfig,
-                                                                actualConfig,
-                                                                mockExecutionQueue,
-                                                                mockHttpClient,
-                                                                mockAllocationStore)
+        let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+        let mockConfig = setUpMockedEvolvConfigWithMockedClient(mockedConfig: self.mockConfig,
+                                                                actualConfig: actualConfig,
+                                                                mockExecutionQueue: mockExecutionQueue,
+                                                                mockHttpClient: mockHttpClient,
+                                                                mockAllocationStore: mockAllocationStore)
         let allocations = self.rawAllocations
         let participant = EvolvParticipant.builder().build()
         
-        let emitter = EventEmitter(mockConfig, participant)
-        let url = emitter.createEventUrl(type, eid, cid)
-        let testUrl = createAllocationEventUrl(config: actualConfig, allocation: allocations[0], event: type, participant: participant)
+        let emitter = EvolvEventEmitter(config: mockConfig, participant: participant)
+        let url = emitter.createEventUrl(type: type, experimentId: eid, candidateId: cid)
+        let testUrl = createAllocationEventUrl(config: actualConfig, rawAllocation: allocations[0], event: type, participant: participant)
         
         XCTAssertEqual(testUrl, url)
     }
     
     func testSendAllocationEvents() {
-        let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
-        let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig,
-                                                                                actualConfig,
-                                                                                mockExecutionQueue,
-                                                                                mockHttpClient,
-                                                                                mockAllocationStore)
+        let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+        let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(mockedConfig: self.mockConfig,
+                                                                                actualConfig: actualConfig,
+                                                                                mockExecutionQueue: mockExecutionQueue,
+                                                                                mockHttpClient: mockHttpClient,
+                                                                                mockAllocationStore: mockAllocationStore)
         let allocations = self.rawAllocations
         
-        let participant = EvolvParticipant.builder().setUserId("test_user").setSessionId("test_session").build()
-        let emitter = EmitterMock(mockConfig, participant)
+        let participant = EvolvParticipant.builder()
+            .set(userId: "test_user")
+            .set(sessionId: "test_session")
+            .build()
+        let emitter = EventEmitterMock(config: mockConfig, participant: participant)
         
         /// sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
-        emitter.sendAllocationEvents(type, allocations)
+        emitter.sendAllocationEvents(forKey: type, rawAllocations: allocations)
         
         XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
     }
     
     func testContaminateEvent() {
-        let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
-        let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig,
-                                                                                actualConfig,
-                                                                                mockExecutionQueue,
-                                                                                mockHttpClient,
-                                                                                mockAllocationStore)
+        let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+        let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(mockedConfig: self.mockConfig,
+                                                                                actualConfig: actualConfig,
+                                                                                mockExecutionQueue: mockExecutionQueue,
+                                                                                mockHttpClient: mockHttpClient,
+                                                                                mockAllocationStore: mockAllocationStore)
         let allocations = self.rawAllocations
         
         let participant = EvolvParticipant.builder().build()
-        let emitter = EmitterMock(mockConfig, participant)
+        let emitter = EventEmitterMock(config: mockConfig, participant: participant)
         
         /// emitter.contaminate => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
-        emitter.contaminate(allocations)
+        emitter.contaminate(rawAllocations: allocations)
         
         XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
     }
     
     func testConfirmEvent() {
-        let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
-        let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(self.mockConfig,
-                                                                                actualConfig,
-                                                                                mockExecutionQueue,
-                                                                                mockHttpClient,
-                                                                                mockAllocationStore)
+        let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+        let mockConfig = AllocatorTest().setUpMockedEvolvConfigWithMockedClient(mockedConfig: self.mockConfig,
+                                                                                actualConfig: actualConfig,
+                                                                                mockExecutionQueue: mockExecutionQueue,
+                                                                                mockHttpClient: mockHttpClient,
+                                                                                mockAllocationStore: mockAllocationStore)
         let allocations = self.rawAllocations
         
         let participant = EvolvParticipant.builder().build()
-        let emitter = EmitterMock(mockConfig, participant)
+        let emitter = EventEmitterMock(config: mockConfig, participant: participant)
         
         /// emitter.confirm => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
-        emitter.confirm(allocations)
+        emitter.confirm(rawAllocations: allocations)
         
         XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
     }
     
     func testGenericEvent() {
-        let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
+        let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
         let participant = EvolvParticipant.builder().build()
-        let emitter = EmitterMock(actualConfig, participant)
+        let emitter = EventEmitterMock(config: actualConfig, participant: participant)
         
-        emitter.emit(type)
+        emitter.emit(forKey: type)
         
         XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
     }
     
     func testGenericEventWithScore() {
-        let actualConfig = EvolvConfig.builder(environmentId, mockHttpClient).build()
+        let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
         let participant = EvolvParticipant.builder().build()
-        let emitter = EmitterMock(actualConfig, participant)
+        let emitter = EventEmitterMock(config: actualConfig, participant: participant)
         
-        emitter.emit(type, score)
+        emitter.emit(forKey: type, score: score)
         
         XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
     }

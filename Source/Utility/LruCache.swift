@@ -11,7 +11,7 @@ import SwiftyJSON
 public class LRUCache {
     
     private let maxSize: Int
-    private var cache: [String: [JSON]] = [:]
+    private var cache: [String: EvolvRawAllocations] = [:]
     private var priority: LinkedList<String> = LinkedList<String>()
     private var key2node: [String: LinkedList<String>.LinkedListNode<String>] = [:]
     
@@ -19,7 +19,7 @@ public class LRUCache {
         self.maxSize = maxSize
     }
     
-    public func getEntry(_ key: String) -> [JSON] {
+    public func getEntry(_ key: String) -> EvolvRawAllocations {
         guard let val = cache[key] else {
             return []
         }
@@ -30,14 +30,14 @@ public class LRUCache {
         return val
     }
     
-    public func putEntry(_ key: String, _ val: [JSON]) {
+    public func putEntry(_ key: String, _ value: EvolvRawAllocations) {
         if cache[key] != nil {
             remove(key)
-        } else if priority.count >= self.maxSize, let keyToRemove = priority.last?.value {
+        } else if priority.count >= maxSize, let keyToRemove = priority.last?.value {
             remove(keyToRemove)
         }
         
-        insert(key, val)
+        insert(key, value)
     }
     
     private func remove(_ key: String) {
@@ -51,8 +51,8 @@ public class LRUCache {
         key2node.removeValue(forKey: key)
     }
     
-    private func insert(_ key: String, _ val: [JSON]) {
-        cache[key] = val
+    private func insert(_ key: String, _ value: EvolvRawAllocations) {
+        cache[key] = value
         priority.insert(key, atIndex: 0)
         
         guard let first = priority.first else {

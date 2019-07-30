@@ -6,57 +6,32 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
-import Alamofire
 import PromiseKit
-import SwiftyJSON
 
-public class EvolvHttpClient: HttpProtocol {
+public protocol EvolvHttpClient {
+    /**
+     - Performs a GET request to the **allocations endpoint** using the provided url.
+     
+     This call is asynchronous, the request is sent and a completable promise
+     is returned. The promise is completed when the result of the request returns.
+     
+     - Parameters:
+     - url: A valid url representing a call to the Participant API.
+     
+     - Returns: A response promise as a String
+     */
+    func get(_ url: URL) -> PromiseKit.Promise<String>
     
-    let LOGGER = Log.logger
-    
-    public init() {}
-    
-    public func get(_ url: URL) -> Promise<String> {
-        return Promise<String> { resolver -> Void in
-            Alamofire.request(url)
-                .validate()
-                .responseString { response in
-                    switch response.result {
-                    case .success:
-                        if let responseString = response.result.value {
-                            self.LOGGER.log(.debug, message: String(describing: responseString))
-                            resolver.fulfill(responseString)
-                        }
-                    case .failure(let error):
-                        self.LOGGER.log(.error, message: String(describing: error))
-                        resolver.reject(error)
-                    }
-            }
-        }
-    }
-    
-    public func sendEvents(_ url: URL) {
-        let headers = [
-            "Content-Type": "application/json",
-            "Host": "participants.evolv.ai"
-        ]
-        
-        Alamofire.request(
-            url,
-            method: .get,
-            parameters: nil,
-            encoding: JSONEncoding.default ,
-            headers: headers).responseData { dataResponse in
-                self.LOGGER.log(.debug, message: String(describing: dataResponse.request))
-                self.LOGGER.log(.debug, message: String(describing: dataResponse.response))
-                
-                if dataResponse.response?.statusCode == 202 {
-                    self.LOGGER.log(.debug, message: "Event has been emitted to Evolv")
-                } else {
-                    self.LOGGER.log(.error, message: "Error sending data to Evolv" +
-                        " \(String(describing: dataResponse.response?.statusCode))")
-                }
-        }
-    }
-    
+    /**
+     - Performs a GET request to the **events endpoint** using the provided url.
+     
+     This call is asynchronous, the request is sent and a completable future
+     is returned. The future is completed when the result of the request returns.
+     
+     - Parameters:
+     - url: A valid url representing a call to the Participant API.
+     
+     - Returns: Void
+     */
+    func sendEvents(_ url: URL)
 }

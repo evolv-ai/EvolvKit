@@ -1,5 +1,5 @@
 //
-//  Allocations.swift
+//  EvolvAllocations.swift
 //  EvolvKit_Example
 //
 //  Created by phyllis.wong on 7/3/19.
@@ -8,30 +8,27 @@
 
 import SwiftyJSON
 
-public class Allocations {
+class EvolvAllocations {
     
-    let allocations: [JSON]
-    let audience: Audience = Audience()
-    let LOGGER = Log.logger
+    let rawAllocations: EvolvRawAllocations
+    let audience: EvolvAudience = EvolvAudience()
+    private let logger = Log.logger
     
-    public init (_ allocations: [JSON]) {
-        self.allocations = allocations
+    init(_ rawAllocations: EvolvRawAllocations) {
+        self.rawAllocations = rawAllocations
     }
     
-    func getMyType<T>(_ element: T) -> Any? {
-        return type(of: element)
-    }
-    
-    public func getValueFromAllocations<T>(_ key: String, _ type: T, _ participant: EvolvParticipant) throws -> JSON? {
+    // TODO: add audience filter logic
+    public func value(forKey key: String, participant: EvolvParticipant) throws -> JSON? {
         let keyParts = key.components(separatedBy: ".")
         
         if keyParts.isEmpty {
             throw EvolvKeyError(rawValue: "Key provided was empty.")!
         }
         
-        for allocation in self.allocations {
+        for allocation in rawAllocations {
             let genome = allocation["genome"]
-            let element = try getElementFromGenome(genome, keyParts)
+            let element = try getElement(fromGenome: genome, keyParts: keyParts)
             
             if element.error == nil {
                 return element
@@ -44,7 +41,7 @@ public class Allocations {
         return errorJson
     }
     
-    private func getElementFromGenome(_ genome: JSON, _ keyParts: [String]) throws -> JSON {
+    private func getElement(fromGenome genome: JSON, keyParts: [String]) throws -> JSON {
         var element: JSON = genome
         
         if element.isEmpty {
@@ -57,22 +54,23 @@ public class Allocations {
             
             if element.error != nil {
                 throw EvolvKeyError.elementFails
-                LOGGER.log(.error, message: "Element fails")
+                logger.log(.error, message: "Element fails")
             }
         }
         
         return element
     }
     
-    static public func reconcileAllocations(_ previousAllocations: [JSON], _ currentAllocations: [JSON]) -> [JSON] {
-        var allocations = [JSON]()
+    static public func reconcileAllocations(previousAllocations: EvolvRawAllocations,
+                                            currentAllocations: EvolvRawAllocations) -> EvolvRawAllocations {
+        var allocations: EvolvRawAllocations = []
         
         for currentAllocation in currentAllocations {
-            let currentEid = String(describing: currentAllocation["eid"])
+            let currentEid = String(describing: currentAllocation[EvolvRawAllocations.Key.experimentId.rawValue])
             var previousFound = false
             
             for previousAllocation in previousAllocations {
-                let previousEid = String(describing: previousAllocation["eid"])
+                let previousEid = String(describing: previousAllocation[EvolvRawAllocations.Key.experimentId.rawValue])
                 
                 if currentEid.elementsEqual(previousEid) {
                     allocations.append(previousAllocation)
@@ -91,8 +89,8 @@ public class Allocations {
     public func getActiveExperiments() -> Set<String> {
         var activeExperiments = Set<String>()
         
-        for allocation in allocations {
-            let eid = String(describing: allocation["eid"])
+        for allocation in rawAllocations {
+            let eid = String(describing: allocation[EvolvRawAllocations.Key.experimentId.rawValue])
             activeExperiments.insert(eid)
         }
         
