@@ -65,7 +65,7 @@ let config: EvolvConfig = EvolvConfig.builder(<environment_id>, <http_client>).b
 
 2. Initialize the EvolvClient.
 ```swift
-let client: EvolvClient = EvolvClientFactory.init(config).client
+let client: EvolvClient = EvolvClientFactory(config).client
 ```
 
 ### Confirm the Allocation

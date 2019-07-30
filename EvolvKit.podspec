@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
   s.name             = 'EvolvKit'
   s.version          = '1.0.2'
-  s.summary          = 'Autonomous Optimizations Tool'
+  s.summary          = 'Autonomous Optimization Tool'
   s.description      = <<-DESC
   'This SDK is designed to be integrated into projects to allow for autonomous UI optimozations'
   DESC
