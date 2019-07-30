@@ -34,7 +34,7 @@ EvolvKit is available under the Apache License, Version 2.0. See the LICENSE fil
 **Allocation:** The set of configurations that have been given to the participant, the values that are being
 experimented against.
 
-For a complete example of how to use this SDK see our [example app](https://github.com/PhyllisWong/EvolvKit/tree/master/Example).
+For a complete example of how to use this SDK see our [example app](https://github.com/evolv-ai/EvolvKit/tree/master/Example).
 
 ### Import the SDK
 
@@ -65,7 +65,7 @@ let config: EvolvConfig = EvolvConfig.builder(<environment_id>, <http_client>).b
 
 2. Initialize the EvolvClient.
 ```swift
-let client: EvolvClient = EvolvClientFactory.init(config)
+let client: EvolvClient = EvolvClientFactory.init(config).client
 ```
 
 ### Confirm the Allocation
