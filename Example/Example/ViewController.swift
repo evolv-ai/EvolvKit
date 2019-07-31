@@ -42,25 +42,24 @@ class ViewController: UIViewController {
         
         self.store = CustomAllocationStore()
         httpClient = DefaultEvolvHttpClient()
-        
-        /// Uncomment each allocation option to see the UI change based on the allocation.
-        // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_1\",\"buttons\":{\"checkout\":{\"text\":\"option_1\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
-        // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_2\",\"buttons\":{\"checkout\":{\"text\":\"option_2\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
-        // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_3\",\"buttons\":{\"checkout\":{\"text\":\"option_3\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
-        // let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_4\",\"buttons\":{\"checkout\":{\"text\":\"option_7\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
-        //    let myStoredAllocation = "[{\"uid\":\"sandbox_user\",\"eid\":\"experiment_1\",\"cid\":\"candidate_3\",\"genome\":{\"ui\":{\"layout\":\"option_7\",\"buttons\":{\"checkout\":{\"text\":\"option_7\",\"color\":\"#f3b36d\"},\"info\":{\"text\":\"Begin Checkout\",\"color\":\"#f3b36d\"}}},\"search\":{\"weighting\":3.5}},\"excluded\":true}]"
-        
+
+		/// Simulates getting different variants in your allocation, based on an experiment.
+		func optionRandomizer() -> String {
+			let options: [String] = ["option_1", "option_2", "option_3", "option_4", "option_7"]
+			return options.randomElement()!
+		}
+
         let myStoredAllocationDict: [[String: Any]] = [
             [
-                EvolvRawAllocations.Key.userId.rawValue: "sandbox_user",
-                EvolvRawAllocations.Key.experimentId.rawValue: "experiment_1",
-                EvolvRawAllocations.Key.candidateId.rawValue: "candidate_3",
+                "uid": "sandbox_user",
+                "eid": "experiment_1",
+                "cid": "candidate_3",
                 "genome": [
                     "ui": [
-                        "layout": "option_7",
+                        "layout": "\(optionRandomizer())",
                         "buttons": [
                             "checkout": [
-                                "text": "option_2",
+                                "text": "\(optionRandomizer())",
                                 "color": "#f3b36d"
                             ],
                             "info": [
@@ -76,6 +75,7 @@ class ViewController: UIViewController {
                 "excluded": true
             ]
         ]
+
         rawAllocations = JSON(myStoredAllocationDict).arrayValue
         
         if rawAllocations.isEmpty {
@@ -84,13 +84,13 @@ class ViewController: UIViewController {
         } else {
             store.put("sandbox_user", rawAllocations)
         }
-        
+
         /// - Build config with custom timeout and custom allocation store
         // set client to use sandbox environment
         let config = EvolvConfig.builder(environmentId: "sandbox", httpClient: httpClient)
             .set(allocationStore: store)
             .build()
-        
+
         /// - Initialize the client with a stored user
         /// fetches allocations from Evolv, and stores them in a custom store
         client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
@@ -100,28 +100,21 @@ class ViewController: UIViewController {
         /// - Initialize the client with a new user
         /// - Uncomment this line if you prefer this initialization.
         // client = EvolvClientFactory(config: config) as! EvolvClientProtocol
-        
+
         super.init(coder: aDecoder)
     }
-    
+	
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else {
-            return
-        }
-        
-        statusBarView.backgroundColor = UIColor(red: 0.0, green: 0.3, blue: 0.3, alpha: 1.0)
-        
+        setStatusBar()
+
+		// MARK: Evolv subscribe
         client.subscribe(forKey: "ui.layout", defaultValue: "#000000", closure: setBackgroundColor)
         client.subscribe(forKey: "ui.buttons.checkout.text", defaultValue: "보안 체크 아웃 시작", closure: changeButtonText)
         client.confirm()
     }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
+
+
     /// Trailing closure example that will apply the treatments from the allocation.
     ///
     /// - Parameter layoutOption: Implementer decides what the data type will be.
@@ -132,19 +125,23 @@ class ViewController: UIViewController {
             switch buttonTextOption {
             case "option_1":
                 self?.checkoutButton.setTitle("Begin Secure Checkout", for: .normal)
+				self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 24)
             case "option_2":
                 self?.checkoutButton.setTitle("CHECKOUT", for: .normal)
+				self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 12)
             case "option_3":
-                self?.checkoutButton.setTitle("Start Checking Out", for: .normal)
+                self?.checkoutButton.setTitle("  I WANT IT!  ", for: .normal)
+				self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 40)
             default:
                 self?.checkoutButton.setTitle("보안 체크 아웃 시작", for: .normal)
+				self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 16)
             }
         }
     }
 }
 
 private extension ViewController {
-    
+
     /// Simple function example that will apply the treatments from the allocation.
     ///
     /// - Parameter layoutOption: Implementer decides what the data type will be.
@@ -166,5 +163,17 @@ private extension ViewController {
             }
         }
     }
-    
+
+	override internal var preferredStatusBarStyle: UIStatusBarStyle {
+		return .lightContent
+	}
+
+	func setStatusBar() {
+		guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else {
+			return
+		}
+
+		statusBarView.backgroundColor = UIColor(red: 0.0, green: 0.3, blue: 0.3, alpha: 1.0)
+	}
+
 }
