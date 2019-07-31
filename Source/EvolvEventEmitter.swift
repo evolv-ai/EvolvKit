@@ -10,16 +10,17 @@ import SwiftyJSON
 
 class EvolvEventEmitter {
     
-    enum Key: String {
+    public enum Key: String {
         case confirm = "confirmation"
         case contaminate = "contamination"
     }
     
-    private let logger = EvolvLogger.shared
+    private let logger = Log.logger
     
-    private let httpClient: EvolvHttpClient
-    private let config: EvolvConfig
-    private let participant: EvolvParticipant
+    let httpClient: EvolvHttpClient
+    let config: EvolvConfig
+    let participant: EvolvParticipant
+    let audience: EvolvAudience = EvolvAudience()
     
     init(config: EvolvConfig, participant: EvolvParticipant) {
         self.config = config
@@ -27,7 +28,7 @@ class EvolvEventEmitter {
         self.httpClient = config.httpClient
     }
     
-    func emit(forKey key: String) {
+    public func emit(forKey key: String) {
         guard let url = createEventUrl(type: key, score: 1.0) else {
             return
         }
@@ -35,7 +36,7 @@ class EvolvEventEmitter {
         makeEventRequest(url)
     }
     
-    func emit(forKey key: String, score: Double) {
+    public func emit(forKey key: String, score: Double) {
         guard let url: URL = createEventUrl(type: key, score: score) else {
             return
         }
@@ -43,15 +44,15 @@ class EvolvEventEmitter {
         makeEventRequest(url)
     }
     
-    func confirm(rawAllocations: EvolvRawAllocations) {
+    public func confirm(rawAllocations: EvolvRawAllocations) {
         sendAllocationEvents(forKey: Key.confirm.rawValue, rawAllocations: rawAllocations)
     }
     
-    func contaminate(rawAllocations: EvolvRawAllocations) {
+    public func contaminate(rawAllocations: EvolvRawAllocations) {
         sendAllocationEvents(forKey: Key.contaminate.rawValue, rawAllocations: rawAllocations)
     }
     
-    func sendAllocationEvents(forKey key: String, rawAllocations: EvolvRawAllocations) {
+    public func sendAllocationEvents(forKey key: String, rawAllocations: EvolvRawAllocations) {
         if !rawAllocations.isEmpty {
             for allocation in rawAllocations {
                 // TODO: Perform audience check here
@@ -61,12 +62,13 @@ class EvolvEventEmitter {
                 makeEventRequest(url)
                 
                 // TODO: Add audience filter logic here
-                logger.debug("\(key) event filtered")
+                let message: String = "\(key) event filtered"
+                logger.log(.debug, message: message)
             }
         }
     }
     
-    func createEventUrl(type: String, score: Double) -> URL? {
+    public func createEventUrl(type: String, score: Double) -> URL? {
         var components = URLComponents()
         components.scheme = config.httpScheme
         components.host = config.domain
@@ -79,14 +81,15 @@ class EvolvEventEmitter {
         ]
         
         guard let url = components.url else {
-            logger.debug("Error creating event url with type and score.")
+            let message: String = "Error creating event url with type and score."
+            logger.log(.debug, message: message)
             return nil
         }
         
         return url
     }
     
-    func createEventUrl(type: String, experimentId: String, candidateId: String) -> URL? {
+    public func createEventUrl(type: String, experimentId: String, candidateId: String) -> URL? {
         var components = URLComponents()
         components.scheme = config.httpScheme
         components.host = config.domain
@@ -100,7 +103,8 @@ class EvolvEventEmitter {
         ]
         
         guard let url = components.url else {
-            logger.debug("Error creating event url with experimentID and candidateID.")
+            let message: String = "Error creating event url with experimentID and candidateID."
+            logger.log(.debug, message: message)
             return nil
         }
         
@@ -109,7 +113,8 @@ class EvolvEventEmitter {
     
     private func makeEventRequest(_ url: URL?) {
         guard let unwrappedUrl = url else {
-            logger.debug("The event url was nil, skipping event request.")
+            let message = "The event url was nil, skipping event request."
+            logger.log(.debug, message: message)
             return
         }
         

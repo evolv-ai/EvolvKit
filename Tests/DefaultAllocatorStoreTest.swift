@@ -12,6 +12,43 @@ import SwiftyJSON
 
 class DefaultAllocatorStoreTest: XCTestCase {
     
+    private var rawAllocations: EvolvRawAllocations {
+        let data: [[String: Any]] = [
+            [
+                EvolvRawAllocations.Key.userId.rawValue: "test_uid",
+                EvolvRawAllocations.Key.sessionId.rawValue: "test_sid",
+                EvolvRawAllocations.Key.experimentId.rawValue: "test_eid",
+                EvolvRawAllocations.Key.candidateId.rawValue: "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
+    
     func testEmptyStoreRGetsEmptyJsonArray() {
         let store = DefaultEvolvAllocationStore(size: 10)
         
@@ -22,7 +59,7 @@ class DefaultAllocatorStoreTest: XCTestCase {
     
     func testSetAndGetOnStore() {
         let store = DefaultEvolvAllocationStore(size: 10)
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         store.put("test_user", allocations)
         let storedAllocations = store.get("test_user")
         

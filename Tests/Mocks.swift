@@ -20,7 +20,7 @@ class AllocationStoreMockWithAllocations: EvolvAllocationStore {
     
     public init(size: Int) {
         self.cache = LRUCache(size)
-        let allocationsForMockStore = TestData.rawAllocations
+        let allocationsForMockStore = AllocationsTest.rawAllocations
         cache.putEntry("test_user", allocationsForMockStore)
     }
     
@@ -47,12 +47,12 @@ class AllocationStoreMock: EvolvAllocationStore {
     var expectPutExpectation: XCTestExpectation?
     
     private var mockedGet: (String) -> EvolvRawAllocations = { _ in
-        return TestData.rawAllocations
+        return AllocationsTest.rawAllocations
     }
     
     private var mockedPut: (String, EvolvRawAllocations) -> Void = { _, _  in
-        let rawAllocation = TestData.rawAllocations
-        let allocations = TestData.rawAllocations
+        let rawAllocation = AllocationsTest.rawAllocations
+        let allocations = AllocationsTest.rawAllocations
         DefaultEvolvAllocationStore(size: 10).put("test_user", allocations)
     }
     

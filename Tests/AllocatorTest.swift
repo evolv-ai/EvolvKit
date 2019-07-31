@@ -14,6 +14,42 @@ import PromiseKit
 class AllocatorTest: XCTestCase {
     
     private let environmentId: String = "test_12345"
+    private var rawAllocations: EvolvRawAllocations {
+        let data: [[String: Any]] = [
+            [
+                EvolvRawAllocations.Key.userId.rawValue: "test_uid",
+                EvolvRawAllocations.Key.sessionId.rawValue: "test_sid",
+                EvolvRawAllocations.Key.experimentId.rawValue: "test_eid",
+                EvolvRawAllocations.Key.candidateId.rawValue: "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
     private var mockConfig: EvolvConfig!
     private var mockExecutionQueue: EvolvExecutionQueue!
     private var mockHttpClient: HttpClientMock!
@@ -125,7 +161,7 @@ class AllocatorTest: XCTestCase {
     func testAllocationsNotEmpty() {
         let nilAllocations: EvolvRawAllocations? = nil
         let emptyAllocations = EvolvRawAllocations()
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         
         XCTAssertFalse(EvolvAllocator.allocationsNotEmpty(nilAllocations))
         XCTAssertFalse(EvolvAllocator.allocationsNotEmpty(emptyAllocations))
@@ -135,7 +171,7 @@ class AllocatorTest: XCTestCase {
     func testResolveAllocationFailureWithAllocationsInStore() {
         let participant = EvolvParticipant.builder().build()
         let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         
         mockAllocationStore.put(participant.userId, allocations)
         
@@ -161,7 +197,7 @@ class AllocatorTest: XCTestCase {
     func testResolveAllocationFailureWithAllocationsInStoreWithSandbaggedConfirmation() {
         let participant = EvolvParticipant.builder().build()
         let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         
         mockAllocationStore.put(participant.userId, allocations)
         
@@ -195,7 +231,7 @@ class AllocatorTest: XCTestCase {
     func testResolveAllocationFailureWithAllocationsInStoreWithSandbaggedContamination() {
         let participant = EvolvParticipant.builder().build()
         let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         
         mockAllocationStore.put(participant.userId, allocations)
         
@@ -252,7 +288,7 @@ class AllocatorTest: XCTestCase {
     
     func testFetchAllocationsWithNoAllocationsInStore() {
         let participant = EvolvParticipant.builder().build()
-        let rawAllocations = TestData.rawAllocations
+        let rawAllocations = self.rawAllocations
         let allocationsEmpty = mockAllocationStore.get(participant.userId)
         let allocator = EvolvAllocator(config: mockConfig, participant: participant)
         let allocationsPromise = allocator.fetchAllocations()
@@ -264,8 +300,8 @@ class AllocatorTest: XCTestCase {
     
     func testAllocationsReconciliation() {
         let participant = EvolvParticipant.builder().build()
-        let allocations = TestData.rawAllocations
-        let allocationsJson = TestData.rawAllocations
+        let allocations = self.rawAllocations
+        let allocationsJson = self.rawAllocations
         
         mockAllocationStore.put(participant.userId, allocationsJson)
         
@@ -278,7 +314,7 @@ class AllocatorTest: XCTestCase {
     func testAllocationsNotEmptyFunction() {
         let participant = EvolvParticipant.builder().build()
         let emptyAllocations = mockAllocationStore.get(participant.userId)
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         
         XCTAssertNotNil(emptyAllocations)
         XCTAssertTrue(emptyAllocations == EvolvRawAllocations())

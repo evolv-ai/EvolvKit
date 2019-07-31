@@ -11,6 +11,7 @@ extension EvolvRawAllocations {
         case candidateId = "cid"
         case type
         case score
+        case country
     }
     
 }

@@ -15,6 +15,42 @@ class ExecutionQueueTest: XCTestCase {
     private var mockExecutionQueue: ExecutionQueueMock!
     private var participant: EvolvParticipant!
     private let environmentId: String = "test_12345"
+    private var rawAllocations: EvolvRawAllocations {
+        let data: [[String: Any]] = [
+            [
+                EvolvRawAllocations.Key.userId.rawValue: "test_uid",
+                EvolvRawAllocations.Key.sessionId.rawValue: "test_sid",
+                EvolvRawAllocations.Key.experimentId.rawValue: "test_eid",
+                EvolvRawAllocations.Key.candidateId.rawValue: "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
     private var mockConfig: EvolvConfig!
     private var mockHttpClient: HttpClientMock!
     private var mockAllocationStore: EvolvAllocationStore!
@@ -76,7 +112,7 @@ class ExecutionQueueTest: XCTestCase {
         let exMock1 = ExecutionMock(key: key, defaultValue: defaultValue, participant: participant, closure: printSomething)
         let exMock2 = ExecutionMock(key: "pages.testing_page.header", defaultValue: "red", participant: participant, closure: doSomething)
         
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         
         mockExecutionQueue.enqueue(exMock1)
         mockExecutionQueue.enqueue(exMock2)

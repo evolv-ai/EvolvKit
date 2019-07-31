@@ -6,8 +6,6 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
-import Foundation
-
 public class EvolvConfig {
     
     public enum Default {
@@ -42,12 +40,6 @@ public class EvolvConfig {
     
     static public func builder(environmentId: String, httpClient: EvolvHttpClient) -> EvolvConfigBuilder {
         return EvolvConfigBuilder(environmentId: environmentId, httpClient: httpClient)
-    }
-    
-    public func set(logLevel: EvolvLogLevel) {
-        DispatchQueue.global(qos: .utility).async {
-            EvolvLogger.shared.logLevel = logLevel
-        }
     }
     
 }

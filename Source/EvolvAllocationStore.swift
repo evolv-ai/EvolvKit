@@ -6,6 +6,8 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
+import SwiftyJSON
+
 public protocol EvolvAllocationStore {
     /**
      Retrieves a JsonArray.

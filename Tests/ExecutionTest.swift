@@ -12,31 +12,23 @@ import XCTest
 class ExecutionTest: XCTestCase {
 
     private var mockParticipant: EvolvParticipant!
-    private var testValueString: String = ""
     private var testValueInt: Int = 0
     private var testValueDouble: Double = 0
-    private var testValueFloat: Float = 0
-    private var testValueBool: Bool = false
     
     override func setUp() {
         super.setUp()
         
         mockParticipant = EvolvParticipant.builder().build()
-        testValueString = ""
         testValueInt = 0
         testValueDouble = 0
-        testValueFloat = 0
-        testValueBool = false
     }
 
     override func tearDown() {
         super.tearDown()
         
-        testValueString = ""
+        mockParticipant = nil
         testValueInt = 0
         testValueDouble = 0
-        testValueFloat = 0
-        testValueBool = false
     }
 
     func test_Init() {
@@ -54,24 +46,12 @@ class ExecutionTest: XCTestCase {
         XCTAssertEqual(execution.key, key)
     }
     
-    private func closureString(value: String) {
-        testValueString = value
-    }
-    
     private func closureInt(value: Int) {
         testValueInt = value
     }
     
     private func closureDouble(value: Double) {
         testValueDouble = value
-    }
-    
-    private func closureFloat(value: Float) {
-        testValueFloat = value
-    }
-    
-    private func closureBool(value: Bool) {
-        testValueBool = value
     }
     
     func test_ExecutionWithDefault() {
@@ -93,7 +73,7 @@ class ExecutionTest: XCTestCase {
     
     func test_ExecutionWithRawAllocations() {
         // given
-        let rawAllocations = TestData.rawAllocations
+        let rawAllocations = AllocationsTest.rawAllocations
         let key = "search.weighting.distance"
         let defaultValue = 2.5
         
@@ -116,7 +96,7 @@ class ExecutionTest: XCTestCase {
     
     func test_DoubleExecutionWithRawAllocations() {
         // given
-        let rawAllocations = TestData.rawAllocations
+        let rawAllocations = AllocationsTest.rawAllocations
         let key = "search.weighting.distance"
         let defaultValue = 2.5
         var executionCounter = 0
@@ -141,55 +121,6 @@ class ExecutionTest: XCTestCase {
         XCTAssertNotNil(execution)
         XCTAssertEqual(executionCounter, 1)
         XCTAssertEqual(testValueDouble, defaultValue)
-    }
-    
-    func test_TypeSupport() {
-        // given
-        let key = "test"
-        let defaultStringValue = ""
-        let defaultIntValue = 1
-        let defaultDoubleValue: Double = 1
-        let defaultFloatValue: Float = 1
-        let defaultBoolValue = true
-        
-        // when
-        let executionString = EvolvExecution(key: key, defaultValue: defaultStringValue, participant: mockParticipant, closure: closureString)
-        let executionInt = EvolvExecution(key: key, defaultValue: defaultIntValue, participant: mockParticipant, closure: closureInt)
-        let executionDouble = EvolvExecution(key: key, defaultValue: defaultDoubleValue, participant: mockParticipant, closure: closureDouble)
-        let executionFloat = EvolvExecution(key: key, defaultValue: defaultFloatValue, participant: mockParticipant, closure: closureFloat)
-        let executionBool = EvolvExecution(key: key, defaultValue: defaultBoolValue, participant: mockParticipant, closure: closureBool)
-        executionString.executeWithDefault()
-        executionInt.executeWithDefault()
-        executionDouble.executeWithDefault()
-        executionFloat.executeWithDefault()
-        executionBool.executeWithDefault()
-        
-        // then
-        XCTAssertNotNil(executionString)
-        XCTAssertNotNil(executionInt)
-        XCTAssertNotNil(executionDouble)
-        XCTAssertNotNil(executionFloat)
-        XCTAssertNotNil(executionBool)
-        XCTAssertEqual(testValueString, defaultStringValue)
-        XCTAssertEqual(testValueInt, defaultIntValue)
-        XCTAssertEqual(testValueDouble, defaultDoubleValue)
-        XCTAssertEqual(testValueFloat, defaultFloatValue)
-        XCTAssertEqual(testValueBool, defaultBoolValue)
-    }
-    
-    func test_ThrowsMismatchTypes() {
-        // given
-        let rawAllocations = TestData.rawAllocations
-        let key = "search.weighting.distance"
-        let defaultValue: [Int] = []
-        
-        // when
-        let execution = EvolvExecution(key: key, defaultValue: defaultValue, participant: mockParticipant, closure: { _ in })
-        
-        // then
-        XCTAssertThrowsError(try execution.execute(with: rawAllocations)) { error in
-            XCTAssertEqual(error as! EvolvKeyError, EvolvKeyError.mismatchTypes)
-        }
     }
 
 }

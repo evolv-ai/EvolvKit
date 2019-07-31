@@ -12,7 +12,7 @@ import SwiftyJSON
 
 public class DefaultEvolvHttpClient: EvolvHttpClient {
     
-    private let logger = EvolvLogger.shared
+    private let logger = Log.logger
     
     public init() {}
     
@@ -24,11 +24,11 @@ public class DefaultEvolvHttpClient: EvolvHttpClient {
                     switch response.result {
                     case .success:
                         if let responseString = response.result.value {
-                            self.logger.debug(String(describing: responseString))
+                            self.logger.log(.debug, message: String(describing: responseString))
                             resolver.fulfill(responseString)
                         }
                     case .failure(let error):
-                        self.logger.error(String(describing: error))
+                        self.logger.log(.error, message: String(describing: error))
                         resolver.reject(error)
                     }
             }
@@ -47,13 +47,14 @@ public class DefaultEvolvHttpClient: EvolvHttpClient {
             parameters: nil,
             encoding: JSONEncoding.default ,
             headers: headers).responseData { dataResponse in
-                self.logger.debug(String(describing: dataResponse.request))
-                self.logger.debug(String(describing: dataResponse.response))
+                self.logger.log(.debug, message: String(describing: dataResponse.request))
+                self.logger.log(.debug, message: String(describing: dataResponse.response))
                 
                 if dataResponse.response?.statusCode == 202 {
-                    self.logger.debug("Event has been emitted to Evolv")
+                    self.logger.log(.debug, message: "Event has been emitted to Evolv")
                 } else {
-                    self.logger.error("Error sending data to Evolv \(String(describing: dataResponse.response?.statusCode))")
+                    self.logger.log(.error, message: "Error sending data to Evolv" +
+                        " \(String(describing: dataResponse.response?.statusCode))")
                 }
         }
     }

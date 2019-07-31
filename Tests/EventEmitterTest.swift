@@ -17,6 +17,42 @@ class EventEmitterTest: XCTestCase {
     private let score = 10.0
     private let eid = "test_eid"
     private let cid = "test_cid"
+    private var rawAllocations: EvolvRawAllocations {
+        let data: [[String: Any]] = [
+            [
+                EvolvRawAllocations.Key.userId.rawValue: "test_uid",
+                EvolvRawAllocations.Key.sessionId.rawValue: "test_sid",
+                EvolvRawAllocations.Key.experimentId.rawValue: "test_eid",
+                EvolvRawAllocations.Key.candidateId.rawValue: "test_cid",
+                "genome": [
+                    "search": [
+                        "weighting": [
+                            "distance": 2.5,
+                            "dealer_score": 2.5
+                        ]
+                    ],
+                    "pages": [
+                        "all_pages": [
+                            "header_footer": [
+                                "blue",
+                                "white"
+                            ]
+                        ],
+                        "testing_page": [
+                            "megatron": "none",
+                            "header": "white"
+                        ]
+                    ],
+                    "algorithms": [
+                        "feature_importance": false
+                    ]
+                ],
+                "excluded": false
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
     private var mockConfig: ConfigMock!
     private var mockExecutionQueue: ExecutionQueueMock!
     private var mockHttpClient: HttpClientMock!
@@ -117,7 +153,7 @@ class EventEmitterTest: XCTestCase {
                                                                 mockExecutionQueue: mockExecutionQueue,
                                                                 mockHttpClient: mockHttpClient,
                                                                 mockAllocationStore: mockAllocationStore)
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         let participant = EvolvParticipant.builder().build()
         
         let emitter = EvolvEventEmitter(config: mockConfig, participant: participant)
@@ -134,7 +170,7 @@ class EventEmitterTest: XCTestCase {
                                                                                 mockExecutionQueue: mockExecutionQueue,
                                                                                 mockHttpClient: mockHttpClient,
                                                                                 mockAllocationStore: mockAllocationStore)
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         
         let participant = EvolvParticipant.builder()
             .set(userId: "test_user")
@@ -155,7 +191,7 @@ class EventEmitterTest: XCTestCase {
                                                                                 mockExecutionQueue: mockExecutionQueue,
                                                                                 mockHttpClient: mockHttpClient,
                                                                                 mockAllocationStore: mockAllocationStore)
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         
         let participant = EvolvParticipant.builder().build()
         let emitter = EventEmitterMock(config: mockConfig, participant: participant)
@@ -173,7 +209,7 @@ class EventEmitterTest: XCTestCase {
                                                                                 mockExecutionQueue: mockExecutionQueue,
                                                                                 mockHttpClient: mockHttpClient,
                                                                                 mockAllocationStore: mockAllocationStore)
-        let allocations = TestData.rawAllocations
+        let allocations = self.rawAllocations
         
         let participant = EvolvParticipant.builder().build()
         let emitter = EventEmitterMock(config: mockConfig, participant: participant)
