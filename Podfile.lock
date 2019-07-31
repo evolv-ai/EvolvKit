@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (4.8.2)
-  - EvolvKit (1.0.0):
+  - EvolvKit (1.0.2):
     - Alamofire
     - PromiseKit (~> 6.8)
     - SwiftyJSON (~> 4.0)
@@ -33,7 +33,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
-  EvolvKit: 9387f911e783d82bc1e3d5be83b17d2fed381113
+  EvolvKit: 3ce12e5f35e07510270852590a0bd95f00697e74
   PromiseKit: 1fdaeb6c0a94a5114fcb814ff3d772b86886ad4e
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
