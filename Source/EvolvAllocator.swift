@@ -1,13 +1,21 @@
 //
 //  EvolvAllocator.swift
-//  EvolvKit_Example
 //
-//  Created by phyllis.wong on 7/3/19.
-//  Copyright © 2019 CocoaPods. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
-import Alamofire
-import SwiftyJSON
 import PromiseKit
 
 class EvolvAllocator {
@@ -30,6 +38,8 @@ class EvolvAllocator {
     private var confirmationSandbagged: Bool = false
     private var contaminationSandbagged: Bool = false
     private var allocationStatus: AllocationStatus
+    
+    private lazy var jsonDecoder: JSONDecoder = JSONDecoder()
     
     init(config: EvolvConfig, participant: EvolvParticipant) {
         self.executionQueue = config.executionQueue
@@ -60,11 +70,11 @@ class EvolvAllocator {
         return components
     }
     
-    public func createAllocationsUrl() -> URL {
+    func createAllocationsUrl() -> URL {
         var components = createUrlComponents(config: config)
         components.path = "/\(config.version)/\(config.environmentId)/allocations"
         components.queryItems = [
-            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue, value: "\(participant.userId)")
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.userId.stringValue, value: "\(participant.userId)")
         ]
         
         guard let url = components.url else {
@@ -74,12 +84,24 @@ class EvolvAllocator {
         return url
     }
     
-    func fetchAllocations() -> Promise<EvolvRawAllocations> {
-        return Promise { resolve in
+    func fetchAllocations() -> Promise<[EvolvRawAllocation]> {
+        return Promise { [weak self] resolve in
+            guard let self = self else {
+                return
+            }
+            
             let url = self.createAllocationsUrl()
             
             _ = self.httpClient.get(url).done { (stringJSON) in
-                var currentAllocations = JSON(parseJSON: stringJSON).arrayValue
+                var currentAllocations: [EvolvRawAllocation] = []
+                
+                do {
+                    let jsonData = stringJSON.data(using: .utf8) ?? Data()
+                    currentAllocations = try self.jsonDecoder.decode([EvolvRawAllocation].self, from: jsonData)
+                } catch let error {
+                    self.logger.error(error)
+                }
+                
                 let previousAllocations = self.store.get(self.participant.userId)
                 
                 if previousAllocations.isEmpty == false {
@@ -102,15 +124,15 @@ class EvolvAllocator {
                 
                 do {
                     try self.executionQueue.executeAllWithValues(from: currentAllocations)
-                } catch let err {
+                } catch let error {
                     _ = self.resolveAllocationsFailure()
-                    self.logger.error("There was an error executing with allocations. \(err.localizedDescription)")
+                    self.logger.error("There was an error executing with allocations. \(error.localizedDescription)")
                 }
             }
         }
     }
     
-    func resolveAllocationsFailure() -> EvolvRawAllocations {
+    func resolveAllocationsFailure() -> [EvolvRawAllocation] {
         let previousAllocations = store.get(participant.userId)
         
         if previousAllocations.isEmpty == false {
@@ -145,7 +167,7 @@ class EvolvAllocator {
         return previousAllocations
     }
     
-    static func allocationsNotEmpty(_ allocations: EvolvRawAllocations?) -> Bool {
+    static func allocationsNotEmpty(_ allocations: [EvolvRawAllocation]?) -> Bool {
         guard let allocations = allocations else {
             return false
         }

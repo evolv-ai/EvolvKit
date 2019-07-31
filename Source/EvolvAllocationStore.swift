@@ -1,31 +1,35 @@
 //
 //  EvolvAllocationStore.swift
-//  EvolvKit_Example
 //
-//  Created by phyllis.wong on 7/3/19.
-//  Copyright © 2019 CocoaPods. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
+/// A type that can store and retrieve participant's allocations.
 public protocol EvolvAllocationStore {
-    /**
-     Retrieves a JsonArray.
-     - SwiftyJSON is a required package for
-     implementing the store. You can install SwiftyJSON here: https://cocoapods.org/pods/SwiftyJSON.
-     
-     - Retrieves a JsonArray converted to json using SwiftyJSON. JsonArray represents the participant's allocations.
-     If there are no stored allocations, should return an empty SwiftyJSON array.
-     - Parameters:
-     - uid: The participant's unique id.
-     - Returns: a SwiftyJSON array of allocation if one exists, else an empty SwiftyJSON array.
-     */
-    func get(_ participantId: String) -> EvolvRawAllocations
+    /// Retrieves a json converted to array of EvolvRawAllocation. Json represents the participant's allocations.
+    /// If there are no stored allocations, should return an empty array.
+    ///
+    /// - Parameter participantId: The participant's unique id.
+    /// - Returns: a EvolvRawAllocation array of allocation if one exists, else an empty array.
+    func get(_ participantId: String) -> [EvolvRawAllocation]
     
-    /**
-     Stores a JsonArray.
-     - Stores the given SwiftyJSON array.
-     - Parameters:
-     - uid: The participant's unique id.
-     - allocations: The participant's allocations.
-     */
-    func put(_ participantId: String, _ rawAllocations: EvolvRawAllocations)
+    /// Stores an array of allocations.
+    /// Stores the given EvolvRawAllocation array.
+    ///
+    /// - Parameters:
+    ///   - participantId: The participant's unique id.
+    ///   - rawAllocations: The participant's allocations.
+    func put(_ participantId: String, _ rawAllocations: [EvolvRawAllocation])
 }

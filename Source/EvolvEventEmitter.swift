@@ -1,12 +1,22 @@
 //
 //  EvolvEventEmitter.swift
-//  EvolvKit_Example
 //
-//  Created by phyllis.wong on 7/3/19.
-//  Copyright © 2019 CocoaPods. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
-import SwiftyJSON
+import Foundation
 
 class EvolvEventEmitter {
     
@@ -43,21 +53,21 @@ class EvolvEventEmitter {
         makeEventRequest(url)
     }
     
-    func confirm(rawAllocations: EvolvRawAllocations) {
+    func confirm(rawAllocations: [EvolvRawAllocation]) {
         sendAllocationEvents(forKey: Key.confirm.rawValue, rawAllocations: rawAllocations)
     }
     
-    func contaminate(rawAllocations: EvolvRawAllocations) {
+    func contaminate(rawAllocations: [EvolvRawAllocation]) {
         sendAllocationEvents(forKey: Key.contaminate.rawValue, rawAllocations: rawAllocations)
     }
     
-    func sendAllocationEvents(forKey key: String, rawAllocations: EvolvRawAllocations) {
+    func sendAllocationEvents(forKey key: String, rawAllocations: [EvolvRawAllocation]) {
         if !rawAllocations.isEmpty {
             for allocation in rawAllocations {
                 // TODO: Perform audience check here
-                let experimentId = String(describing: allocation[EvolvRawAllocations.Key.experimentId.rawValue])
-                let candidateId = String(describing: allocation[EvolvRawAllocations.Key.candidateId.rawValue])
-                let url = createEventUrl(type: key, experimentId: experimentId, candidateId: candidateId)
+                let url = createEventUrl(type: key,
+                                         experimentId: allocation.experimentId,
+                                         candidateId: allocation.candidateId)
                 makeEventRequest(url)
                 
                 // TODO: Add audience filter logic here
@@ -72,10 +82,10 @@ class EvolvEventEmitter {
         components.host = config.domain
         components.path = "/\(config.version)/\(config.environmentId)/events"
         components.queryItems = [
-            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue, value: "\(participant.userId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.sessionId.rawValue, value: "\(participant.sessionId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.type.rawValue, value: "\(type)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.score.rawValue, value: "\(String(score))")
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.userId.stringValue, value: "\(participant.userId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.sessionId.stringValue, value: "\(participant.sessionId)"),
+            URLQueryItem(name: "type", value: "\(type)"),
+            URLQueryItem(name: "score", value: "\(String(score))")
         ]
         
         guard let url = components.url else {
@@ -92,11 +102,11 @@ class EvolvEventEmitter {
         components.host = config.domain
         components.path = "/\(config.version)/\(config.environmentId)/events"
         components.queryItems = [
-            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue, value: "\(participant.userId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.sessionId.rawValue, value: "\(participant.sessionId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.experimentId.rawValue, value: "\(experimentId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.candidateId.rawValue, value: "\(candidateId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.type.rawValue, value: "\(type)")
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.userId.stringValue, value: "\(participant.userId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.sessionId.stringValue, value: "\(participant.sessionId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.experimentId.stringValue, value: "\(experimentId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.candidateId.stringValue, value: "\(candidateId)"),
+            URLQueryItem(name: "type", value: "\(type)")
         ]
         
         guard let url = components.url else {

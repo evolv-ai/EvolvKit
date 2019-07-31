@@ -1,52 +1,47 @@
 //
 //  EvolvClientFactory.swift
-//  EvolvKit_Example
 //
-//  Created by phyllis.wong on 7/3/19.
-//  Copyright © 2019 CocoaPods. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import Foundation
 
 public class EvolvClientFactory {
     
-    /**
-     Creates instances of the EvolvClient.
-     - Parameters:
-     - config: General configurations for the SDK.
-     - Returns:  an instance of EvolvClient
-     */
-    public var client: EvolvClient
-    private let logger = EvolvLogger.shared
-    
-    public init(config: EvolvConfig) {
-        logger.debug("Initializing Evolv Client.")
+    /// Creates instances of the EvolvClient.
+    ///
+    /// - Parameters:
+    ///   - config: General configurations for the SDK.
+    ///   - participant: The participant for the initialized client.
+    /// - Returns: an instance of EvolvClient
+    public class func createClient(config: EvolvConfig, participant: EvolvParticipant? = nil) -> EvolvClient {
+        EvolvLogger.shared.debug("Initializing Evolv Client.")
         
-        let participant: EvolvParticipant = EvolvParticipant.builder().build()
-        client = EvolvClientFactory.createClient(config: config, participant: participant)
-    }
-    
-    /**
-     Creates instances of the EvolvClient.
-     - Parameters:
-     - config: General configurations for the SDK.
-     - participant: The participant for the initialized client.
-     - Returns: an instance of EvolvClient
-     */
-    public init(config: EvolvConfig, participant: EvolvParticipant) {
-        logger.debug("Initializing Evolv Client.")
-        
-        client = EvolvClientFactory.createClient(config: config, participant: participant)
-    }
-    
-    private static func createClient(config: EvolvConfig, participant: EvolvParticipant) -> EvolvClient {
+        let participant = participant ?? EvolvParticipant.builder().build()
         let store = config.allocationStore
         let previousAllocations = store.get(participant.userId)
-        let allocator: EvolvAllocator = EvolvAllocator(config: config, participant: participant)
+        let allocator = EvolvAllocator(config: config, participant: participant)
         let futureAllocations = allocator.fetchAllocations()
+        let eventEmitter = EvolvEventEmitter(config: config, participant: participant)
+        
+        defer {
+            EvolvLogger.shared.debug("Initialized Evolv Client.")
+        }
         
         return DefaultEvolvClient(config: config,
-                                  eventEmitter: EvolvEventEmitter(config: config, participant: participant),
+                                  eventEmitter: eventEmitter,
                                   futureAllocations: futureAllocations,
                                   allocator: allocator,
                                   previousAllocations: !previousAllocations.isEmpty,

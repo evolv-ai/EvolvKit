@@ -1,19 +1,29 @@
 //
 //  EvolvExecutionQueue.swift
-//  EvolvKit_Example
 //
-//  Created by phyllis.wong on 7/3/19.
-//  Copyright © 2019 CocoaPods. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
 //
-
-import SwiftyJSON
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
 
 class EvolvExecutionQueue {
     
     private let logger = EvolvLogger.shared
     
-    private var queue: [Any] = []
-    public var count: Int = 0
+    private var queue: [EvolvExecutable] = []
+    var count: Int {
+        return queue.count
+    }
     
     init() {}
     
@@ -21,73 +31,31 @@ class EvolvExecutionQueue {
     
     func enqueue<T>(_ execution: EvolvExecution<T>) {
         queue.insert(execution, at: 0)
-        count += 1
     }
     
-    func executeAllWithValues(from rawAllocations: EvolvRawAllocations) throws {
+    func executeAllWithValues(from rawAllocations: [EvolvRawAllocation]) throws {
         while !queue.isEmpty {
-            var execution = queue.popLast() as Any
+            guard let execution = queue.popLast() else {
+                continue
+            }
             
             do {
-                if let executionString = execution as? EvolvExecution<String> {
-                    try executionString.execute(with: rawAllocations)
-                    execution = executionString as EvolvExecution<String>
-                } else if let executionInt = execution as? EvolvExecution<Int> {
-                    try executionInt.execute(with: rawAllocations)
-                    execution = executionInt as EvolvExecution<Int>
-                } else if let executionDouble = execution as? EvolvExecution<Double> {
-                    try executionDouble.execute(with: rawAllocations)
-                    execution = executionDouble as EvolvExecution<Double>
-                } else if let executionBool = execution as? EvolvExecution<Bool> {
-                    try executionBool.execute(with: rawAllocations)
-                    execution = executionBool as EvolvExecution<Bool>
-                } else if let executionFloat = execution as? EvolvExecution<Float> {
-                    try executionFloat.execute(with: rawAllocations)
-                    execution = executionFloat as EvolvExecution<Float>
-                } else {
-                    continue
-                }
+                try execution.execute(with: rawAllocations)
             } catch {
                 logger.debug("There was an error retrieving the value of from the allocation.")
                 
-                if let executionString = execution as? EvolvExecution<String> {
-                    executionString.executeWithDefault()
-                } else if let executionInt = execution as? EvolvExecution<Int> {
-                    executionInt.executeWithDefault()
-                } else if let executionDouble = execution as? EvolvExecution<Double> {
-                    executionDouble.executeWithDefault()
-                } else if let executionBool = execution as? EvolvExecution<Bool> {
-                    executionBool.executeWithDefault()
-                } else if let executionFloat = execution as? EvolvExecution<Float> {
-                    executionFloat.executeWithDefault()
-                } else {
-                    continue
-                }
+                execution.executeWithDefault()
             }
         }
     }
     
     func executeAllWithValuesFromDefaults() {
         while !queue.isEmpty {
-            let execution = queue.popLast() as Any
-            
-            do {
-                if let executionString = execution as? EvolvExecution<String> {
-                    executionString.executeWithDefault()
-                } else if let executionInt = execution as? EvolvExecution<Int> {
-                    executionInt.executeWithDefault()
-                } else if let executionDouble = execution as? EvolvExecution<Double> {
-                    executionDouble.executeWithDefault()
-                } else if let executionBool = execution as? EvolvExecution<Bool> {
-                    executionBool.executeWithDefault()
-                } else if let executionFloat = execution as? EvolvExecution<Float> {
-                    executionFloat.executeWithDefault()
-                } else {
-                    continue
-                }
-                
-                logger.debug("There was an error retrieving the value of from the allocation.")
+            guard let execution = queue.popLast() else {
+                continue
             }
+            
+            execution.executeWithDefault()
         }
     }
     

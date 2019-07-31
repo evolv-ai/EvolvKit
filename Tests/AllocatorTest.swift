@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import SwiftyJSON
 import PromiseKit
 @testable import EvolvKit
 
@@ -66,42 +65,42 @@ class AllocatorTest: XCTestCase {
         var components = createUrlComponents(config: config)
         components.path = "/\(config.version)/\(config.environmentId)/allocations"
         components.queryItems = [
-            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue, value: "\(participant.userId)")
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.userId.stringValue, value: "\(participant.userId)")
         ]
         return components.url!
     }
     
-    func createConfirmationUrl(config: EvolvConfig, rawAllocations: EvolvRawAllocations, participant: EvolvParticipant) -> URL {
+    func createConfirmationUrl(config: EvolvConfig, rawAllocations: [EvolvRawAllocation], participant: EvolvParticipant) -> URL {
         var components = createUrlComponents(config: config)
         components.path = "/\(config.version)/\(config.environmentId)/events"
         components.queryItems = [
-            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue,
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.userId.stringValue,
                          value: "\(participant.userId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.sessionId.rawValue,
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.sessionId.stringValue,
                          value: "\(participant.sessionId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.experimentId.rawValue,
-                         value: "\(rawAllocations[0][EvolvRawAllocations.Key.experimentId.rawValue].stringValue)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.candidateId.rawValue,
-                         value: "\(rawAllocations[0][EvolvRawAllocations.Key.candidateId.rawValue].stringValue)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.type.rawValue,
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.experimentId.stringValue,
+                         value: "\(rawAllocations[0].experimentId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.candidateId.stringValue,
+                         value: "\(rawAllocations[0].candidateId)"),
+            URLQueryItem(name: "type",
                          value: "confirmation")
         ]
         return components.url!
     }
     
-    func createContaminationUrl(config: EvolvConfig, rawAllocations: EvolvRawAllocations, participant: EvolvParticipant) -> URL {
+    func createContaminationUrl(config: EvolvConfig, rawAllocations: [EvolvRawAllocation], participant: EvolvParticipant) -> URL {
         var components = createUrlComponents(config: config)
         components.path = "/\(config.version)/\(config.environmentId)/events"
         components.queryItems = [
-            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue,
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.userId.stringValue,
                          value: "\(participant.userId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.sessionId.rawValue,
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.sessionId.stringValue,
                          value: "\(participant.sessionId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.experimentId.rawValue,
-                         value: "\(rawAllocations[0][EvolvRawAllocations.Key.experimentId.rawValue].stringValue)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.candidateId.rawValue,
-                         value: "\(rawAllocations[0][EvolvRawAllocations.Key.candidateId.rawValue].stringValue)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.type.rawValue,
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.experimentId.stringValue,
+                         value: "\(rawAllocations[0].experimentId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.candidateId.stringValue,
+                         value: "\(rawAllocations[0].candidateId)"),
+            URLQueryItem(name: "type",
                          value: "contamination")
         ]
         return components.url!
@@ -123,8 +122,8 @@ class AllocatorTest: XCTestCase {
     }
     
     func testAllocationsNotEmpty() {
-        let nilAllocations: EvolvRawAllocations? = nil
-        let emptyAllocations = EvolvRawAllocations()
+        let nilAllocations: [EvolvRawAllocation]? = nil
+        let emptyAllocations = [EvolvRawAllocation]()
         let allocations = TestData.rawAllocations
         
         XCTAssertFalse(EvolvAllocator.allocationsNotEmpty(nilAllocations))
@@ -247,7 +246,7 @@ class AllocatorTest: XCTestCase {
         
         XCTAssertEqual(exp.expectedFulfillmentCount, 1)
         XCTAssertEqual(.failed, allocator.getAllocationStatus())
-        XCTAssertEqual(EvolvRawAllocations(), actualAllocations)
+        XCTAssertEqual([EvolvRawAllocation](), actualAllocations)
     }
     
     func testFetchAllocationsWithNoAllocationsInStore() {
@@ -259,7 +258,7 @@ class AllocatorTest: XCTestCase {
         
         XCTAssertNotNil(allocationsPromise)
         XCTAssertNotEqual(rawAllocations, allocationsEmpty)
-        XCTAssertEqual(allocationsEmpty, EvolvRawAllocations())
+        XCTAssertEqual(allocationsEmpty, [EvolvRawAllocation]())
     }
     
     func testAllocationsReconciliation() {
@@ -281,8 +280,8 @@ class AllocatorTest: XCTestCase {
         let allocations = TestData.rawAllocations
         
         XCTAssertNotNil(emptyAllocations)
-        XCTAssertTrue(emptyAllocations == EvolvRawAllocations())
-        XCTAssertTrue(allocations != EvolvRawAllocations())
+        XCTAssertTrue(emptyAllocations == [EvolvRawAllocation]())
+        XCTAssertTrue(allocations != [EvolvRawAllocation]())
         XCTAssertFalse(emptyAllocations == allocations)
     }
     

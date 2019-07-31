@@ -1,12 +1,21 @@
 //
 //  DefaultEvolvClient.swift
-//  EvolvKit_Example
 //
-//  Created by phyllis.wong on 7/3/19.
-//  Copyright © 2019 CocoaPods. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
-import SwiftyJSON
 import PromiseKit
 
 class DefaultEvolvClient: EvolvClient {
@@ -14,7 +23,7 @@ class DefaultEvolvClient: EvolvClient {
     private let logger = EvolvLogger.shared
     
     private let eventEmitter: EvolvEventEmitter
-    private let futureAllocations: Promise<EvolvRawAllocations>?
+    private let futureAllocations: Promise<[EvolvRawAllocation]>?
     private let executionQueue: EvolvExecutionQueue
     private let allocator: EvolvAllocator
     private let store: EvolvAllocationStore
@@ -23,7 +32,7 @@ class DefaultEvolvClient: EvolvClient {
     
     init(config: EvolvConfig,
          eventEmitter: EvolvEventEmitter,
-         futureAllocations: Promise<EvolvRawAllocations>,
+         futureAllocations: Promise<[EvolvRawAllocation]>,
          allocator: EvolvAllocator,
          previousAllocations: Bool,
          participant: EvolvParticipant) {
@@ -40,30 +49,31 @@ class DefaultEvolvClient: EvolvClient {
         let execution = EvolvExecution(key: key, defaultValue: defaultValue, participant: participant, closure: closure)
         let previousAllocations = store.get(participant.userId)
         
-        do {
-            try execution.execute(with: previousAllocations)
-        } catch {
-            logger.error("Error from \(key). Error message: \(error.localizedDescription).")
-            execution.executeWithDefault()
+        if previousAllocations.isEmpty == false {
+            do {
+                try execution.execute(with: previousAllocations)
+            } catch {
+                logger.error("Error from \(key). Error message: \(error.localizedDescription).")
+                execution.executeWithDefault()
+            }
         }
         
         let allocationStatus = allocator.getAllocationStatus()
         
-        if allocationStatus == .fetching {
+        switch allocationStatus {
+        case .fetching:
             executionQueue.enqueue(execution)
-            return
-        } else if allocationStatus == .retrieved {
+        case .retrieved:
             let cachedAllocations = store.get(participant.userId)
             
             do {
                 try execution.execute(with: cachedAllocations)
-                return
             } catch let error {
                 logger.error("Unable to retieve value from \(key), \(error.localizedDescription)")
             }
+        default:
+            execution.executeWithDefault()
         }
-        
-        execution.executeWithDefault()
     }
     
     public func emitEvent(forKey key: String) {

@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import SwiftyJSON
 import PromiseKit
 @testable import EvolvKit
 
@@ -48,8 +47,8 @@ class ClientFactoryTest: XCTestCase {
         components.host = config.domain
         components.path = "/\(config.version)/\(config.environmentId)/allocations"
         components.queryItems = [
-            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue, value: "\(participant.userId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.sessionId.rawValue, value: "\(participant.sessionId)")
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.userId.stringValue, value: "\(participant.userId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.sessionId.stringValue, value: "\(participant.sessionId)")
         ]
         return components.url!
     }
@@ -69,7 +68,7 @@ class ClientFactoryTest: XCTestCase {
         XCTAssertNotNil(responsePromise)
         XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
         
-        let client = EvolvClientFactory(config: mockConfig)
+        let client = EvolvClientFactory.createClient(config: mockConfig)
         XCTAssertTrue(HttpClientMock.httpClientSendEventsWasCalled)
         XCTAssertNotNil(client)
     }
@@ -93,17 +92,16 @@ class ClientFactoryTest: XCTestCase {
                                                                             mockAllocationStore: mockAllocationStore)
         
         let previousAllocations = TestData.rawAllocations
-        let previousUid = previousAllocations[0][EvolvRawAllocations.Key.userId.rawValue].rawString()!
+        let previousUid = previousAllocations[0].userId
         
         mockAllocationStore.put(previousUid, previousAllocations)
         let cachedAllocations = mockAllocationStore.get(previousUid)
         
         XCTAssertEqual(cachedAllocations, previousAllocations)
         
-        let client = EvolvClientFactory(config: mockConfig, participant: participant)
-        let verifiedClient = client.client as EvolvClient
+        let client = EvolvClientFactory.createClient(config: mockConfig, participant: participant)
         
-        XCTAssertNotNil(verifiedClient)
+        XCTAssertNotNil(client)
     }
     
 }

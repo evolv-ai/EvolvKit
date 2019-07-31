@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import SwiftyJSON
 @testable import EvolvKit
 
 class ExecutionQueueTest: XCTestCase {
@@ -86,7 +85,7 @@ class ExecutionQueueTest: XCTestCase {
         // Should pop an execution from the queue
         mockExecutionQueue.executeAllWithValues(from: allocations)
         
-        XCTAssertEqual(mockExecutionQueue.count, 1)
+        XCTAssertEqual(mockExecutionQueue.count, 0)
         XCTAssertTrue(mockExecutionQueue.executeValuesFromAllocationsWasCalled)
     }
     
@@ -104,7 +103,7 @@ class ExecutionQueueTest: XCTestCase {
         // Should pop an execution from the queue
         mockExecutionQueue.executeAllWithValuesFromDefaults()
         
-        XCTAssertEqual(mockExecutionQueue.count, 1)
+        XCTAssertEqual(mockExecutionQueue.count, 0)
         XCTAssertTrue(mockExecutionQueue.executeWithDefaultsWasCalled)
     }
     

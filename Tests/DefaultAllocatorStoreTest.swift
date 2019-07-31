@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import SwiftyJSON
 @testable import EvolvKit
 
 class DefaultAllocatorStoreTest: XCTestCase {
@@ -17,7 +16,7 @@ class DefaultAllocatorStoreTest: XCTestCase {
         
         XCTAssertNotNil(store.get("test_user"))
         XCTAssertEqual(0, store.get("test_user").count)
-        XCTAssertEqual(EvolvRawAllocations(), store.get("test_user"))
+        XCTAssertEqual([EvolvRawAllocation](), store.get("test_user"))
     }
     
     func testSetAndGetOnStore() {
@@ -27,7 +26,7 @@ class DefaultAllocatorStoreTest: XCTestCase {
         let storedAllocations = store.get("test_user")
         
         XCTAssertNotNil(storedAllocations)
-        XCTAssertNotEqual(EvolvRawAllocations(), storedAllocations)
+        XCTAssertNotEqual([EvolvRawAllocation](), storedAllocations)
         XCTAssertEqual(allocations, storedAllocations)
     }
     

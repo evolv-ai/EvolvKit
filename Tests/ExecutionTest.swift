@@ -17,6 +17,8 @@ class ExecutionTest: XCTestCase {
     private var testValueDouble: Double = 0
     private var testValueFloat: Float = 0
     private var testValueBool: Bool = false
+    private var testValueArray: [Any] = []
+    private var testValueDict: [String: Any] = [:]
     
     override func setUp() {
         super.setUp()
@@ -27,16 +29,21 @@ class ExecutionTest: XCTestCase {
         testValueDouble = 0
         testValueFloat = 0
         testValueBool = false
+        testValueArray = []
+        testValueDict = [:]
     }
 
     override func tearDown() {
         super.tearDown()
         
+        mockParticipant = nil
         testValueString = ""
         testValueInt = 0
         testValueDouble = 0
         testValueFloat = 0
         testValueBool = false
+        testValueArray = []
+        testValueDict = [:]
     }
 
     func test_Init() {
@@ -72,6 +79,14 @@ class ExecutionTest: XCTestCase {
     
     private func closureBool(value: Bool) {
         testValueBool = value
+    }
+    
+    private func closureArray(value: [Any]) {
+        testValueArray = value
+    }
+    
+    private func closureDict(value: [String: Any]) {
+        testValueDict = value
     }
     
     func test_ExecutionWithDefault() {
@@ -151,6 +166,8 @@ class ExecutionTest: XCTestCase {
         let defaultDoubleValue: Double = 1
         let defaultFloatValue: Float = 1
         let defaultBoolValue = true
+        let defaultArrayValue: [Any] = [1, "2", true, 12.345]
+        let defaultDictValue: [String: Any] = ["temp": 1, "foo": ["bar": true]]
         
         // when
         let executionString = EvolvExecution(key: key, defaultValue: defaultStringValue, participant: mockParticipant, closure: closureString)
@@ -158,11 +175,15 @@ class ExecutionTest: XCTestCase {
         let executionDouble = EvolvExecution(key: key, defaultValue: defaultDoubleValue, participant: mockParticipant, closure: closureDouble)
         let executionFloat = EvolvExecution(key: key, defaultValue: defaultFloatValue, participant: mockParticipant, closure: closureFloat)
         let executionBool = EvolvExecution(key: key, defaultValue: defaultBoolValue, participant: mockParticipant, closure: closureBool)
+        let executionArray = EvolvExecution(key: key, defaultValue: defaultArrayValue, participant: mockParticipant, closure: closureArray)
+        let executionDict = EvolvExecution(key: key, defaultValue: defaultDictValue, participant: mockParticipant, closure: closureDict)
         executionString.executeWithDefault()
         executionInt.executeWithDefault()
         executionDouble.executeWithDefault()
         executionFloat.executeWithDefault()
         executionBool.executeWithDefault()
+        executionArray.executeWithDefault()
+        executionDict.executeWithDefault()
         
         // then
         XCTAssertNotNil(executionString)
@@ -170,11 +191,15 @@ class ExecutionTest: XCTestCase {
         XCTAssertNotNil(executionDouble)
         XCTAssertNotNil(executionFloat)
         XCTAssertNotNil(executionBool)
+        XCTAssertNotNil(executionArray)
+        XCTAssertNotNil(executionDict)
         XCTAssertEqual(testValueString, defaultStringValue)
         XCTAssertEqual(testValueInt, defaultIntValue)
         XCTAssertEqual(testValueDouble, defaultDoubleValue)
         XCTAssertEqual(testValueFloat, defaultFloatValue)
         XCTAssertEqual(testValueBool, defaultBoolValue)
+        XCTAssertEqual(testValueArray as NSObject, defaultArrayValue as NSObject)
+        XCTAssertEqual(testValueDict as NSObject, defaultDictValue as NSObject)
     }
     
     func test_ThrowsMismatchTypes() {
@@ -188,7 +213,7 @@ class ExecutionTest: XCTestCase {
         
         // then
         XCTAssertThrowsError(try execution.execute(with: rawAllocations)) { error in
-            XCTAssertEqual(error as! EvolvKeyError, EvolvKeyError.mismatchTypes)
+            XCTAssertEqual(error as! EvolvExecution<[Int]>.Error, EvolvExecution.Error.mismatchTypes)
         }
     }
 
