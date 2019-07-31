@@ -140,7 +140,7 @@ class ViewController: UIViewController {
     }
 }
 
-private extension ViewController {
+extension ViewController {
 
     /// Simple function example that will apply the treatments from the allocation.
     ///
@@ -164,7 +164,7 @@ private extension ViewController {
         }
     }
 
-	override internal var preferredStatusBarStyle: UIStatusBarStyle {
+	override var preferredStatusBarStyle: UIStatusBarStyle {
 		return .lightContent
 	}
 
