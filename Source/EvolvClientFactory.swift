@@ -6,6 +6,8 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
+import Foundation
+
 public class EvolvClientFactory {
     
     /**
@@ -15,10 +17,11 @@ public class EvolvClientFactory {
      - Returns:  an instance of EvolvClient
      */
     public var client: EvolvClient
-    public let logger = Log.logger
+    private let logger = EvolvLogger.shared
     
     public init(config: EvolvConfig) {
-        logger.log(.debug, message: "Initializing Evolv Client.")
+        logger.debug("Initializing Evolv Client.")
+        
         let participant: EvolvParticipant = EvolvParticipant.builder().build()
         client = EvolvClientFactory.createClient(config: config, participant: participant)
     }
@@ -31,7 +34,8 @@ public class EvolvClientFactory {
      - Returns: an instance of EvolvClient
      */
     public init(config: EvolvConfig, participant: EvolvParticipant) {
-        logger.log(.debug, message: "Initializing Evolv Client.")
+        logger.debug("Initializing Evolv Client.")
+        
         client = EvolvClientFactory.createClient(config: config, participant: participant)
     }
     

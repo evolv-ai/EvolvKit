@@ -12,43 +12,6 @@ import SwiftyJSON
 
 class LruCacheTest: XCTestCase {
     
-    private var rawAllocations: EvolvRawAllocations {
-        let data: [[String: Any]] = [
-            [
-                EvolvRawAllocations.Key.userId.rawValue: "test_uid",
-                EvolvRawAllocations.Key.sessionId.rawValue: "test_sid",
-                EvolvRawAllocations.Key.experimentId.rawValue: "test_eid",
-                EvolvRawAllocations.Key.candidateId.rawValue: "test_cid",
-                "genome": [
-                    "search": [
-                        "weighting": [
-                            "distance": 2.5,
-                            "dealer_score": 2.5
-                        ]
-                    ],
-                    "pages": [
-                        "all_pages": [
-                            "header_footer": [
-                                "blue",
-                                "white"
-                            ]
-                        ],
-                        "testing_page": [
-                            "megatron": "none",
-                            "header": "white"
-                        ]
-                    ],
-                    "algorithms": [
-                        "feature_importance": false
-                    ]
-                ],
-                "excluded": false
-            ]
-        ]
-        
-        return JSON(data).arrayValue
-    }
-    
     func testGetEntryEmptyCache() {
         let testCacheSize = 10
         let testKey = "test_key"
@@ -63,7 +26,7 @@ class LruCacheTest: XCTestCase {
     func testGetEntry() {
         let testCacheSize = 10
         let testKey = "test_key"
-        let testEntry = self.rawAllocations
+        let testEntry = TestData.rawAllocations
         
         let cache = LRUCache(testCacheSize)
         cache.putEntry(testKey, testEntry)
@@ -81,7 +44,7 @@ class LruCacheTest: XCTestCase {
         let keyThree = "Key_three"
         let keyFour = "key_four"
         
-        let testEntry = self.rawAllocations
+        let testEntry = TestData.rawAllocations
         
         let cache = LRUCache(testCacheSize)
         
@@ -106,7 +69,7 @@ class LruCacheTest: XCTestCase {
     func testPutEntryTwice() {
         let testCacheSize = 10
         let testKey = "test_key"
-        let testEntry = self.rawAllocations
+        let testEntry = TestData.rawAllocations
         
         let cache = LRUCache(testCacheSize)
         cache.putEntry(testKey, testEntry)

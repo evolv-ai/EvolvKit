@@ -11,7 +11,7 @@ import PromiseKit
 
 class DefaultEvolvClient: EvolvClient {
     
-    private let logger = Log.logger
+    private let logger = EvolvLogger.shared
     
     private let eventEmitter: EvolvEventEmitter
     private let futureAllocations: Promise<EvolvRawAllocations>?
@@ -43,8 +43,7 @@ class DefaultEvolvClient: EvolvClient {
         do {
             try execution.execute(with: previousAllocations)
         } catch {
-            let message = "Error from \(key). Error message: \(error.localizedDescription)."
-            logger.log(.error, message: message)
+            logger.error("Error from \(key). Error message: \(error.localizedDescription).")
             execution.executeWithDefault()
         }
         
@@ -60,8 +59,7 @@ class DefaultEvolvClient: EvolvClient {
                 try execution.execute(with: cachedAllocations)
                 return
             } catch let error {
-                let message = "Unable to retieve value from \(key), \(error.localizedDescription)"
-                logger.log(.error, message: message)
+                logger.error("Unable to retieve value from \(key), \(error.localizedDescription)")
             }
         }
         

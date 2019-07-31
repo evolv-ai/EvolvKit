@@ -14,45 +14,6 @@ import PromiseKit
 class ClientFactoryTest: XCTestCase {
     
     private let environmentId: String = "test_12345"
-    private var rawAllocations: EvolvRawAllocations {
-        let data: [[String: Any]] = [
-            [
-                EvolvRawAllocations.Key.userId.rawValue: "test_uid",
-                EvolvRawAllocations.Key.sessionId.rawValue: "test_sid",
-                EvolvRawAllocations.Key.experimentId.rawValue: "test_eid",
-                EvolvRawAllocations.Key.candidateId.rawValue: "test_cid",
-                "genome": [
-                    "search": [
-                        "weighting": [
-                            "distance": 2.5,
-                            "dealer_score": 2.5
-                        ]
-                    ],
-                    "pages": [
-                        "all_pages": [
-                            "header_footer": [
-                                "blue",
-                                "white"
-                            ]
-                        ],
-                        "testing_page": [
-                            "megatron": "none",
-                            "header": "white"
-                        ]
-                    ],
-                    "algorithms": [
-                        "feature_importance": false
-                    ]
-                ],
-                "excluded": false
-            ]
-        ]
-        
-        return JSON(data).arrayValue
-    }
-    private var rawAllocationString: String {
-        return "[\(rawAllocations.compactMap({ $0.rawString() }).joined(separator: ","))]"
-    }
     private var mockHttpClient: EvolvHttpClient!
     private var mockAllocationStore: EvolvAllocationStore!
     private var mockExecutionQueue: EvolvExecutionQueue!
@@ -102,7 +63,7 @@ class ClientFactoryTest: XCTestCase {
                                                                                 mockAllocationStore: mockAllocationStore)
         var responsePromise = mockHttpClient.get(URL(string: anyString(length: 12))!)
         responsePromise = Promise { resolver in
-            resolver.fulfill(rawAllocationString)
+            resolver.fulfill(TestData.rawAllocationsString)
         }
         
         XCTAssertNotNil(responsePromise)
@@ -131,7 +92,7 @@ class ClientFactoryTest: XCTestCase {
                                                                             mockHttpClient: mockClient,
                                                                             mockAllocationStore: mockAllocationStore)
         
-        let previousAllocations = self.rawAllocations
+        let previousAllocations = TestData.rawAllocations
         let previousUid = previousAllocations[0][EvolvRawAllocations.Key.userId.rawValue].rawString()!
         
         mockAllocationStore.put(previousUid, previousAllocations)

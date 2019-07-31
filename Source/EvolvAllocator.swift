@@ -18,6 +18,8 @@ class EvolvAllocator {
         case failed
     }
     
+    private let logger = EvolvLogger.shared
+    
     private let config: EvolvConfig
     private let eventEmitter: EvolvEventEmitter
     private let executionQueue: EvolvExecutionQueue
@@ -28,8 +30,6 @@ class EvolvAllocator {
     private var confirmationSandbagged: Bool = false
     private var contaminationSandbagged: Bool = false
     private var allocationStatus: AllocationStatus
-    
-    private var logger = Log.logger
     
     init(config: EvolvConfig, participant: EvolvParticipant) {
         self.executionQueue = config.executionQueue
@@ -74,12 +74,12 @@ class EvolvAllocator {
         return url
     }
     
-    public func fetchAllocations() -> Promise<EvolvRawAllocations> {
+    func fetchAllocations() -> Promise<EvolvRawAllocations> {
         return Promise { resolve in
             let url = self.createAllocationsUrl()
             
             _ = self.httpClient.get(url).done { (stringJSON) in
-                var currentAllocations = JSON.init(parseJSON: stringJSON).arrayValue
+                var currentAllocations = JSON(parseJSON: stringJSON).arrayValue
                 let previousAllocations = self.store.get(self.participant.userId)
                 
                 if previousAllocations.isEmpty == false {
@@ -104,22 +104,22 @@ class EvolvAllocator {
                     try self.executionQueue.executeAllWithValues(from: currentAllocations)
                 } catch let err {
                     _ = self.resolveAllocationsFailure()
-                    let message = "There was an error executing with allocations. \(err.localizedDescription)"
-                    self.logger.log(.error, message: message)
+                    self.logger.error("There was an error executing with allocations. \(err.localizedDescription)")
                 }
             }
         }
     }
     
-    public func resolveAllocationsFailure() -> EvolvRawAllocations {
+    func resolveAllocationsFailure() -> EvolvRawAllocations {
         let previousAllocations = store.get(participant.userId)
         
         if previousAllocations.isEmpty == false {
-            logger.log(.debug, message: "Falling back to participant's previous allocation.")
+            logger.debug("Falling back to participant's previous allocation.")
             
             if confirmationSandbagged {
                 eventEmitter.confirm(rawAllocations: previousAllocations)
             }
+            
             if contaminationSandbagged {
                 eventEmitter.contaminate(rawAllocations: previousAllocations)
             }
@@ -129,12 +129,14 @@ class EvolvAllocator {
             do {
                 try executionQueue.executeAllWithValues(from: previousAllocations)
             } catch {
-                logger.log(.error, message: "Execution with values from Allocations fails, falling back on defaults.")
+                logger.error("Execution with values from Allocations fails, falling back on defaults.")
+                
                 executionQueue.executeAllWithValuesFromDefaults()
                 return previousAllocations
             }
         } else {
-            logger.log(.error, message: "Falling back to the supplied defaults.")
+            logger.error("Falling back to the supplied defaults.")
+            
             allocationStatus = .failed
             executionQueue.executeAllWithValuesFromDefaults()
             return previousAllocations
@@ -143,7 +145,7 @@ class EvolvAllocator {
         return previousAllocations
     }
     
-    public static func allocationsNotEmpty(_ allocations: EvolvRawAllocations?) -> Bool {
+    static func allocationsNotEmpty(_ allocations: EvolvRawAllocations?) -> Bool {
         guard let allocations = allocations else {
             return false
         }

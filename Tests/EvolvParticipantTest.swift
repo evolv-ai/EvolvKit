@@ -16,7 +16,7 @@ class EvolvParticipantTest: XCTestCase {
     func testSetCustomParticipantAttributes() {
         let userId = "Testy"
         let sessionId = "McTestTest"
-        let userAttributes = [EvolvRawAllocations.Key.country.rawValue: "us"]
+        let userAttributes = ["country": "us"]
         
         let participant = EvolvParticipant.builder()
             .set(userId: userId)
@@ -28,7 +28,7 @@ class EvolvParticipantTest: XCTestCase {
         XCTAssertEqual(sessionId, participant.sessionId)
         
         var expectedUserAttributes: [String: String] = [:]
-        expectedUserAttributes[EvolvRawAllocations.Key.country.rawValue] = String("us")
+        expectedUserAttributes["country"] = String("us")
         expectedUserAttributes[EvolvRawAllocations.Key.userId.rawValue] = String(userId)
         expectedUserAttributes[EvolvRawAllocations.Key.sessionId.rawValue] = String(sessionId)
         
