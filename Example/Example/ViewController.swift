@@ -43,48 +43,6 @@ class ViewController: UIViewController {
         self.store = CustomAllocationStore()
         httpClient = DefaultEvolvHttpClient()
 
-//		/// Simulates getting different variants in your allocation, based on an experiment.
-//		func optionRandomizer() -> String {
-//			let options: [String] = ["option_1", "option_2", "option_3", "option_4", "option_7"]
-//			return options.randomElement()!
-//		}
-//
-//        let myStoredAllocationDict: [[String: Any]] = [
-//            [
-//                "uid": "sandbox_user",
-//                "eid": "experiment_1",
-//                "cid": "candidate_3",
-//                "genome": [
-//                    "ui": [
-//                        "layout": "\(optionRandomizer())",
-//                        "buttons": [
-//                            "checkout": [
-//                                "text": "\(optionRandomizer())",
-//                                "color": "#f3b36d"
-//                            ],
-//                            "info": [
-//                                "text": "Begin Checkout",
-//                                "color": "#f3b36d"
-//                            ]
-//                        ],
-//                        "search": [
-//                            "weighting": 3.5
-//                        ]
-//                    ]
-//                ],
-//                "excluded": false
-//            ]
-//        ]
-//
-//        rawAllocations = JSON(myStoredAllocationDict).arrayValue
-//
-//        if rawAllocations.isEmpty {
-//            let message = "Error converting string json to SwiftyJSON"
-//            logger.log(.error, message: message)
-//        } else {
-//            store.put("sandbox_user", rawAllocations)
-//        }
-
         /// - Build config with custom timeout and custom allocation store
         // set client to use sandbox environment
         let config = EvolvConfig.builder(environmentId: "sandbox", httpClient: httpClient)
