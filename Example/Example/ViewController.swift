@@ -43,47 +43,47 @@ class ViewController: UIViewController {
         self.store = CustomAllocationStore()
         httpClient = DefaultEvolvHttpClient()
 
-		/// Simulates getting different variants in your allocation, based on an experiment.
-		func optionRandomizer() -> String {
-			let options: [String] = ["option_1", "option_2", "option_3", "option_4", "option_7"]
-			return options.randomElement()!
-		}
-
-        let myStoredAllocationDict: [[String: Any]] = [
-            [
-                "uid": "sandbox_user",
-                "eid": "experiment_1",
-                "cid": "candidate_3",
-                "genome": [
-                    "ui": [
-                        "layout": "\(optionRandomizer())",
-                        "buttons": [
-                            "checkout": [
-                                "text": "\(optionRandomizer())",
-                                "color": "#f3b36d"
-                            ],
-                            "info": [
-                                "text": "Begin Checkout",
-                                "color": "#f3b36d"
-                            ]
-                        ],
-                        "search": [
-                            "weighting": 3.5
-                        ]
-                    ]
-                ],
-                "excluded": false
-            ]
-        ]
-
-        rawAllocations = JSON(myStoredAllocationDict).arrayValue
-        
-        if rawAllocations.isEmpty {
-            let message = "Error converting string json to SwiftyJSON"
-            logger.log(.error, message: message)
-        } else {
-            store.put("sandbox_user", rawAllocations)
-        }
+//		/// Simulates getting different variants in your allocation, based on an experiment.
+//		func optionRandomizer() -> String {
+//			let options: [String] = ["option_1", "option_2", "option_3", "option_4", "option_7"]
+//			return options.randomElement()!
+//		}
+//
+//        let myStoredAllocationDict: [[String: Any]] = [
+//            [
+//                "uid": "sandbox_user",
+//                "eid": "experiment_1",
+//                "cid": "candidate_3",
+//                "genome": [
+//                    "ui": [
+//                        "layout": "\(optionRandomizer())",
+//                        "buttons": [
+//                            "checkout": [
+//                                "text": "\(optionRandomizer())",
+//                                "color": "#f3b36d"
+//                            ],
+//                            "info": [
+//                                "text": "Begin Checkout",
+//                                "color": "#f3b36d"
+//                            ]
+//                        ],
+//                        "search": [
+//                            "weighting": 3.5
+//                        ]
+//                    ]
+//                ],
+//                "excluded": false
+//            ]
+//        ]
+//
+//        rawAllocations = JSON(myStoredAllocationDict).arrayValue
+//
+//        if rawAllocations.isEmpty {
+//            let message = "Error converting string json to SwiftyJSON"
+//            logger.log(.error, message: message)
+//        } else {
+//            store.put("sandbox_user", rawAllocations)
+//        }
 
         /// - Build config with custom timeout and custom allocation store
         // set client to use sandbox environment
@@ -123,15 +123,9 @@ class ViewController: UIViewController {
     lazy var changeButtonText: (String) -> Void = { buttonTextOption in
         DispatchQueue.main.async { [weak self] in
             switch buttonTextOption {
-            case "option_1":
+            case "Checkout":
                 self?.checkoutButton.setTitle("Begin Secure Checkout", for: .normal)
 				self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 24)
-            case "option_2":
-                self?.checkoutButton.setTitle("CHECKOUT", for: .normal)
-				self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 12)
-            case "option_3":
-                self?.checkoutButton.setTitle("  I WANT IT!  ", for: .normal)
-				self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 40)
             default:
                 self?.checkoutButton.setTitle("보안 체크 아웃 시작", for: .normal)
 				self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 16)
@@ -159,7 +153,7 @@ extension ViewController {
             case "option_4":
                 self?.view.backgroundColor = UIColor(red: 255 / 255, green: 176 / 255, blue: 198 / 255, alpha: 1) // pink
             default:
-                self?.view.backgroundColor = UIColor(hexString: layoutOption) // light turquoise (control)
+                self?.view.backgroundColor = UIColor(hexString: layoutOption) // black (control)
             }
         }
     }
