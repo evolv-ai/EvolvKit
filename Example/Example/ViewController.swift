@@ -72,7 +72,7 @@ class ViewController: UIViewController {
                         ]
                     ]
                 ],
-                "excluded": true
+                "excluded": false
             ]
         ]
 
