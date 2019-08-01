@@ -80,14 +80,8 @@ class ViewController: UIViewController {
     /// - Use DispatchQueue to ensure this operation runs on the UI thread
     lazy var changeButtonText: (String) -> Void = { buttonTextOption in
         DispatchQueue.main.async { [weak self] in
-            switch buttonTextOption {
-            case "Checkout":
-                self?.checkoutButton.setTitle("Begin Secure Checkout", for: .normal)
-				self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 24)
-            default:
-                self?.checkoutButton.setTitle("보안 체크 아웃 시작", for: .normal)
-				self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 16)
-            }
+			self?.checkoutButton.setTitle(buttonTextOption, for: .normal)
+			self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 24)
         }
     }
 }
