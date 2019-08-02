@@ -68,7 +68,7 @@ class ViewController: UIViewController {
 
 		// MARK: Evolv subscribe
         client.subscribe(forKey: "ui.layout", defaultValue: "#000000", closure: setBackgroundColor)
-        client.subscribe(forKey: "ui.buttons.checkout.text", defaultValue: "보안 체크 아웃 시작", closure: changeButtonText)
+        client.subscribe(forKey: "ui.buttons.checkout.text", defaultValue: "BUY STUFF", closure: changeButtonText)
         client.confirm()
     }
 
