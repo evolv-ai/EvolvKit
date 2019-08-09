@@ -10,7 +10,8 @@ import SwiftyJSON
 
 class EvolvExecutionQueue {
     
-    private let logger = Log.logger
+    private let logger = EvolvLogger.shared
+    
     private var queue: [Any] = []
     public var count: Int = 0
     
@@ -18,12 +19,12 @@ class EvolvExecutionQueue {
     
     static let shared = EvolvExecutionQueue()
     
-    public func enqueue<T>(_ execution: EvolvExecution<T>) {
+    func enqueue<T>(_ execution: EvolvExecution<T>) {
         queue.insert(execution, at: 0)
         count += 1
     }
     
-    public func executeAllWithValues(from rawAllocations: EvolvRawAllocations) throws {
+    func executeAllWithValues(from rawAllocations: EvolvRawAllocations) throws {
         while !queue.isEmpty {
             var execution = queue.popLast() as Any
             
@@ -47,8 +48,7 @@ class EvolvExecutionQueue {
                     continue
                 }
             } catch {
-                let message = "There was an error retrieving the value of from the allocation."
-                logger.log(.debug, message: message)
+                logger.debug("There was an error retrieving the value of from the allocation.")
                 
                 if let executionString = execution as? EvolvExecution<String> {
                     executionString.executeWithDefault()
@@ -86,8 +86,7 @@ class EvolvExecutionQueue {
                     continue
                 }
                 
-                let message = "There was an error retrieving the value of from the allocation."
-                logger.log(.debug, message: message)
+                logger.debug("There was an error retrieving the value of from the allocation.")
             }
         }
     }

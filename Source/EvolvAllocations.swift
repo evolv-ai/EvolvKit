@@ -10,16 +10,16 @@ import SwiftyJSON
 
 class EvolvAllocations {
     
-    let rawAllocations: EvolvRawAllocations
-    let audience: EvolvAudience = EvolvAudience()
-    private let logger = Log.logger
+    private let logger = EvolvLogger.shared
+    
+    private let rawAllocations: EvolvRawAllocations
     
     init(_ rawAllocations: EvolvRawAllocations) {
         self.rawAllocations = rawAllocations
     }
     
     // TODO: add audience filter logic
-    public func value(forKey key: String, participant: EvolvParticipant) throws -> JSON? {
+    func value(forKey key: String, participant: EvolvParticipant) throws -> JSON? {
         let keyParts = key.components(separatedBy: ".")
         
         if keyParts.isEmpty {
@@ -53,16 +53,16 @@ class EvolvAllocations {
             element = object
             
             if element.error != nil {
+                logger.error("Element fails")
                 throw EvolvKeyError.elementFails
-                logger.log(.error, message: "Element fails")
             }
         }
         
         return element
     }
     
-    static public func reconcileAllocations(previousAllocations: EvolvRawAllocations,
-                                            currentAllocations: EvolvRawAllocations) -> EvolvRawAllocations {
+    static func reconcileAllocations(previousAllocations: EvolvRawAllocations,
+                                     currentAllocations: EvolvRawAllocations) -> EvolvRawAllocations {
         var allocations: EvolvRawAllocations = []
         
         for currentAllocation in currentAllocations {
@@ -86,7 +86,7 @@ class EvolvAllocations {
         return allocations
     }
     
-    public func getActiveExperiments() -> Set<String> {
+    func getActiveExperiments() -> Set<String> {
         var activeExperiments = Set<String>()
         
         for allocation in rawAllocations {
