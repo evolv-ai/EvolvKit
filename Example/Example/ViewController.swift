@@ -18,7 +18,6 @@ class ViewController: UIViewController {
     var rawAllocations: [JSON] = []
     var client: EvolvClient
     var httpClient: EvolvHttpClient
-    let logger = Log.logger
     let store: EvolvAllocationStore
     
     @IBAction func didPressCheckOut(_ sender: Any) {
@@ -48,7 +47,10 @@ class ViewController: UIViewController {
         let config = EvolvConfig.builder(environmentId: "sandbox", httpClient: httpClient)
             .set(allocationStore: store)
             .build()
-
+        
+        // set error or debug logLevel for debugging
+        config.set(logLevel: .error)
+        
         /// - Initialize the client with a stored user
         /// fetches allocations from Evolv, and stores them in a custom store
         client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()

@@ -12,7 +12,7 @@ import SwiftyJSON
 
 public class DefaultEvolvHttpClient: EvolvHttpClient {
     
-    private let logger = Log.logger
+    private let logger = EvolvLogger.shared
     
     public init() {}
     
@@ -24,11 +24,11 @@ public class DefaultEvolvHttpClient: EvolvHttpClient {
                     switch response.result {
                     case .success:
                         if let responseString = response.result.value {
-                            self.logger.log(.debug, message: String(describing: responseString))
+                            self.logger.debug(responseString)
                             resolver.fulfill(responseString)
                         }
                     case .failure(let error):
-                        self.logger.log(.error, message: String(describing: error))
+                        self.logger.error(error.localizedDescription)
                         resolver.reject(error)
                     }
             }
@@ -47,14 +47,13 @@ public class DefaultEvolvHttpClient: EvolvHttpClient {
             parameters: nil,
             encoding: JSONEncoding.default ,
             headers: headers).responseData { dataResponse in
-                self.logger.log(.debug, message: String(describing: dataResponse.request))
-                self.logger.log(.debug, message: String(describing: dataResponse.response))
+                self.logger.debug(dataResponse.request)
+                self.logger.debug(dataResponse.response)
                 
                 if dataResponse.response?.statusCode == 202 {
-                    self.logger.log(.debug, message: "Event has been emitted to Evolv")
+                    self.logger.debug("Event has been emitted to Evolv")
                 } else {
-                    self.logger.log(.error, message: "Error sending data to Evolv" +
-                        " \(String(describing: dataResponse.response?.statusCode))")
+                    self.logger.error("Error sending data to Evolv \(String(describing: dataResponse.response?.statusCode))")
                 }
         }
     }
