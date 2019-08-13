@@ -66,6 +66,7 @@ class ViewController: UIViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setStatusBar()
 
 		// MARK: Evolv subscribe
@@ -86,6 +87,7 @@ class ViewController: UIViewController {
 			self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 24)
         }
     }
+    
 }
 
 extension ViewController {

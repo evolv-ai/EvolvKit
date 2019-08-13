@@ -10,6 +10,26 @@ import SwiftyJSON
 
 class EvolvAllocations {
     
+    enum AllocationsError: LocalizedError, Equatable {
+        case keyEmpty
+        case genomeEmpty
+        case valueNotFound(key: String)
+        case incorrectKeyPart(key: String, keyPart: String)
+        
+        var errorDescription: String? {
+            switch self {
+            case .keyEmpty:
+                return "Key provided was empty."
+            case .genomeEmpty:
+                return "Allocation genome was empty."
+            case .valueNotFound(let key):
+                return "No value was found in any allocations for key: \(key)"
+            case .incorrectKeyPart(let key, let keyPart):
+                return "Could not find element for keyPart: \(keyPart) in \(key)"
+            }
+        }
+    }
+    
     private let logger = EvolvLogger.shared
     
     private let rawAllocations: EvolvRawAllocations
@@ -19,43 +39,48 @@ class EvolvAllocations {
     }
     
     // TODO: add audience filter logic
-    func value(forKey key: String, participant: EvolvParticipant) throws -> JSON? {
-        let keyParts = key.components(separatedBy: ".")
-        
+    func value(forKey key: String, participant: EvolvParticipant) throws -> JSON {
+        let keyParts = key.components(separatedBy: ".").filter({ $0.isEmpty == false })
+
         if keyParts.isEmpty {
-            throw EvolvKeyError(rawValue: "Key provided was empty.")!
+            throw AllocationsError.keyEmpty
         }
         
         for allocation in rawAllocations {
             let genome = allocation["genome"]
-            let element = try getElement(fromGenome: genome, keyParts: keyParts)
             
-            if element.error == nil {
-                return element
-            } else {
-                throw EvolvKeyError.errorMessage
+            do {
+                let element = try getElement(fromGenome: genome, keyParts: keyParts)
+                
+                if element.error == nil {
+                    return element
+                }
+            } catch let error {
+                throw error
             }
         }
         
-        let errorJson = JSON([key: "Unable to find key in experiment"])
-        return errorJson
+        throw AllocationsError.valueNotFound(key: key)
     }
     
     private func getElement(fromGenome genome: JSON, keyParts: [String]) throws -> JSON {
         var element: JSON = genome
         
         if element.isEmpty {
-            throw EvolvKeyError.genomeEmpty
+            throw AllocationsError.genomeEmpty
         }
         
         for part in keyParts {
             let object = element[part]
-            element = object
             
-            if element.error != nil {
-                logger.error("Element fails")
-                throw EvolvKeyError.elementFails
+            if object.error != nil {
+                let key = keyParts.joined(separator: ".")
+                let error = AllocationsError.incorrectKeyPart(key: key, keyPart: part)
+                logger.error(error)
+                throw error
             }
+            
+            element = object
         }
         
         return element

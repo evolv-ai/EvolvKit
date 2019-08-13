@@ -183,5 +183,16 @@ enum TestData {
         
         return JSON(data).arrayValue
     }
-    
+    static var rawAllocationsWithoutGenome: EvolvRawAllocations {
+        let data: [[String: Any]] = [
+            [
+                EvolvRawAllocations.Key.userId.rawValue: "test_uid",
+                EvolvRawAllocations.Key.sessionId.rawValue: "test_sid",
+                EvolvRawAllocations.Key.experimentId.rawValue: "test_eid",
+                EvolvRawAllocations.Key.candidateId.rawValue: "test_cid"
+            ]
+        ]
+        
+        return JSON(data).arrayValue
+    }
 }

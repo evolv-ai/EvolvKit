@@ -40,30 +40,31 @@ class DefaultEvolvClient: EvolvClient {
         let execution = EvolvExecution(key: key, defaultValue: defaultValue, participant: participant, closure: closure)
         let previousAllocations = store.get(participant.userId)
         
-        do {
-            try execution.execute(with: previousAllocations)
-        } catch {
-            logger.error("Error from \(key). Error message: \(error.localizedDescription).")
-            execution.executeWithDefault()
+        if previousAllocations.isEmpty == false {
+            do {
+                try execution.execute(with: previousAllocations)
+            } catch {
+                logger.error("Error from \(key). Error message: \(error.localizedDescription).")
+                execution.executeWithDefault()
+            }
         }
         
         let allocationStatus = allocator.getAllocationStatus()
         
-        if allocationStatus == .fetching {
+        switch allocationStatus {
+        case .fetching:
             executionQueue.enqueue(execution)
-            return
-        } else if allocationStatus == .retrieved {
+        case .retrieved:
             let cachedAllocations = store.get(participant.userId)
             
             do {
                 try execution.execute(with: cachedAllocations)
-                return
             } catch let error {
                 logger.error("Unable to retieve value from \(key), \(error.localizedDescription)")
             }
+        default:
+            execution.executeWithDefault()
         }
-        
-        execution.executeWithDefault()
     }
     
     public func emitEvent(forKey key: String) {
