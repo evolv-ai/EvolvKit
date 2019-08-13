@@ -69,4 +69,77 @@ class AllocationsTest: XCTestCase {
         XCTAssertEqual(expected, activeExperiments)
     }
     
+    func test_KeyWithLastDot() {
+        // given
+        let allocations = EvolvAllocations(TestData.rawAllocations)
+        let participant: EvolvParticipant = EvolvParticipant.builder().build()
+        let key = "search.weighting.distance."
+        var result: JSON = .init(0)
+        
+        // when
+        do {
+            result = try allocations.value(forKey: key, participant: participant)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+        
+        // then
+        XCTAssertEqual(result, 2.5)
+    }
+    
+    func test_KeyWithEmptyKeyPart() {
+        // given
+        let allocations = EvolvAllocations(TestData.rawAllocations)
+        let participant: EvolvParticipant = EvolvParticipant.builder().build()
+        let key = "search..weighting.distance"
+        var result: JSON = .init(0)
+        
+        // when
+        do {
+            result = try allocations.value(forKey: key, participant: participant)
+        } catch let error {
+            XCTFail(error.localizedDescription)
+        }
+        
+        // then
+        XCTAssertEqual(result, 2.5)
+    }
+    
+    func test_ThrowValueNotFound() {
+        // given
+        let allocations = EvolvAllocations([])
+        let participant: EvolvParticipant = EvolvParticipant.builder().build()
+        let key = "search.weighting.distance"
+        
+        // when & then
+        XCTAssertThrowsError(try allocations.value(forKey: key, participant: participant)) { error in
+            XCTAssertEqual(error as! EvolvAllocations.AllocationsError, EvolvAllocations.AllocationsError.valueNotFound(key: key))
+        }
+    }
+    
+    func test_ThrowGenomeEmpty() {
+        // given
+        let allocations = EvolvAllocations(TestData.rawAllocationsWithoutGenome)
+        let participant: EvolvParticipant = EvolvParticipant.builder().build()
+        let key = "search.weighting.distance"
+        
+        // when & then
+        XCTAssertThrowsError(try allocations.value(forKey: key, participant: participant)) { error in
+            XCTAssertEqual(error as! EvolvAllocations.AllocationsError, EvolvAllocations.AllocationsError.genomeEmpty)
+        }
+    }
+    
+    func test_ThrowIncorrectKeyPart() {
+        // given
+        let allocations = EvolvAllocations(TestData.rawAllocations)
+        let participant: EvolvParticipant = EvolvParticipant.builder().build()
+        let key = "search.weighting2.distance"
+        
+        // when & then
+        XCTAssertThrowsError(try allocations.value(forKey: key, participant: participant)) { error in
+            XCTAssertEqual(error as! EvolvAllocations.AllocationsError,
+                           EvolvAllocations.AllocationsError.incorrectKeyPart(key: key, keyPart: "weighting2"))
+        }
+    }
+    
 }

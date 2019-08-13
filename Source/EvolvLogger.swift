@@ -47,6 +47,13 @@ class EvolvLogger {
         log(.error, item: item)
     }
     
+    private func getItemDescription(_ item: Any) -> String {
+        var printedItem = ""
+        print(item, separator: " ", to: &printedItem)
+        let lastNewLineRange = printedItem.range(of: "\n", options: .backwards)
+        return printedItem.replacingOccurrences(of: "\n", with: "", options: .backwards, range: lastNewLineRange)
+    }
+    
     private func log(_ logLevel: EvolvLogLevel, item: Any?) {
         guard logLevel.rawValue <= self.logLevel.rawValue else {
             logMessage = nil
@@ -57,16 +64,14 @@ class EvolvLogger {
             logMessage = nil
             return
         }
-
-        logMessage = String(format: "%@%@%@", basePrefix, logLevel.prefix(), "\(item)")
         
-        DispatchQueue.global(qos: .utility).async { [weak self] in
-            guard let logMessage = self?.logMessage else {
-                return
-            }
-            
-            NSLog(logMessage)
+        logMessage = String(format: "%@%@%@", basePrefix, logLevel.prefix(), getItemDescription(item))
+        
+        guard let logMessage = logMessage else {
+            return
         }
+        
+        NSLog(logMessage)
     }
     
 }

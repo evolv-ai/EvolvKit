@@ -137,6 +137,7 @@ class LoggerTest: XCTestCase {
     
     func test_LogEnum() {
         // given
+        // swiftlint:disable nesting
         enum Temp {
             case aaa
             case bbb
@@ -153,6 +154,7 @@ class LoggerTest: XCTestCase {
     
     func test_LogStruct() {
         // given
+        // swiftlint:disable nesting
         struct Foo {
             let description: String
             let value: Int

@@ -20,15 +20,15 @@ public class DefaultEvolvHttpClient: EvolvHttpClient {
         return Promise<String> { resolver -> Void in
             Alamofire.request(url)
                 .validate()
-                .responseString { response in
+                .responseString { [weak self] response in
                     switch response.result {
                     case .success:
                         if let responseString = response.result.value {
-                            self.logger.debug(responseString)
+                            self?.logger.debug(responseString)
                             resolver.fulfill(responseString)
                         }
                     case .failure(let error):
-                        self.logger.error(error.localizedDescription)
+                        self?.logger.error(error.localizedDescription)
                         resolver.reject(error)
                     }
             }
@@ -46,14 +46,20 @@ public class DefaultEvolvHttpClient: EvolvHttpClient {
             method: .get,
             parameters: nil,
             encoding: JSONEncoding.default ,
-            headers: headers).responseData { dataResponse in
-                self.logger.debug(dataResponse.request)
-                self.logger.debug(dataResponse.response)
+            headers: headers)
+            .validate(statusCode: 202...202)
+            .responseString { [weak self] dataResponse in
+                self?.logger.debug(dataResponse.request)
+                self?.logger.debug(dataResponse.response)
                 
-                if dataResponse.response?.statusCode == 202 {
-                    self.logger.debug("Event has been emitted to Evolv")
-                } else {
-                    self.logger.error("Error sending data to Evolv \(String(describing: dataResponse.response?.statusCode))")
+                switch dataResponse.result {
+                case .success:
+                    self?.logger.debug("Event has been emitted to Evolv")
+                case .failure(let error):
+                    let description = "\(dataResponse.result.debugDescription)\n\(error)"
+                    self?.logger.error(String(format: "Error sending data to Evolv (url: %@, description: %@)",
+                                              dataResponse.request?.url?.absoluteString ?? "",
+                                              description))
                 }
         }
     }

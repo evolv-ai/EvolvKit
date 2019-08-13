@@ -8,7 +8,23 @@
 
 import SwiftyJSON
 
-class EvolvExecution<T> {
+protocol EvolvExecutable: AnyObject {
+    func execute(with rawAllocations: EvolvRawAllocations) throws
+    func executeWithDefault()
+}
+
+class EvolvExecution<T>: EvolvExecutable {
+    
+    enum ExecutionError: LocalizedError {
+        case mismatchTypes
+        
+        var errorDescription: String? {
+            switch self {
+            case .mismatchTypes:
+                return "Mismatched Types"
+            }
+        }
+    }
     
     let key: String
     private let participant: EvolvParticipant
@@ -28,14 +44,10 @@ class EvolvExecution<T> {
     
     func execute(with rawAllocations: EvolvRawAllocations) throws {
         let allocations = EvolvAllocations(rawAllocations)
-        let optionalValue = try allocations.value(forKey: key, participant: participant)
-        
-        guard let value = optionalValue else {
-            throw EvolvKeyError.errorMessage
-        }
+        let value = try allocations.value(forKey: key, participant: participant)
         
         guard let genericValue = value.rawValue as? T else {
-            throw EvolvKeyError.mismatchTypes
+            throw ExecutionError.mismatchTypes
         }
         
         let activeExperiements = allocations.getActiveExperiments()

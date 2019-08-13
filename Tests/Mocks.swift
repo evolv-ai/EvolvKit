@@ -251,15 +251,24 @@ class ExecutionQueueMock: EvolvExecutionQueue {
     
     var executeValuesFromAllocationsWasCalled = false
     var executeWithDefaultsWasCalled = false
+    private var queue: [Any] = []
+    
+    override var count: Int {
+        return queue.count
+    }
+    
+    override func enqueue<T>(_ execution: EvolvExecution<T>) {
+        queue.insert(execution, at: 0)
+    }
     
     override func executeAllWithValues(from allocations: EvolvRawAllocations) {
-        self.count -= 1
         executeValuesFromAllocationsWasCalled = true
+        queue.removeAll()
     }
     
     override func executeAllWithValuesFromDefaults() {
-        self.count -= 1
         executeWithDefaultsWasCalled = true
+        queue.removeAll()
     }
     
 }

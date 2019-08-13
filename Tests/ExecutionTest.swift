@@ -189,7 +189,7 @@ class ExecutionTest: XCTestCase {
         
         // then
         XCTAssertThrowsError(try execution.execute(with: rawAllocations)) { error in
-            XCTAssertEqual(error as! EvolvKeyError, EvolvKeyError.mismatchTypes)
+            XCTAssertEqual(error as! EvolvExecution<[Int]>.ExecutionError, EvolvExecution.ExecutionError.mismatchTypes)
         }
     }
 
