@@ -1,5 +1,4 @@
 import XCTest
-import SwiftyJSON
 import PromiseKit
 @testable import EvolvKit
 
@@ -29,8 +28,8 @@ class EvolvParticipantTest: XCTestCase {
         
         var expectedUserAttributes: [String: String] = [:]
         expectedUserAttributes["country"] = String("us")
-        expectedUserAttributes[EvolvRawAllocations.Key.userId.rawValue] = String(userId)
-        expectedUserAttributes[EvolvRawAllocations.Key.sessionId.rawValue] = String(sessionId)
+        expectedUserAttributes[EvolvRawAllocation.CodingKey.userId.stringValue] = String(userId)
+        expectedUserAttributes[EvolvRawAllocation.CodingKey.sessionId.stringValue] = String(sessionId)
         
         XCTAssertEqual(expectedUserAttributes, participant.userAttributes)
     }
@@ -51,12 +50,12 @@ class EvolvParticipantTest: XCTestCase {
             .set(sessionId: "test_session")
             .build()
         let userAttributes = participant.userAttributes
-        let expectedUserAttributes = [EvolvRawAllocations.Key.userId.rawValue: "test_user",
-                                      EvolvRawAllocations.Key.sessionId.rawValue: "test_session"]
-        XCTAssertEqual(userAttributes[EvolvRawAllocations.Key.userId.rawValue],
-                       expectedUserAttributes[EvolvRawAllocations.Key.userId.rawValue])
-        XCTAssertEqual(userAttributes[EvolvRawAllocations.Key.sessionId.rawValue],
-                       expectedUserAttributes[EvolvRawAllocations.Key.sessionId.rawValue])
+        let expectedUserAttributes = [EvolvRawAllocation.CodingKey.userId.stringValue: "test_user",
+                                      EvolvRawAllocation.CodingKey.sessionId.stringValue: "test_session"]
+        XCTAssertEqual(userAttributes[EvolvRawAllocation.CodingKey.userId.stringValue],
+                       expectedUserAttributes[EvolvRawAllocation.CodingKey.userId.stringValue])
+        XCTAssertEqual(userAttributes[EvolvRawAllocation.CodingKey.sessionId.stringValue],
+                       expectedUserAttributes[EvolvRawAllocation.CodingKey.sessionId.stringValue])
     }
     
     func testEvolvParticipant() {

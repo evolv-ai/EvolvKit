@@ -1,21 +1,31 @@
 //
 //  EvolvExecution.swift
-//  EvolvKit_Example
 //
-//  Created by phyllis.wong on 7/3/19.
-//  Copyright © 2019 CocoaPods. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
-import SwiftyJSON
+import Foundation
 
 protocol EvolvExecutable: AnyObject {
-    func execute(with rawAllocations: EvolvRawAllocations) throws
+    func execute(with rawAllocations: [EvolvRawAllocation]) throws
     func executeWithDefault()
 }
 
 class EvolvExecution<T>: EvolvExecutable {
     
-    enum ExecutionError: LocalizedError {
+    enum Error: LocalizedError {
         case mismatchTypes
         
         var errorDescription: String? {
@@ -42,12 +52,12 @@ class EvolvExecution<T>: EvolvExecutable {
         self.closure = closure
     }
     
-    func execute(with rawAllocations: EvolvRawAllocations) throws {
+    func execute(with rawAllocations: [EvolvRawAllocation]) throws {
         let allocations = EvolvAllocations(rawAllocations)
-        let value = try allocations.value(forKey: key, participant: participant)
+        let node = try allocations.value(forKey: key)
         
-        guard let genericValue = value.rawValue as? T else {
-            throw ExecutionError.mismatchTypes
+        guard let genericValue = node.value as? T else {
+            throw Error.mismatchTypes
         }
         
         let activeExperiements = allocations.getActiveExperiments()

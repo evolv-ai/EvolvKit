@@ -1,13 +1,22 @@
 //
 //  ViewController.swift
-//  EvolvKit
 //
-//  Created by PhyllisWong on 07/03/2019.
-//  Copyright (c) 2019 PhyllisWong. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import UIKit
-import SwiftyJSON
 import EvolvKit
 
 class ViewController: UIViewController {
@@ -15,9 +24,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var checkoutButton: UIButton!
     
-    var rawAllocations: [JSON] = []
-    var client: EvolvClient
-    var httpClient: EvolvHttpClient
+    let client: EvolvClient
+    let httpClient: EvolvHttpClient
     let store: EvolvAllocationStore
     
     @IBAction func didPressCheckOut(_ sender: Any) {
@@ -32,14 +40,14 @@ class ViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         /*
          When you receive the fetched json from the participants API, it will be as type String.
-         If you use the EvolvHttpClient, the json will be parsed with SwiftyJSON
-         (required data type for AllocationsStoreProtocol).
+         If you use the DefaultEvolvHttpClient, the string will be parsed to EvolvRawAllocation array
+         (required data type for EvolvAllocationStore).
          
          This example shows how the data can be structured in your view controllers,
-         your implementation can work directly with the raw string and serialize into SwiftyJSON.
+         your implementation can work directly with the raw string and serialize into EvolvRawAllocation.
          */
-        
-        self.store = CustomAllocationStore()
+
+        store = CustomAllocationStore()
         httpClient = DefaultEvolvHttpClient()
 
         /// - Build config with custom timeout and custom allocation store
@@ -53,13 +61,12 @@ class ViewController: UIViewController {
         
         /// - Initialize the client with a stored user
         /// fetches allocations from Evolv, and stores them in a custom store
-        client = EvolvClientFactory(config: config, participant: EvolvParticipant.builder()
-            .set(userId: "sandbox_user")
-            .build()).client
+        client = EvolvClientFactory.createClient(config: config,
+                                                 participant: EvolvParticipant.builder().set(userId: "sandbox_user").build())
         
         /// - Initialize the client with a new user
         /// - Uncomment this line if you prefer this initialization.
-        // client = EvolvClientFactory(config: config) as! EvolvClientProtocol
+        // client = EvolvClientFactory.createClient(config: config)
 
         super.init(coder: aDecoder)
     }
@@ -74,7 +81,6 @@ class ViewController: UIViewController {
         client.subscribe(forKey: "ui.buttons.checkout.text", defaultValue: "보안 체크 아웃 시작", closure: changeButtonText)
         client.confirm()
     }
-
 
     /// Trailing closure example that will apply the treatments from the allocation.
     ///

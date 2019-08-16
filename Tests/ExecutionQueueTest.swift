@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import SwiftyJSON
 @testable import EvolvKit
 
 class ExecutionQueueTest: XCTestCase {
