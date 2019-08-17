@@ -51,7 +51,7 @@ let participant = EvolvParticipant.builder().build()
 
 or 
 
-let participant = EvolvParticipant.builder().setUserId(<custom_id>).build()
+let participant = EvolvParticipant.builder().(userId: <custom_id>).build()
 ```
 *Note: If you do not set the participant's userId, the builder will create a unique id for you.*
 
@@ -60,12 +60,12 @@ let participant = EvolvParticipant.builder().setUserId(<custom_id>).build()
 
 1. Build an EvolvConfig instance.
 ```swift
-let config: EvolvConfig = EvolvConfig.builder(<environment_id>, <http_client>).build()
+let config: EvolvConfig = EvolvConfig.builder(environmentId: <environment_id>, httpClient: <http_client>).build()
 ```
 
 2. Initialize the EvolvClient.
 ```swift
-let client: EvolvClient = EvolvClientFactory(config).client
+let client: EvolvClient = EvolvClientFactory.createClient(config: config)
 ```
 
 ### Confirm the Allocation
@@ -85,7 +85,7 @@ subscribe to a value and apply any actions as a result of it asynchronously.
 
 1. Subscribe to a value from Evolv.
 ```swift
-client.subscribe(<key_for_value>, <default_value>, <closure>)
+client.subscribe(forKey: <key_for_value>, defaultValue: <default_value>, closure: <closure>)
 ```
 
 *Note: The return value's type is decided by the provided default value's type. If there is an issue retrieving the
@@ -102,14 +102,14 @@ thats important to record is a "conversion" event. If you implemented the SDK in
 
 1. Emit a custom event.
 ```swift
-client.emitEvent(<event_type>)
+client.emitEvent(forKey: <event_type>)
 ```
 
 AND / OR
 
 2. Emit a custom event with an associated score.
 ```swift
-client.emitEvent(<event_type>, <score>)
+client.emitEvent(forKey: <event_type>, score: <score>)
 ```
 
 ### Contaminate the Allocation (optional)
@@ -128,10 +128,12 @@ implementing the EvolvAllocationStore interface. You can supply the custom alloc
 
 1. Supply the allocation store to the client.
 ```swift
-let config = EvolvConfig.Builder(<environment_id>)
-  .setEvolvAllocationStore(<custom_store>).build()
+let config = EvolvConfig.builder(environmentId: <environment_id>, httpClient: <http_client>)
+    .set(allocationStore: <custom_store>)
+    .build()
 
-let client = EvolvClientFactory(<config>, EvolvParticipant.builder().setUserId("sandbox_user").build())
+let client = EvolvClientFactory.createClient(config: config,
+                                             participant: EvolvParticipant.builder().set(userId: "sandbox_user").build())
 ```
 
 

@@ -8,7 +8,6 @@
 
 import XCTest
 import Alamofire
-import SwiftyJSON
 import PromiseKit
 @testable import EvolvKit
 
@@ -24,11 +23,11 @@ class AllocationStoreMockWithAllocations: EvolvAllocationStore {
         cache.putEntry("test_user", allocationsForMockStore)
     }
     
-    public func get(_ uid: String) -> EvolvRawAllocations {
+    public func get(_ uid: String) -> [EvolvRawAllocation] {
         return cache.getEntry(uid)
     }
     
-    public func put(_ uid: String, _ allocations: EvolvRawAllocations) {
+    public func put(_ uid: String, _ allocations: [EvolvRawAllocation]) {
         cache.putEntry(uid, allocations)
     }
     
@@ -46,24 +45,24 @@ class AllocationStoreMock: EvolvAllocationStore {
     var expectGetExpectation: XCTestExpectation?
     var expectPutExpectation: XCTestExpectation?
     
-    private var mockedGet: (String) -> EvolvRawAllocations = { _ in
+    private var mockedGet: (String) -> [EvolvRawAllocation] = { _ in
         return TestData.rawAllocations
     }
     
-    private var mockedPut: (String, EvolvRawAllocations) -> Void = { _, _  in
+    private var mockedPut: (String, [EvolvRawAllocation]) -> Void = { _, _  in
         let rawAllocation = TestData.rawAllocations
         let allocations = TestData.rawAllocations
         DefaultEvolvAllocationStore(size: 10).put("test_user", allocations)
     }
     
     @discardableResult
-    func expectGet(_ mocked: @escaping (_ uid: String) -> EvolvRawAllocations) -> XCTestExpectation {
+    func expectGet(_ mocked: @escaping (_ uid: String) -> [EvolvRawAllocation]) -> XCTestExpectation {
         self.expectGetExpectation = self.testCase.expectation(description: "expect get")
         self.mockedGet = mocked
         return expectGetExpectation!
     }
     
-    func expectPut(_ mocked: @escaping (_ uid: String, _ allocations: EvolvRawAllocations) -> Void) -> XCTestExpectation {
+    func expectPut(_ mocked: @escaping (_ uid: String, _ allocations: [EvolvRawAllocation]) -> Void) -> XCTestExpectation {
         self.expectPutExpectation = self.testCase.expectation(description: "expect put")
         self.mockedPut = mocked
         return expectPutExpectation!
@@ -71,12 +70,12 @@ class AllocationStoreMock: EvolvAllocationStore {
     
     /// conform to protocol
     @discardableResult
-    func get(_ uid: String) -> EvolvRawAllocations {
+    func get(_ uid: String) -> [EvolvRawAllocation] {
         self.expectGetExpectation?.fulfill()
         return mockedGet(uid)
     }
     
-    func put(_ uid: String, _ allocations: EvolvRawAllocations) {
+    func put(_ uid: String, _ allocations: [EvolvRawAllocation]) {
         self.expectGetExpectation?.fulfill()
         return mockedPut(uid, allocations)
     }
@@ -151,7 +150,7 @@ class ClientMock: DefaultEvolvClient {
         allocator.sandbagConfirmation()
     }
     
-    public func confirm(_ eventEmitter: EventEmitterMock, _ allocations: EvolvRawAllocations) {
+    public func confirm(_ eventEmitter: EventEmitterMock, _ allocations: [EvolvRawAllocation]) {
         eventEmitter.confirm(rawAllocations: allocations)
     }
     
@@ -159,7 +158,7 @@ class ClientMock: DefaultEvolvClient {
         allocator.sandbagContamination()
     }
     
-    public func contaminate(_ eventEmitter: EventEmitterMock, _ allocations: EvolvRawAllocations) {
+    public func contaminate(_ eventEmitter: EventEmitterMock, _ allocations: [EvolvRawAllocation]) {
         eventEmitter.confirm(rawAllocations: allocations)
     }
     
@@ -200,9 +199,9 @@ class EventEmitterMock: EvolvEventEmitter {
     var confirmWithAllocationsWasCalled = false
     var contaminateWithAllocationsWasCalled = false
     
-    override func sendAllocationEvents(forKey key: String, rawAllocations allocations: EvolvRawAllocations) {
-        let eid = allocations[0][EvolvRawAllocations.Key.experimentId.rawValue].rawString()!
-        let cid = allocations[0][EvolvRawAllocations.Key.candidateId.rawValue].rawString()!
+    override func sendAllocationEvents(forKey key: String, rawAllocations allocations: [EvolvRawAllocation]) {
+        let eid = allocations[0].experimentId
+        let cid = allocations[0].candidateId
         
         guard let url = createEventUrl(type: key, experimentId: eid, candidateId: cid) else {
             return
@@ -216,14 +215,14 @@ class EventEmitterMock: EvolvEventEmitter {
     }
     
     /// emitter.contaminate => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
-    override public func contaminate(rawAllocations allocations: EvolvRawAllocations) {
+    override public func contaminate(rawAllocations allocations: [EvolvRawAllocation]) {
         let testKey = "test_key"
         sendAllocationEvents(forKey: testKey, rawAllocations: allocations)
         contaminateWithAllocationsWasCalled = true
     }
     
     /// emitter.confirm => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
-    override public func confirm(rawAllocations allocations: EvolvRawAllocations) {
+    override public func confirm(rawAllocations allocations: [EvolvRawAllocation]) {
         let testKey = "test_key"
         sendAllocationEvents(forKey: testKey, rawAllocations: allocations)
         confirmWithAllocationsWasCalled = true
@@ -251,7 +250,7 @@ class ExecutionQueueMock: EvolvExecutionQueue {
     
     var executeValuesFromAllocationsWasCalled = false
     var executeWithDefaultsWasCalled = false
-    private var queue: [Any] = []
+    private var queue: [EvolvExecutable] = []
     
     override var count: Int {
         return queue.count
@@ -261,7 +260,7 @@ class ExecutionQueueMock: EvolvExecutionQueue {
         queue.insert(execution, at: 0)
     }
     
-    override func executeAllWithValues(from allocations: EvolvRawAllocations) {
+    override func executeAllWithValues(from allocations: [EvolvRawAllocation]) {
         executeValuesFromAllocationsWasCalled = true
         queue.removeAll()
     }
@@ -275,7 +274,7 @@ class ExecutionQueueMock: EvolvExecutionQueue {
 
 class ExecutionMock<T>: EvolvExecution<T> {
     override func executeWithDefault() {}
-    override func execute(with rawAllocations: EvolvRawAllocations) throws {}
+    override func execute(with rawAllocations: [EvolvRawAllocation]) throws {}
 }
 
 class ConfigMock: EvolvConfig {}

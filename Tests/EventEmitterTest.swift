@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import SwiftyJSON
 @testable import EvolvKit
 
 class EventEmitterTest: XCTestCase {
@@ -58,22 +57,19 @@ class EventEmitterTest: XCTestCase {
                            httpClient: mockHttpClient)
     }
     
-    func createAllocationEventUrl(config: EvolvConfig, rawAllocation: JSON, event: String, participant: EvolvParticipant) -> URL {
+    func createAllocationEventUrl(config: EvolvConfig, rawAllocation: EvolvRawAllocation, event: String, participant: EvolvParticipant) -> URL {
         //    let _ = "%s://%s/%s/%s/events?uid=%s&sid=%s&eid=%s&cid=%s&type=%s"
         var components = URLComponents()
-        
-        let eid = rawAllocation[EvolvRawAllocations.Key.experimentId.rawValue].rawString()!
-        let cid = rawAllocation[EvolvRawAllocations.Key.candidateId.rawValue].rawString()!
         
         components.scheme = config.httpScheme
         components.host = config.domain
         components.path = "/\(config.version)/\(config.environmentId)/events"
         components.queryItems = [
-            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue, value: "\(participant.userId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.sessionId.rawValue, value: "\(participant.sessionId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.experimentId.rawValue, value: "\(eid)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.candidateId.rawValue, value: "\(cid)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.type.rawValue, value: "\(event)")
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.userId.stringValue, value: "\(participant.userId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.sessionId.stringValue, value: "\(participant.sessionId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.experimentId.stringValue, value: "\(rawAllocation.experimentId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.candidateId.stringValue, value: "\(rawAllocation.candidateId)"),
+            URLQueryItem(name: "type", value: "\(event)")
         ]
         
         return components.url ?? URL(string: "")!
@@ -87,10 +83,10 @@ class EventEmitterTest: XCTestCase {
         components.host = config.domain
         components.path = "/\(config.version)/\(config.environmentId)/events"
         components.queryItems = [
-            URLQueryItem(name: EvolvRawAllocations.Key.userId.rawValue, value: "\(participant.userId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.sessionId.rawValue, value: "\(participant.sessionId)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.type.rawValue, value: "\(type)"),
-            URLQueryItem(name: EvolvRawAllocations.Key.score.rawValue, value: "\(String(score))")
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.userId.stringValue, value: "\(participant.userId)"),
+            URLQueryItem(name: EvolvRawAllocation.CodingKey.sessionId.stringValue, value: "\(participant.sessionId)"),
+            URLQueryItem(name: "type", value: "\(type)"),
+            URLQueryItem(name: "score", value: "\(String(score))")
         ]
         
         return components.url ?? URL(string: "")!

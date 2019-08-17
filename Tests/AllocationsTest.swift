@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import SwiftyJSON
 import PromiseKit
 @testable import EvolvKit
 
@@ -15,11 +14,10 @@ class AllocationsTest: XCTestCase {
     
     func testGetValueFromAllocationGenome() {
         do {
-            let participant = EvolvParticipant.builder().build()
             let allocations = EvolvAllocations(TestData.rawAllocations)
             
-            let featureImportance = try allocations.value(forKey: "algorithms.feature_importance", participant: participant)
-            let weightingDistance = try allocations.value(forKey: "search.weighting.distance", participant: participant)
+            let featureImportance = try allocations.value(forKey: "algorithms.feature_importance")
+            let weightingDistance = try allocations.value(forKey: "search.weighting.distance")
             
             XCTAssertEqual(featureImportance, false)
             XCTAssertEqual(weightingDistance, 2.5)
@@ -30,11 +28,10 @@ class AllocationsTest: XCTestCase {
     
     func testGetValueFromMultiAllocationGenome() {
         do {
-            let participant: EvolvParticipant = EvolvParticipant.builder().build()
             let allocations = EvolvAllocations(TestData.rawAllocations)
             
-            let featureImportance = try allocations.value(forKey: "algorithms.feature_importance", participant: participant)
-            let weightingDistance = try allocations.value(forKey: "search.weighting.distance", participant: participant)
+            let featureImportance = try allocations.value(forKey: "algorithms.feature_importance")
+            let weightingDistance = try allocations.value(forKey: "search.weighting.distance")
             
             XCTAssertEqual(featureImportance, false)
             XCTAssertEqual(weightingDistance, 2.5)
@@ -45,11 +42,10 @@ class AllocationsTest: XCTestCase {
     
     func testGetValueFromMultiAllocationWithDupsGenome() {
         do {
-            let participant: EvolvParticipant = EvolvParticipant.builder().build()
             let allocations = EvolvAllocations(TestData.rawMultiAllocations)
             
-            let featureImportance = try allocations.value(forKey: "algorithms.feature_importance", participant: participant)
-            let weightingDistance = try allocations.value(forKey: "search.weighting.distance", participant: participant)
+            let featureImportance = try allocations.value(forKey: "algorithms.feature_importance")
+            let weightingDistance = try allocations.value(forKey: "search.weighting.distance")
             
             XCTAssertEqual(featureImportance, false)
             XCTAssertEqual(weightingDistance, 2.5)
@@ -72,13 +68,12 @@ class AllocationsTest: XCTestCase {
     func test_KeyWithLastDot() {
         // given
         let allocations = EvolvAllocations(TestData.rawAllocations)
-        let participant: EvolvParticipant = EvolvParticipant.builder().build()
         let key = "search.weighting.distance."
-        var result: JSON = .init(0)
+        var result: EvolvRawAllocationNode = EvolvRawAllocationNode.null
         
         // when
         do {
-            result = try allocations.value(forKey: key, participant: participant)
+            result = try allocations.value(forKey: key)
         } catch let error {
             XCTFail(error.localizedDescription)
         }
@@ -90,13 +85,12 @@ class AllocationsTest: XCTestCase {
     func test_KeyWithEmptyKeyPart() {
         // given
         let allocations = EvolvAllocations(TestData.rawAllocations)
-        let participant: EvolvParticipant = EvolvParticipant.builder().build()
         let key = "search..weighting.distance"
-        var result: JSON = .init(0)
+        var result: EvolvRawAllocationNode = EvolvRawAllocationNode.null
         
         // when
         do {
-            result = try allocations.value(forKey: key, participant: participant)
+            result = try allocations.value(forKey: key)
         } catch let error {
             XCTFail(error.localizedDescription)
         }
@@ -108,37 +102,34 @@ class AllocationsTest: XCTestCase {
     func test_ThrowValueNotFound() {
         // given
         let allocations = EvolvAllocations([])
-        let participant: EvolvParticipant = EvolvParticipant.builder().build()
         let key = "search.weighting.distance"
         
         // when & then
-        XCTAssertThrowsError(try allocations.value(forKey: key, participant: participant)) { error in
-            XCTAssertEqual(error as! EvolvAllocations.AllocationsError, EvolvAllocations.AllocationsError.valueNotFound(key: key))
+        XCTAssertThrowsError(try allocations.value(forKey: key)) { error in
+            XCTAssertEqual(error as! EvolvAllocations.Error, EvolvAllocations.Error.valueNotFound(key: key))
         }
     }
     
     func test_ThrowGenomeEmpty() {
         // given
         let allocations = EvolvAllocations(TestData.rawAllocationsWithoutGenome)
-        let participant: EvolvParticipant = EvolvParticipant.builder().build()
         let key = "search.weighting.distance"
         
         // when & then
-        XCTAssertThrowsError(try allocations.value(forKey: key, participant: participant)) { error in
-            XCTAssertEqual(error as! EvolvAllocations.AllocationsError, EvolvAllocations.AllocationsError.genomeEmpty)
+        XCTAssertThrowsError(try allocations.value(forKey: key)) { error in
+            XCTAssertEqual(error as! EvolvAllocations.Error, EvolvAllocations.Error.genomeEmpty)
         }
     }
     
     func test_ThrowIncorrectKeyPart() {
         // given
         let allocations = EvolvAllocations(TestData.rawAllocations)
-        let participant: EvolvParticipant = EvolvParticipant.builder().build()
         let key = "search.weighting2.distance"
         
         // when & then
-        XCTAssertThrowsError(try allocations.value(forKey: key, participant: participant)) { error in
-            XCTAssertEqual(error as! EvolvAllocations.AllocationsError,
-                           EvolvAllocations.AllocationsError.incorrectKeyPart(key: key, keyPart: "weighting2"))
+        XCTAssertThrowsError(try allocations.value(forKey: key)) { error in
+            XCTAssertEqual(error as! EvolvRawAllocationNode.Error,
+                           EvolvRawAllocationNode.Error.incorrectKey(key: "search.weighting2"))
         }
     }
     
