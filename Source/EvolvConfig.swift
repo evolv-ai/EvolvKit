@@ -19,7 +19,7 @@
 import Foundation
 
 /// General configurations for the SDK.
-public class EvolvConfig {
+public class EvolvConfig: NSObject {
     
     public enum Default {
         public static let httpScheme: String = "https"
@@ -51,11 +51,11 @@ public class EvolvConfig {
         self.httpClient = httpClient
     }
     
-    static public func builder(environmentId: String, httpClient: EvolvHttpClient) -> EvolvConfigBuilder {
+    @objc static public func builder(environmentId: String, httpClient: EvolvHttpClient) -> EvolvConfigBuilder {
         return EvolvConfigBuilder(environmentId: environmentId, httpClient: httpClient)
     }
     
-    public func set(logLevel: EvolvLogLevel) {
+    @objc public func set(logLevel: EvolvLogLevel) {
         DispatchQueue.global(qos: .utility).async {
             EvolvLogger.shared.logLevel = logLevel
         }
@@ -63,7 +63,7 @@ public class EvolvConfig {
     
 }
 
-public class EvolvConfigBuilder {
+public class EvolvConfigBuilder: NSObject {
     
     private var allocationStoreSize = EvolvConfig.Default.allocationStoreSize
     private var httpScheme: String = EvolvConfig.Default.httpScheme
@@ -95,7 +95,7 @@ public class EvolvConfigBuilder {
     ///
     /// - Parameter domain: The domain of the evolvParticipant api.
     /// - Returns: this instance of the config builder
-    public func set(domain: String) -> EvolvConfigBuilder {
+    @objc public func set(domain: String) -> EvolvConfigBuilder {
         self.domain = domain
         return self
     }
@@ -104,7 +104,7 @@ public class EvolvConfigBuilder {
     ///
     /// - Parameter version: Representation of the required evolvParticipant api version.
     /// - Returns: this instance of the config builder
-    public func set(version: String) -> EvolvConfigBuilder {
+    @objc public func set(version: String) -> EvolvConfigBuilder {
         self.version = version
         return self
     }
@@ -114,7 +114,7 @@ public class EvolvConfigBuilder {
     ///
     /// - Parameter allocationStore: A custom built allocation store.
     /// - Returns: this instance of the config builder
-    public func set(allocationStore: EvolvAllocationStore) -> EvolvConfigBuilder {
+    @objc public func set(allocationStore: EvolvAllocationStore) -> EvolvConfigBuilder {
         self.allocationStore = allocationStore
         return self
     }
@@ -123,7 +123,7 @@ public class EvolvConfigBuilder {
     ///
     /// - Parameter httpScheme: either http or https
     /// - Returns: this instance of the config builder
-    public func set(httpScheme: String) -> EvolvConfigBuilder {
+    @objc public func set(httpScheme: String) -> EvolvConfigBuilder {
         self.httpScheme = httpScheme
         return self
     }
@@ -132,7 +132,7 @@ public class EvolvConfigBuilder {
     ///
     /// - Parameter allocationStoreSize: number of entries allowed in the default allocation store
     /// - Returns: this instance of the config builder
-    public func set(allocationStoreSize: Int) -> EvolvConfigBuilder {
+    @objc public func set(allocationStoreSize: Int) -> EvolvConfigBuilder {
         self.allocationStoreSize = allocationStoreSize
         return self
     }
@@ -140,7 +140,7 @@ public class EvolvConfigBuilder {
     /// Builds an instance of EvolConfig
     ///
     /// - Returns: an EvolvConfig instance
-    public func build() -> EvolvConfig {
+    @objc public func build() -> EvolvConfig {
         var store: EvolvAllocationStore = DefaultEvolvAllocationStore(size: allocationStoreSize)
         
         if let allocationStore = allocationStore {

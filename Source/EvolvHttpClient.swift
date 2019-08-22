@@ -18,15 +18,15 @@
 
 import PromiseKit
 
-public protocol EvolvHttpClient {
+@objc public protocol EvolvHttpClient {
     /// Performs a GET request to the **allocations endpoint** using the provided url.
     ///
     /// This call is asynchronous, the request is sent and a completable promise
     /// is returned. The promise is completed when the result of the request returns.
     ///
     /// - Parameter url: A valid url representing a call to the Participant API.
-    /// - Returns: A response promise as a String
-    func get(_ url: URL) -> PromiseKit.Promise<String>
+    /// - Returns: A response promise
+    func get(_ url: URL) -> PromiseKit.AnyPromise
     
     /// Performs a GET request to the **events endpoint** using the provided url.
     ///

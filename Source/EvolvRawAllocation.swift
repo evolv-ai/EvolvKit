@@ -20,7 +20,7 @@ import Foundation
 
 /// The set of configurations that have been given to the participant, the values that are being
 /// experimented against
-public struct EvolvRawAllocation: Decodable, Equatable {
+public class EvolvRawAllocation: NSObject, Decodable {
     
     /// The unique identifier of the experiment.
     public let experimentId: String
@@ -44,7 +44,7 @@ public struct EvolvRawAllocation: Decodable, Equatable {
         case excluded
     }
     
-    public init(from decoder: Decoder) throws {
+    required public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKey.self)
         experimentId = try container.decode(String.self, forKey: .experimentId)
         userId = try container.decode(String.self, forKey: .userId)
@@ -66,6 +66,19 @@ public struct EvolvRawAllocation: Decodable, Equatable {
         self.candidateId = candidateId
         self.genome = genome
         self.excluded = excluded
+    }
+    
+    public override func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? EvolvRawAllocation else {
+            return false
+        }
+        
+        return object.experimentId == experimentId &&
+            object.userId == userId &&
+            object.candidateId == candidateId &&
+            object.genome == genome &&
+            object.excluded == excluded &&
+            object.sessionId == sessionId
     }
     
 }

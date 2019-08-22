@@ -16,6 +16,8 @@
 //  limitations under the License.
 //
 
+import Foundation
+
 public struct LinkedQueue<T> {
     
     private var list = LinkedList<T>()

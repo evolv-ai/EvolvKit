@@ -23,7 +23,7 @@ protocol EvolvExecutable: AnyObject {
     func executeWithDefault()
 }
 
-class EvolvExecution<T>: EvolvExecutable {
+class EvolvExecution: EvolvExecutable {
     
     enum Error: LocalizedError {
         case mismatchTypes
@@ -38,14 +38,14 @@ class EvolvExecution<T>: EvolvExecutable {
     
     let key: String
     private let participant: EvolvParticipant
-    private var defaultValue: T
+    private var defaultValue: EvolvRawAllocationNode
     private var alreadyExecuted: Set<String> = Set()
-    private var closure: (T) -> Void
+    private var closure: (EvolvRawAllocationNode) -> Void
     
     init(key: String,
-         defaultValue: T,
+         defaultValue: EvolvRawAllocationNode,
          participant: EvolvParticipant,
-         closure: @escaping (T) -> Void) {
+         closure: @escaping (EvolvRawAllocationNode) -> Void) {
         self.key = key
         self.defaultValue = defaultValue
         self.participant = participant
@@ -56,7 +56,7 @@ class EvolvExecution<T>: EvolvExecutable {
         let allocations = EvolvAllocations(rawAllocations)
         let node = try allocations.value(forKey: key)
         
-        guard let genericValue = node.value as? T else {
+        guard node.type == defaultValue.type else {
             throw Error.mismatchTypes
         }
         
@@ -64,7 +64,7 @@ class EvolvExecution<T>: EvolvExecutable {
         
         if alreadyExecuted.isEmpty || alreadyExecuted != activeExperiements {
             // there was a change to the allocations after reconciliation, apply changes
-            closure(genericValue)
+            closure(node)
         }
         
         alreadyExecuted = activeExperiements

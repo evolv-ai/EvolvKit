@@ -16,8 +16,10 @@
 //  limitations under the License.
 //
 
+import Foundation
+
 /// A type that can store and retrieve participant's allocations.
-public protocol EvolvAllocationStore {
+@objc public protocol EvolvAllocationStore {
     /// Retrieves a json converted to array of EvolvRawAllocation. Json represents the participant's allocations.
     /// If there are no stored allocations, should return an empty array.
     ///

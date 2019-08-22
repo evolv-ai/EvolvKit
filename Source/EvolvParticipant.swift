@@ -19,7 +19,7 @@
 import Foundation
 
 /// The end user of the application, the individual who's actions are being recorded in the experiment.
-public class EvolvParticipant {
+public class EvolvParticipant: NSObject {
     
     let sessionId: String
     var userId: String
@@ -31,32 +31,33 @@ public class EvolvParticipant {
         self.userAttributes = userAttributes
     }
     
-    public static func builder() -> EvolvParticipantBuilder {
+    @objc public static func builder() -> EvolvParticipantBuilder {
         return EvolvParticipantBuilder()
     }
     
 }
 
-public class EvolvParticipantBuilder {
+public class EvolvParticipantBuilder: NSObject {
     
     private var userId: String
     private var sessionId: String
     private var userAttributes: [String: String]
     
-    init() {
+    override init() {
         self.userId = UUID().uuidString
         self.sessionId = UUID().uuidString
         self.userAttributes = [
             EvolvRawAllocation.CodingKey.userId.stringValue: userId,
             EvolvRawAllocation.CodingKey.sessionId.stringValue: sessionId
         ]
+        super.init()
     }
     
     /// A unique key representing the participant.
     ///
     /// - Parameter userId: A unique key.
     /// - Returns: this instance of the participant
-    public func set(userId: String) -> EvolvParticipantBuilder {
+    @objc public func set(userId: String) -> EvolvParticipantBuilder {
         self.userId = userId
         return self
     }
@@ -65,7 +66,7 @@ public class EvolvParticipantBuilder {
     ///
     /// - Parameter sessionId: A unique key.
     /// - Returns: this instance of the participant
-    public func set(sessionId: String) -> EvolvParticipantBuilder {
+    @objc public func set(sessionId: String) -> EvolvParticipantBuilder {
         self.sessionId = sessionId
         return self
     }
@@ -74,7 +75,7 @@ public class EvolvParticipantBuilder {
     ///
     /// - Parameter userAttributes: A map representing specific attributes that describe the participant.
     /// - Returns: this instance of the participant
-    public func set(userAttributes: [String: String]) -> EvolvParticipantBuilder {
+    @objc public func set(userAttributes: [String: String]) -> EvolvParticipantBuilder {
         self.userAttributes = userAttributes
         return self
     }
@@ -82,7 +83,7 @@ public class EvolvParticipantBuilder {
     /// Builds the EvolvParticipant instance.
     ///
     /// - Returns: an EvolvParticipant instance.
-    public func build() -> EvolvParticipant {
+    @objc public func build() -> EvolvParticipant {
         userAttributes.updateValue(userId, forKey: EvolvRawAllocation.CodingKey.userId.stringValue)
         userAttributes.updateValue(sessionId, forKey: EvolvRawAllocation.CodingKey.sessionId.stringValue)
         return EvolvParticipant(userId: userId, sessionId: sessionId, userAttributes: userAttributes)

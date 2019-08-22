@@ -19,14 +19,12 @@
 import Alamofire
 import PromiseKit
 
-public class DefaultEvolvHttpClient: EvolvHttpClient {
+@objc public class DefaultEvolvHttpClient: NSObject, EvolvHttpClient {
     
     private let logger = EvolvLogger.shared
     
-    public init() {}
-    
-    public func get(_ url: URL) -> Promise<String> {
-        return Promise<String> { resolver -> Void in
+    public func get(_ url: URL) -> AnyPromise {
+        return AnyPromise(Promise<String> { resolver -> Void in
             Alamofire.request(url)
                 .validate()
                 .responseString { [weak self] response in
@@ -41,7 +39,7 @@ public class DefaultEvolvHttpClient: EvolvHttpClient {
                         resolver.reject(error)
                     }
             }
-        }
+        })
     }
     
     public func sendEvents(_ url: URL) {

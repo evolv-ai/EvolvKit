@@ -16,6 +16,8 @@
 //  limitations under the License.
 //
 
+import Foundation
+
 public class DefaultEvolvAllocationStore: EvolvAllocationStore {
     
     public var cache: LRUCache

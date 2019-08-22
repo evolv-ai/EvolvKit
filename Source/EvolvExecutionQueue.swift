@@ -16,6 +16,8 @@
 //  limitations under the License.
 //
 
+import Foundation
+
 class EvolvExecutionQueue {
     
     private let logger = EvolvLogger.shared
@@ -29,7 +31,7 @@ class EvolvExecutionQueue {
     
     static let shared = EvolvExecutionQueue()
     
-    func enqueue<T>(_ execution: EvolvExecution<T>) {
+    func enqueue(_ execution: EvolvExecution) {
         queue.insert(execution, at: 0)
     }
     

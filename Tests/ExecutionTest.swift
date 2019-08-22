@@ -1,9 +1,19 @@
 //
 //  ExecutionTest.swift
-//  EvolvKit iOS Tests
 //
-//  Created by divbyzero on 30/07/2019.
-//  Copyright © 2019 Evolv. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import XCTest
@@ -53,7 +63,7 @@ class ExecutionTest: XCTestCase {
 
         // when
         let execution = EvolvExecution(key: key,
-                                       defaultValue: defaultValue,
+                                       defaultValue: __N(defaultValue),
                                        participant: mockParticipant) { _ in }
         
         // then
@@ -61,32 +71,32 @@ class ExecutionTest: XCTestCase {
         XCTAssertEqual(execution.key, key)
     }
     
-    private func closureString(value: String) {
-        testValueString = value
+    private func closureString(node: EvolvRawAllocationNode) {
+        testValueString = node.stringValue
     }
     
-    private func closureInt(value: Int) {
-        testValueInt = value
+    private func closureInt(node: EvolvRawAllocationNode) {
+        testValueInt = node.intValue
     }
     
-    private func closureDouble(value: Double) {
-        testValueDouble = value
+    private func closureDouble(node: EvolvRawAllocationNode) {
+        testValueDouble = node.doubleValue
     }
     
-    private func closureFloat(value: Float) {
-        testValueFloat = value
+    private func closureFloat(node: EvolvRawAllocationNode) {
+        testValueFloat = node.floatValue
     }
     
-    private func closureBool(value: Bool) {
-        testValueBool = value
+    private func closureBool(node: EvolvRawAllocationNode) {
+        testValueBool = node.boolValue
     }
     
-    private func closureArray(value: [Any]) {
-        testValueArray = value
+    private func closureArray(node: EvolvRawAllocationNode) {
+        testValueArray = node.arrayValue
     }
     
-    private func closureDict(value: [String: Any]) {
-        testValueDict = value
+    private func closureDict(node: EvolvRawAllocationNode) {
+        testValueDict = node.dictionaryValue
     }
     
     func test_ExecutionWithDefault() {
@@ -96,7 +106,7 @@ class ExecutionTest: XCTestCase {
         
         // when
         let execution = EvolvExecution(key: key,
-                                       defaultValue: defaultValue,
+                                       defaultValue: __N(defaultValue),
                                        participant: mockParticipant,
                                        closure: closureInt)
         execution.executeWithDefault()
@@ -114,7 +124,7 @@ class ExecutionTest: XCTestCase {
         
         // when
         let execution = EvolvExecution(key: key,
-                                       defaultValue: defaultValue,
+                                       defaultValue: __N(defaultValue),
                                        participant: mockParticipant,
                                        closure: closureDouble)
         
@@ -138,11 +148,11 @@ class ExecutionTest: XCTestCase {
         
         // when
         let execution = EvolvExecution(key: key,
-                                       defaultValue: defaultValue,
+                                       defaultValue: __N(defaultValue),
                                        participant: mockParticipant,
-                                       closure: { [weak self] value in
+                                       closure: { [weak self] node in
                                         executionCounter += 1
-                                        self?.testValueDouble = value
+                                        self?.testValueDouble = node.doubleValue
         })
         
         do {
@@ -170,13 +180,13 @@ class ExecutionTest: XCTestCase {
         let defaultDictValue: [String: Any] = ["temp": 1, "foo": ["bar": true]]
         
         // when
-        let executionString = EvolvExecution(key: key, defaultValue: defaultStringValue, participant: mockParticipant, closure: closureString)
-        let executionInt = EvolvExecution(key: key, defaultValue: defaultIntValue, participant: mockParticipant, closure: closureInt)
-        let executionDouble = EvolvExecution(key: key, defaultValue: defaultDoubleValue, participant: mockParticipant, closure: closureDouble)
-        let executionFloat = EvolvExecution(key: key, defaultValue: defaultFloatValue, participant: mockParticipant, closure: closureFloat)
-        let executionBool = EvolvExecution(key: key, defaultValue: defaultBoolValue, participant: mockParticipant, closure: closureBool)
-        let executionArray = EvolvExecution(key: key, defaultValue: defaultArrayValue, participant: mockParticipant, closure: closureArray)
-        let executionDict = EvolvExecution(key: key, defaultValue: defaultDictValue, participant: mockParticipant, closure: closureDict)
+        let executionString = EvolvExecution(key: key, defaultValue: __N(defaultStringValue), participant: mockParticipant, closure: closureString)
+        let executionInt = EvolvExecution(key: key, defaultValue: __N(defaultIntValue), participant: mockParticipant, closure: closureInt)
+        let executionDouble = EvolvExecution(key: key, defaultValue: __N(defaultDoubleValue), participant: mockParticipant, closure: closureDouble)
+        let executionFloat = EvolvExecution(key: key, defaultValue: __N(defaultFloatValue), participant: mockParticipant, closure: closureFloat)
+        let executionBool = EvolvExecution(key: key, defaultValue: __N(defaultBoolValue), participant: mockParticipant, closure: closureBool)
+        let executionArray = EvolvExecution(key: key, defaultValue: __N(defaultArrayValue), participant: mockParticipant, closure: closureArray)
+        let executionDict = EvolvExecution(key: key, defaultValue: __N(defaultDictValue), participant: mockParticipant, closure: closureDict)
         executionString.executeWithDefault()
         executionInt.executeWithDefault()
         executionDouble.executeWithDefault()
@@ -198,8 +208,8 @@ class ExecutionTest: XCTestCase {
         XCTAssertEqual(testValueDouble, defaultDoubleValue)
         XCTAssertEqual(testValueFloat, defaultFloatValue)
         XCTAssertEqual(testValueBool, defaultBoolValue)
-        XCTAssertEqual(testValueArray as NSObject, defaultArrayValue as NSObject)
-        XCTAssertEqual(testValueDict as NSObject, defaultDictValue as NSObject)
+        XCTAssertEqual(__N(testValueArray), __N(defaultArrayValue))
+        XCTAssertEqual(__N(testValueDict), __N(defaultDictValue))
     }
     
     func test_ThrowsMismatchTypes() {
@@ -209,11 +219,11 @@ class ExecutionTest: XCTestCase {
         let defaultValue: [Int] = []
         
         // when
-        let execution = EvolvExecution(key: key, defaultValue: defaultValue, participant: mockParticipant, closure: { _ in })
+        let execution = EvolvExecution(key: key, defaultValue: __N(defaultValue), participant: mockParticipant, closure: { _ in })
         
         // then
         XCTAssertThrowsError(try execution.execute(with: rawAllocations)) { error in
-            XCTAssertEqual(error as! EvolvExecution<[Int]>.Error, EvolvExecution.Error.mismatchTypes)
+            XCTAssertEqual(error as! EvolvExecution.Error, EvolvExecution.Error.mismatchTypes)
         }
     }
 

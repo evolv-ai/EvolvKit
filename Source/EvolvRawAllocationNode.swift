@@ -18,11 +18,14 @@
 
 import Foundation
 
+// swiftlint:disable type_name
+public typealias __N = EvolvRawAllocationNode
+
 // TODO: add doc for property
-public struct EvolvRawAllocationNode {
+public final class EvolvRawAllocationNode: NSObject {
     
     /// Raw allocation node's type definitions.
-    public enum NodeType {
+    @objc public enum NodeType: Int, CustomStringConvertible {
         case unknown
         case null
         case number
@@ -30,6 +33,19 @@ public struct EvolvRawAllocationNode {
         case bool
         case array
         case dictionary
+        
+        public var description: String {
+            switch self {
+            case .unknown: return "unknown"
+            case .null: return "null"
+            case .number: return "number"
+            case .string: return "string"
+            case .bool: return "bool"
+            case .array: return "array"
+            case .dictionary: return "dictionary"
+            }
+        }
+        
     }
     
     enum Error: LocalizedError, Equatable {
@@ -55,7 +71,7 @@ public struct EvolvRawAllocationNode {
     }
     
     /// EvolvRawAllocationNode type, private setter
-    public private(set) var type: NodeType = .unknown
+    @objc public private(set) var type: NodeType = .unknown
     
     /// Private raw objects
     private var rawNull: NSNull = NSNull()
@@ -66,7 +82,7 @@ public struct EvolvRawAllocationNode {
     private var rawDictionary: [String: Any] = [:]
     
     /// Value in EvolvRawAllocationNode
-    public var value: Any {
+    @objc public var value: Any {
         get {
             switch type {
             case .number: return rawNumber
@@ -107,7 +123,8 @@ public struct EvolvRawAllocationNode {
     /// Creates a EvolvRawAllocationNode object
     ///
     /// - Parameter value: the value
-    public init(_ value: Any) {
+    @objc public required init(_ value: Any) {
+        super.init()
         self.value = value
     }
     
@@ -130,6 +147,29 @@ public struct EvolvRawAllocationNode {
         default:
             return node
         }
+    }
+    
+    // MARK: - Printable, DebugPrintable
+    
+    override public var description: String {
+        let superDescription = super.description
+        
+        var value: Any = rawNull
+        switch type {
+            
+        case .number: value = rawNumber
+        case .string: value = rawString
+        case .bool: value = rawBool
+        case .array: value = rawArray
+        case .dictionary: value = rawDictionary
+        default: value = rawNull
+        }
+        
+        return "\(superDescription) (type: \(type), value: \(value))"
+    }
+    
+    override public var debugDescription: String {
+        return description
     }
     
 }
@@ -158,7 +198,7 @@ extension EvolvRawAllocationNode: Decodable {
         ]
     }
     
-    public init(from decoder: Decoder) throws {
+    public convenience init(from decoder: Decoder) throws {
         var node: Any?
         
         if let container = try? decoder.singleValueContainer(), container.decodeNil() == false {
@@ -205,21 +245,32 @@ extension EvolvRawAllocationNode: Decodable {
         self.init(node ?? NSNull())
     }
     
-}
-
-// MARK: - Equatable
-
-extension EvolvRawAllocationNode: Equatable {
+    // MARK: - Equatable
     
-    public static func == (lhs: EvolvRawAllocationNode, rhs: EvolvRawAllocationNode) -> Bool {
-        switch (lhs.type, rhs.type) {
-        case (.number, .number): return lhs.rawNumber == rhs.rawNumber
-        case (.string, .string): return lhs.rawString == rhs.rawString
-        case (.bool, .bool): return lhs.rawBool == rhs.rawBool
-        case (.array, .array): return lhs.rawArray as NSArray == rhs.rawArray as NSArray
-        case (.dictionary, .dictionary): return lhs.rawDictionary as NSDictionary == rhs.rawDictionary as NSDictionary
-        case (.null, .null): return true
-        default: return false
+    override public func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? EvolvRawAllocationNode else {
+            return false
+        }
+        
+        guard object.type == type else {
+            return false
+        }
+        
+        switch type {
+        case .number:
+            return object.rawNumber == rawNumber
+        case .string:
+            return object.rawString == rawString
+        case .bool:
+            return object.rawBool == rawBool
+        case .array:
+            return object.rawArray as NSArray == rawArray as NSArray
+        case .dictionary:
+            return object.rawDictionary as NSDictionary == rawDictionary as NSDictionary
+        case .null:
+            return true
+        default:
+            return false
         }
     }
     
@@ -249,15 +300,15 @@ func < (lhs: NSNumber, rhs: NSNumber) -> Bool {
 
 extension EvolvRawAllocationNode: ExpressibleByStringLiteral {
     
-    public init(stringLiteral value: StringLiteralType) {
+    public convenience init(stringLiteral value: StringLiteralType) {
         self.init(value)
     }
     
-    public init(extendedGraphemeClusterLiteral value: StringLiteralType) {
+    public convenience init(extendedGraphemeClusterLiteral value: StringLiteralType) {
         self.init(value)
     }
     
-    public init(unicodeScalarLiteral value: StringLiteralType) {
+    public convenience init(unicodeScalarLiteral value: StringLiteralType) {
         self.init(value)
     }
     
@@ -265,7 +316,7 @@ extension EvolvRawAllocationNode: ExpressibleByStringLiteral {
 
 extension EvolvRawAllocationNode: ExpressibleByIntegerLiteral {
     
-    public init(integerLiteral value: IntegerLiteralType) {
+    public convenience init(integerLiteral value: IntegerLiteralType) {
         self.init(value)
     }
     
@@ -273,7 +324,7 @@ extension EvolvRawAllocationNode: ExpressibleByIntegerLiteral {
 
 extension EvolvRawAllocationNode: ExpressibleByBooleanLiteral {
     
-    public init(booleanLiteral value: BooleanLiteralType) {
+    public convenience init(booleanLiteral value: BooleanLiteralType) {
         self.init(value)
     }
     
@@ -281,7 +332,7 @@ extension EvolvRawAllocationNode: ExpressibleByBooleanLiteral {
 
 extension EvolvRawAllocationNode: ExpressibleByFloatLiteral {
     
-    public init(floatLiteral value: FloatLiteralType) {
+    public convenience init(floatLiteral value: FloatLiteralType) {
         self.init(value)
     }
     
@@ -289,7 +340,7 @@ extension EvolvRawAllocationNode: ExpressibleByFloatLiteral {
 
 extension EvolvRawAllocationNode: ExpressibleByDictionaryLiteral {
     
-    public init(dictionaryLiteral elements: (String, Any)...) {
+    public convenience init(dictionaryLiteral elements: (String, Any)...) {
         let dictionary = elements.reduce(into: [String: Any](), { $0[$1.0] = $1.1})
         self.init(dictionary)
     }
@@ -297,7 +348,7 @@ extension EvolvRawAllocationNode: ExpressibleByDictionaryLiteral {
 
 extension EvolvRawAllocationNode: ExpressibleByArrayLiteral {
     
-    public init(arrayLiteral elements: Any...) {
+    public convenience init(arrayLiteral elements: Any...) {
         self.init(elements)
     }
     
@@ -307,7 +358,7 @@ extension EvolvRawAllocationNode: ExpressibleByArrayLiteral {
 
 extension EvolvRawAllocationNode: RawRepresentable {
 
-    public init?(rawValue: Any) {
+    public convenience init?(rawValue: Any) {
         if EvolvRawAllocationNode(rawValue).type == .unknown {
             return nil
         } else {
@@ -329,28 +380,56 @@ extension EvolvRawAllocationNode {
         return type == .bool ? rawBool : nil
     }
     
+    @objc public var boolValue: Bool {
+        return type == .bool ? rawBool : false
+    }
+    
     public var number: NSNumber? {
         return type == .number ? rawNumber : nil
+    }
+    
+    @objc public var numberValue: NSNumber {
+        return type == .number ? rawNumber : NSNumber.init(value: 0)
     }
     
     public var int: Int? {
         return type == .number ? number?.intValue : nil
     }
     
+    @objc public var intValue: Int {
+        return type == .number ? numberValue.intValue : 0
+    }
+    
     public var float: Float? {
         return type == .number ? number?.floatValue : nil
+    }
+    
+    @objc public var floatValue: Float {
+        return type == .number ? numberValue.floatValue : 0.0
     }
     
     public var double: Double? {
         return type == .number ? number?.doubleValue : nil
     }
     
+    @objc public var doubleValue: Double {
+        return type == .number ? numberValue.doubleValue : 0.0
+    }
+    
     public var string: String? {
         return type == .string ? rawString : nil
     }
     
+    @objc public var stringValue: String {
+        return type == .string ? rawString : ""
+    }
+    
     public var array: [EvolvRawAllocationNode]? {
         return type == .array ? rawArray.map { EvolvRawAllocationNode($0) } : nil
+    }
+    
+    @objc public var arrayValue: [EvolvRawAllocationNode] {
+        return type == .array ? array ?? [] : []
     }
     
     public var dictionary: [String: EvolvRawAllocationNode]? {
@@ -365,6 +444,10 @@ extension EvolvRawAllocationNode {
         }
         
         return nil
+    }
+    
+    @objc public var dictionaryValue: [String: EvolvRawAllocationNode] {
+        return type == .dictionary ? dictionary ?? [:] : [:]
     }
     
 }

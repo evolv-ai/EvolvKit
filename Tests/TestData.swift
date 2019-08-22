@@ -1,192 +1,39 @@
 //
 //  TestData.swift
-//  EvolvKit iOS
 //
-//  Created by divbyzero on 31/07/2019.
-//  Copyright © 2019 Evolv. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import Foundation
 @testable import EvolvKit
 
-enum TestData {
+class TestData {
     
     private static var jsonDecoder: JSONDecoder = JSONDecoder()
     private static let logger = EvolvLogger.shared
     
-    static var rawAllocationsString: String = #"""
-    [
-       {
-          "uid":"test_uid",
-          "sid":"test_sid",
-          "eid":"test_eid",
-          "cid":"test_cid",
-          "genome":{
-             "search":{
-                "weighting":{
-                   "distance":2.5,
-                   "dealer_score":2.5
-                }
-             },
-             "pages":{
-                "all_pages":{
-                   "header_footer":[
-                      "blue",
-                      "white"
-                   ]
-                },
-                "testing_page":{
-                   "megatron":"none",
-                   "header":"white"
-                }
-             },
-             "algorithms":{
-                "feature_importance":false
-             }
-          },
-          "excluded":false
-       }
-    ]
-    """#
-    static var rawMultiAllocationsString: String = #"""
-    [
-       {
-          "uid":"test_uid",
-          "sid":"test_sid",
-          "eid":"test_eid",
-          "cid":"test_cid",
-          "genome":{
-             "search":{
-                "weighting":{
-                   "distance":2.5,
-                   "dealer_score":2.5
-                }
-             },
-             "pages":{
-                "all_pages":{
-                   "header_footer":[
-                      "blue",
-                      "white"
-                   ]
-                },
-                "testing_page":{
-                   "megatron":"none",
-                   "header":"white"
-                }
-             },
-             "algorithms":{
-                "feature_importance":false
-             }
-          },
-          "excluded":false
-       },
-       {
-          "uid":"test_uid",
-          "sid":"test_sid",
-          "eid":"test_eid_2",
-          "cid":"test_cid_2",
-          "genome":{
-             "best":{
-                "baked":{
-                   "cookie":true,
-                   "cake":false
-                }
-             },
-             "utensils":{
-                "knives":{
-                   "drawer":[
-                      "butcher",
-                      "paring"
-                   ]
-                },
-                "spoons":{
-                   "wooden":"oak",
-                   "metal":"steel"
-                }
-             },
-             "measure":{
-                "cups":2.0
-             }
-          },
-          "excluded":false
-       }
-    ]
-    """#
-    static var rawMultiAllocationsWithDupsString: String = #"""
-    [
-       {
-          "uid":"test_uid",
-          "sid":"test_sid",
-          "eid":"test_eid",
-          "cid":"test_cid",
-          "genome":{
-             "search":{
-                "weighting":{
-                   "distance":2.5,
-                   "dealer_score":2.5
-                }
-             },
-             "pages":{
-                "all_pages":{
-                   "header_footer":[
-                      "blue",
-                      "white"
-                   ]
-                },
-                "testing_page":{
-                   "megatron":"none",
-                   "header":"white"
-                }
-             },
-             "algorithms":{
-                "feature_importance":false
-             }
-          },
-          "excluded":false
-       },
-       {
-          "uid":"test_uid",
-          "sid":"test_sid",
-          "eid":"test_eid_2",
-          "cid":"test_cid_2",
-          "genome":{
-             "best":{
-                "baked":{
-                   "cookie":true,
-                   "cake":false
-                }
-             },
-             "utensils":{
-                "knives":{
-                   "drawer":[
-                      "butcher",
-                      "paring"
-                   ]
-                },
-                "spoons":{
-                   "wooden":"oak",
-                   "metal":"steel"
-                }
-             },
-             "algorithms":{
-                "feature_importance":true
-             }
-          },
-          "excluded":false
-       }
-    ]
-    """#
-    
     static var rawAllocations: [EvolvRawAllocation] {
-        return decode(rawAllocationsString)
+        return decode(fromFile: "rawAllocationsString")
     }
     
     static var rawMultiAllocations: [EvolvRawAllocation] {
-        return decode(rawMultiAllocationsString)
+        return decode(fromFile: "rawMultiAllocationsString")
     }
     
     static var rawMultiAllocationsWithDups: [EvolvRawAllocation] {
-        return decode(rawMultiAllocationsWithDupsString)
+        return decode(fromFile: "rawMultiAllocationsWithDupsString")
     }
     
     static var rawAllocationsWithoutGenome: [EvolvRawAllocation] {
@@ -202,13 +49,29 @@ enum TestData {
 
 extension TestData {
     
-    private static func decode(_ stringJSON: String) -> [EvolvRawAllocation] {
+    static func rawJSONString(fromFile fileName: String) -> String {
+        if let path = Bundle(for: TestData.self).path(forResource: fileName, ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                return String(data: data, encoding: .utf8) ?? ""
+            } catch let error {
+                logger.error(error)
+            }
+        }
+        
+        return ""
+    }
+    
+    private static func decode(fromFile fileName: String) -> [EvolvRawAllocation] {
         var rawAllocations: [EvolvRawAllocation] = []
         
-        do {
-            rawAllocations = try jsonDecoder.decode([EvolvRawAllocation].self, from: stringJSON.data(using: .utf8)!)
-        } catch let error {
-            logger.error(error)
+        if let path = Bundle(for: TestData.self).path(forResource: fileName, ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                rawAllocations = try jsonDecoder.decode([EvolvRawAllocation].self, from: data)
+            } catch let error {
+                logger.error(error)
+            }
         }
         
         return rawAllocations

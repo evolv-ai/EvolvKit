@@ -1,9 +1,19 @@
 //
 //  ExecutionQueueTest.swift
-//  EvolvKit_Tests
 //
-//  Created by phyllis.wong on 7/17/19.
-//  Copyright © 2019 CocoaPods. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import XCTest
@@ -42,19 +52,19 @@ class ExecutionQueueTest: XCTestCase {
     }
     
     // Mock executions for the execution queue
-    func printSomething<T>(value: T) {
-        print("some value: \(value)")
+    func printSomething(node: EvolvRawAllocationNode) {
+        print("some value: \(node.value)")
     }
     
-    func doSomething(key: String) {
-        print("Did something with \(key)!")
+    func doSomething(node: EvolvRawAllocationNode) {
+        print("Did something with \(node.stringValue)!")
     }
     
     func testEnqueue() {
         let key = "pages.testing_page.header"
         let defaultValue = "red"
         let execution = ExecutionMock(key: key,
-                                      defaultValue: defaultValue,
+                                      defaultValue: __N(defaultValue),
                                       participant: participant,
                                       closure: printSomething)
         
@@ -72,8 +82,8 @@ class ExecutionQueueTest: XCTestCase {
     func testExecuteAllWithValuesFromAllocations() {
         let key = "pages.testing_page.header"
         let defaultValue = "red"
-        let exMock1 = ExecutionMock(key: key, defaultValue: defaultValue, participant: participant, closure: printSomething)
-        let exMock2 = ExecutionMock(key: "pages.testing_page.header", defaultValue: "red", participant: participant, closure: doSomething)
+        let exMock1 = ExecutionMock(key: key, defaultValue: __N(defaultValue), participant: participant, closure: printSomething)
+        let exMock2 = ExecutionMock(key: "pages.testing_page.header", defaultValue: __N("red"), participant: participant, closure: doSomething)
         
         let allocations = TestData.rawAllocations
         
@@ -92,8 +102,8 @@ class ExecutionQueueTest: XCTestCase {
     func testExecuteAllWithValuesFromDefaults() {
         let key = "pages.testing_page_typo.header_typo"
         let defaultValue = "red"
-        let exMock1 = ExecutionMock(key: key, defaultValue: defaultValue, participant: participant, closure: printSomething)
-        let exMock2 = ExecutionMock(key: key, defaultValue: defaultValue, participant: participant, closure: doSomething)
+        let exMock1 = ExecutionMock(key: key, defaultValue: __N(defaultValue), participant: participant, closure: printSomething)
+        let exMock2 = ExecutionMock(key: key, defaultValue: __N(defaultValue), participant: participant, closure: doSomething)
         
         mockExecutionQueue.enqueue(exMock1)
         mockExecutionQueue.enqueue(exMock2)

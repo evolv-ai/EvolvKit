@@ -16,7 +16,9 @@
 //  limitations under the License.
 //
 
-public protocol EvolvClient {
+import Foundation
+
+@objc public protocol EvolvClient {
     /// Retrieves a value from Evolv asynchronously and applies some custom action.
     ///
     /// This method is non blocking. It will preform the programmed action once
@@ -30,7 +32,9 @@ public protocol EvolvClient {
     ///   - defaultValue: A default value to return upon error.
     ///   - closure: a handler that is invoked when the allocation is updated
     ///     - <T>: type of value to be applied to the execution.
-    func subscribe<T>(forKey key: String, defaultValue: T, closure: @escaping (T) -> Void)
+    func subscribe(forKey key: String,
+                   defaultValue: EvolvRawAllocationNode,
+                   closure: @escaping (EvolvRawAllocationNode) -> Void)
     
     /// Emits a generic event to be recorded by Evolv.
     ///
@@ -40,26 +44,26 @@ public protocol EvolvClient {
     /// - Parameters:
     ///   - key: The identifier of the event.
     ///   - score: A score to be associated with the event.
-    func emitEvent(forKey key: String, score: Double)
+    @objc func emitEvent(forKey key: String, score: Double)
     
     /// Emits a generic event to be recorded by Evolv.
     ///
     /// Sends an event to Evolv to be recorded and reported upon.
     ///
     /// - Parameter key: The identifier of the event.
-    func emitEvent(forKey key: String)
+    @objc func emitEvent(forKey key: String)
     
     /// Sends a confirmed event to Evolv.
     ///
     /// Method produces a confirmed event which confirms the participant's
     /// allocation. Method will not do anything in the event that the allocation
     /// timed out or failed.
-    func confirm()
+    @objc func confirm()
     
     /// Sends a contamination event to Evolv.
     ///
     ///  Method produces a contamination event which will contaminate the
     /// participant's allocation. Method will not do anything in the event
     /// that the allocation timed out or failed.
-    func contaminate()
+    @objc func contaminate()
 }

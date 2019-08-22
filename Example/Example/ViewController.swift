@@ -73,12 +73,10 @@ class ViewController: UIViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setStatusBar()
 
 		// MARK: Evolv subscribe
-        client.subscribe(forKey: "ui.layout", defaultValue: "#000000", closure: setBackgroundColor)
-        client.subscribe(forKey: "ui.buttons.checkout.text", defaultValue: "BUY STUFF", closure: changeButtonText)
+        client.subscribe(forKey: "ui.layout", defaultValue: __N("#000000"), closure: setBackgroundColor)
+        client.subscribe(forKey: "ui.buttons.checkout.text", defaultValue: __N("BUY STUFF"), closure: changeButtonText)
         client.confirm()
     }
 
@@ -87,9 +85,9 @@ class ViewController: UIViewController {
     /// - Parameter layoutOption: Implementer decides what the data type will be.
     ///   Needs to match subscribe method's default value data type.
     /// - Use DispatchQueue to ensure this operation runs on the UI thread
-    lazy var changeButtonText: (String) -> Void = { buttonTextOption in
+    lazy var changeButtonText: (EvolvRawAllocationNode) -> Void = { buttonTextOption in
         DispatchQueue.main.async { [weak self] in
-			self?.checkoutButton.setTitle(buttonTextOption, for: .normal)
+			self?.checkoutButton.setTitle(buttonTextOption.stringValue, for: .normal)
 			self?.checkoutButton.titleLabel?.font = .systemFont(ofSize: 24)
         }
     }
@@ -103,9 +101,9 @@ extension ViewController {
     /// - Parameter layoutOption: Implementer decides what the data type will be.
     ///   Needs to match subscribe method's default value data type.
     /// - Use DispatchQueue to ensure this operation runs on the UI thread
-    func setBackgroundColor(_ layoutOption: String) {
+    func setBackgroundColor(_ layoutOption: EvolvRawAllocationNode) {
         DispatchQueue.main.async { [weak self] in
-            switch layoutOption {
+            switch layoutOption.stringValue {
             case "option_1":
                 self?.view.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1.0) // yellow
             case "option_2":
@@ -115,21 +113,13 @@ extension ViewController {
             case "option_4":
                 self?.view.backgroundColor = UIColor(red: 255 / 255, green: 176 / 255, blue: 198 / 255, alpha: 1) // pink
             default:
-                self?.view.backgroundColor = UIColor(hexString: layoutOption) // black (control)
+                self?.view.backgroundColor = .black // black (control)
             }
         }
     }
 
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		return .lightContent
-	}
-
-	func setStatusBar() {
-		guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else {
-			return
-		}
-
-		statusBarView.backgroundColor = UIColor(red: 0.0, green: 0.3, blue: 0.3, alpha: 1.0)
 	}
 
 }

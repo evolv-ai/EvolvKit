@@ -92,7 +92,11 @@ class EvolvAllocator {
             
             let url = self.createAllocationsUrl()
             
-            _ = self.httpClient.get(url).done { (stringJSON) in
+            _ = self.httpClient.get(url).done { (value) in
+                guard let stringJSON = value as? String else {
+                    return
+                }
+                
                 var currentAllocations: [EvolvRawAllocation] = []
                 
                 do {

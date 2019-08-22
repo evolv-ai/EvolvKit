@@ -45,7 +45,9 @@ class DefaultEvolvClient: EvolvClient {
         self.participant = participant
     }
     
-    public func subscribe<T>(forKey key: String, defaultValue: T, closure: @escaping (T) -> Void) {
+    public func subscribe(forKey key: String,
+                          defaultValue: EvolvRawAllocationNode,
+                          closure: @escaping (EvolvRawAllocationNode) -> Void) {
         let execution = EvolvExecution(key: key, defaultValue: defaultValue, participant: participant, closure: closure)
         let previousAllocations = store.get(participant.userId)
         

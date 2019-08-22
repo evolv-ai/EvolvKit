@@ -18,7 +18,7 @@
 
 import Foundation
 
-public class EvolvClientFactory {
+public class EvolvClientFactory: NSObject {
     
     /// Creates instances of the EvolvClient.
     ///
@@ -26,7 +26,7 @@ public class EvolvClientFactory {
     ///   - config: General configurations for the SDK.
     ///   - participant: The participant for the initialized client.
     /// - Returns: an instance of EvolvClient
-    public class func createClient(config: EvolvConfig, participant: EvolvParticipant? = nil) -> EvolvClient {
+    @objc public class func createClient(config: EvolvConfig, participant: EvolvParticipant? = nil) -> EvolvClient {
         EvolvLogger.shared.debug("Initializing Evolv Client.")
         
         let participant = participant ?? EvolvParticipant.builder().build()

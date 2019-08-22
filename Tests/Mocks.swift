@@ -1,9 +1,19 @@
 //
 //  Mocks.swift
-//  EvolvKit_Tests
 //
-//  Created by phyllis.wong on 7/16/19.
-//  Copyright © 2019 CocoaPods. All rights reserved.
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 import XCTest
@@ -89,9 +99,10 @@ class HttpClientMock: EvolvHttpClient {
     public static var httpClientSendEventsWasCalled = false
     
     @discardableResult
-    func get(_ url: URL) -> Promise<String> {
+    func get(_ url: URL) -> AnyPromise {
         HttpClientMock.httpClientSendEventsWasCalled = true
-        return Promise<String> { resolver -> Void in
+        
+        return AnyPromise(Promise<String> { resolver -> Void in
             
             Alamofire.request(url)
                 .validate()
@@ -107,7 +118,7 @@ class HttpClientMock: EvolvHttpClient {
                         resolver.reject(error)
                     }
             }
-        }
+        })
     }
     
     func sendEvents(_ url: URL) {
@@ -256,7 +267,7 @@ class ExecutionQueueMock: EvolvExecutionQueue {
         return queue.count
     }
     
-    override func enqueue<T>(_ execution: EvolvExecution<T>) {
+    override func enqueue(_ execution: EvolvExecution) {
         queue.insert(execution, at: 0)
     }
     
@@ -272,7 +283,7 @@ class ExecutionQueueMock: EvolvExecutionQueue {
     
 }
 
-class ExecutionMock<T>: EvolvExecution<T> {
+class ExecutionMock: EvolvExecution {
     override func executeWithDefault() {}
     override func execute(with rawAllocations: [EvolvRawAllocation]) throws {}
 }

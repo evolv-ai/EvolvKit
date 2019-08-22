@@ -18,7 +18,7 @@
 
 import Foundation
 
-public enum EvolvLogLevel: Int {
+@objc public enum EvolvLogLevel: Int {
     case info
     case debug
     case error

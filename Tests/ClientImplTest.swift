@@ -1,3 +1,21 @@
+//
+//  ClientImplTest.swift
+//
+//  Copyright (c) 2019 Evolv Technology Solutions
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+
 import XCTest
 import PromiseKit
 @testable import EvolvKit
@@ -67,8 +85,8 @@ class ClientImplTest: XCTestCase {
         }
         
         let expect = expectation(description: "key valid")
-        let applyFunction: (Double) -> Void = { value in
-            XCTAssertNotEqual(defaultValue, value)
+        let applyFunction: (EvolvRawAllocationNode) -> Void = { value in
+            XCTAssertNotEqual(defaultValue, value.doubleValue)
             XCTAssertEqual(value, 2.5)
             expect.fulfill()
         }
@@ -79,7 +97,7 @@ class ClientImplTest: XCTestCase {
                                         allocator: mockAllocator,
                                         previousAllocations: true,
                                         participant: participant)
-        client.subscribe(forKey: subscriptionKey, defaultValue: defaultValue, closure: applyFunction)
+        client.subscribe(forKey: subscriptionKey, defaultValue: __N(defaultValue), closure: applyFunction)
         waitForExpectations(timeout: 3, handler: nil)
     }
     
@@ -102,9 +120,9 @@ class ClientImplTest: XCTestCase {
         }
         
         let expect = expectation(description: "call back method key invalid")
-        let applyFunction: (Double) -> Void = { value in
-            XCTAssertEqual(defaultValue, value)
-            XCTAssertNotEqual(value, 2.5)
+        let applyFunction: (EvolvRawAllocationNode) -> Void = { node in
+            XCTAssertEqual(defaultValue, node.doubleValue)
+            XCTAssertNotEqual(node, 2.5)
             expect.fulfill()
         }
         
@@ -114,7 +132,7 @@ class ClientImplTest: XCTestCase {
                                         allocator: mockAllocator,
                                         previousAllocations: true,
                                         participant: participant)
-        client.subscribe(forKey: subscriptionKey, defaultValue: defaultValue, closure: applyFunction)
+        client.subscribe(forKey: subscriptionKey, defaultValue: __N(defaultValue), closure: applyFunction)
         waitForExpectations(timeout: 3, handler: nil)
     }
     
@@ -301,11 +319,11 @@ class ClientImplTest: XCTestCase {
         let expectedTestValue: Double = 2.5
         let defaultValue: Double = 10.01
         
-        func updateValue(value: Double) {
-            self.testValue = value
+        func updateValue(node: EvolvRawAllocationNode) {
+            self.testValue = node.doubleValue
         }
         
-        client.subscribe(forKey: "search.weighting.distance", defaultValue: defaultValue, closure: updateValue)
+        client.subscribe(forKey: "search.weighting.distance", defaultValue: __N(defaultValue), closure: updateValue)
         
         XCTAssertEqual(expectedTestValue, self.testValue)
         self.testValue = 0.0
@@ -339,11 +357,11 @@ class ClientImplTest: XCTestCase {
         XCTAssertEqual(expectedTestValue, self.testValue)
         
         let expected: Double = 2.5
-        func updateValue(value: Double) {
-            self.testValue = value
+        func updateValue(node: EvolvRawAllocationNode) {
+            self.testValue = node.doubleValue
         }
         
-        client.subscribe(forKey: "search.weighting.distance", defaultValue: defaultValue, closure: updateValue)
+        client.subscribe(forKey: "search.weighting.distance", defaultValue: __N(defaultValue), closure: updateValue)
         XCTAssertEqual(expected, self.testValue)
         self.testValue = 0.0
     }
@@ -376,11 +394,11 @@ class ClientImplTest: XCTestCase {
         XCTAssertEqual(expectedTestValue, testValue)
         
         let expected: Double = 2.5
-        func updateValue(value: Double) {
-            self.testValue = value
+        func updateValue(node: EvolvRawAllocationNode) {
+            self.testValue = node.doubleValue
         }
         
-        client.subscribe(forKey: "search.weighting.distance", defaultValue: defaultValue, closure: updateValue)
+        client.subscribe(forKey: "search.weighting.distance", defaultValue: __N(defaultValue), closure: updateValue)
         XCTAssertEqual(expected, self.testValue)
         self.testValue = 0.0
     }
@@ -413,11 +431,11 @@ class ClientImplTest: XCTestCase {
         XCTAssertEqual(expectedTestValue, self.testValue)
         
         let expected: Double = 2.5
-        func updateValue(value: Double) {
-            self.testValue = value
+        func updateValue(node: EvolvRawAllocationNode) {
+            self.testValue = node.doubleValue
         }
         
-        client.subscribe(forKey: "not.a.valid.key", defaultValue: defaultValue, closure: updateValue)
+        client.subscribe(forKey: "not.a.valid.key", defaultValue: __N(defaultValue), closure: updateValue)
         XCTAssertNotEqual(expected, self.testValue)
         self.testValue = 0.0
     }
