@@ -28,12 +28,14 @@ public class EvolvRawAllocation: NSObject, Decodable {
     public let userId: String
     /// The unique identifier of the Participant's current session.
     public let sessionId: String?
-    // TODO: add doc for property
+    /// The unique identifier of variation
     public let candidateId: String
-    // TODO: add doc for property
+    /// The specific treatments to be applied to the end users experience
     public let genome: EvolvRawAllocationNode
-    // TODO: add doc for property
+    /// User has been excluded from the experiment
     public let excluded: Bool
+   /// Query the specific audience filter defined by project
+    public let audienceQuery: EvolvQuery?
     
     enum CodingKey: String, Swift.CodingKey {
         case experimentId = "eid"
@@ -42,6 +44,7 @@ public class EvolvRawAllocation: NSObject, Decodable {
         case candidateId = "cid"
         case genome
         case excluded
+        case audienceQuery = "audience_query"
     }
     
     required public init(from decoder: Decoder) throws {
@@ -52,6 +55,7 @@ public class EvolvRawAllocation: NSObject, Decodable {
         candidateId = try container.decode(String.self, forKey: .candidateId)
         genome = try container.decode(EvolvRawAllocationNode.self, forKey: .genome)
         excluded = try container.decode(Bool.self, forKey: .excluded)
+        audienceQuery = try container.decodeIfPresent(EvolvQuery.self, forKey: .audienceQuery)
     }
     
     public init(experimentId: String,
@@ -59,13 +63,15 @@ public class EvolvRawAllocation: NSObject, Decodable {
                 candidateId: String,
                 genome: EvolvRawAllocationNode,
                 excluded: Bool,
-                sessionId: String? = nil) {
+                sessionId: String? = nil,
+                audienceQuery: EvolvQuery? = nil) {
         self.experimentId = experimentId
         self.userId = userId
         self.sessionId = sessionId
         self.candidateId = candidateId
         self.genome = genome
         self.excluded = excluded
+        self.audienceQuery = audienceQuery
     }
     
     public override func isEqual(_ object: Any?) -> Bool {
@@ -79,6 +85,23 @@ public class EvolvRawAllocation: NSObject, Decodable {
             object.genome == genome &&
             object.excluded == excluded &&
             object.sessionId == sessionId
+    }
+    
+    /// Determines whether on not to filter the user based upon the supplied user
+    /// attributes and allocation.
+    ///
+    /// - Parameter userAttributes: map representing attributes that represent the participant
+    /// - Returns: if participant should be filters, false if not
+    public func isFilter(userAttributes: [String: String]) -> Bool {
+        guard excluded == false else {
+            return true
+        }
+        
+        guard let query = audienceQuery else {
+            return false
+        }
+        
+        return !EvolvQuery.evaluate(query, userAttributes: userAttributes)
     }
     
 }

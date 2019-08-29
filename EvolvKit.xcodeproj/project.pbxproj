@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -64,6 +64,9 @@
 		E2E201E7230D5D51007DCEE0 /* rawAllocationsString.json in Resources */ = {isa = PBXBuildFile; fileRef = E2E201E5230D5D49007DCEE0 /* rawAllocationsString.json */; };
 		E2E201E9230D5D99007DCEE0 /* rawMultiAllocationsString.json in Resources */ = {isa = PBXBuildFile; fileRef = E2E201E8230D5D99007DCEE0 /* rawMultiAllocationsString.json */; };
 		E2E201EB230D5DCD007DCEE0 /* rawMultiAllocationsWithDupsString.json in Resources */ = {isa = PBXBuildFile; fileRef = E2E201EA230D5DCD007DCEE0 /* rawMultiAllocationsWithDupsString.json */; };
+		E2F81C68231526BE0091D9B4 /* EvolvAudienceQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F81C67231526BE0091D9B4 /* EvolvAudienceQuery.swift */; };
+		E2F81C6A231535FF0091D9B4 /* AudienceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F81C69231535FF0091D9B4 /* AudienceTest.swift */; };
+		E2F81C6C231537060091D9B4 /* rawAllocationsWithAudienceString.json in Resources */ = {isa = PBXBuildFile; fileRef = E2F81C6B231537060091D9B4 /* rawAllocationsWithAudienceString.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +133,9 @@
 		E2E201E5230D5D49007DCEE0 /* rawAllocationsString.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rawAllocationsString.json; sourceTree = "<group>"; };
 		E2E201E8230D5D99007DCEE0 /* rawMultiAllocationsString.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rawMultiAllocationsString.json; sourceTree = "<group>"; };
 		E2E201EA230D5DCD007DCEE0 /* rawMultiAllocationsWithDupsString.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rawMultiAllocationsWithDupsString.json; sourceTree = "<group>"; };
+		E2F81C67231526BE0091D9B4 /* EvolvAudienceQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvAudienceQuery.swift; sourceTree = "<group>"; };
+		E2F81C69231535FF0091D9B4 /* AudienceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudienceTest.swift; sourceTree = "<group>"; };
+		E2F81C6B231537060091D9B4 /* rawAllocationsWithAudienceString.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rawAllocationsWithAudienceString.json; sourceTree = "<group>"; };
 		F331EE08CA597B3615E2480F /* Pods-EvolvKit iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EvolvKit iOS.debug.xcconfig"; path = "Target Support Files/Pods-EvolvKit iOS/Pods-EvolvKit iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		F6F757CD263654347E21B2EE /* Pods-EvolvKit iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EvolvKit iOS.release.xcconfig"; path = "Target Support Files/Pods-EvolvKit iOS/Pods-EvolvKit iOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -240,6 +246,7 @@
 			children = (
 				E26DB21122EB04BC007B997F /* AllocationsTest.swift */,
 				E26DB20922EB04BC007B997F /* AllocatorTest.swift */,
+				E2F81C69231535FF0091D9B4 /* AudienceTest.swift */,
 				E26DB21022EB04BC007B997F /* ClientFactoryTest.swift */,
 				E26DB20D22EB04BC007B997F /* ClientImplTest.swift */,
 				E26DB20E22EB04BC007B997F /* DefaultAllocatorStoreTest.swift */,
@@ -266,6 +273,7 @@
 				E2E201E5230D5D49007DCEE0 /* rawAllocationsString.json */,
 				E2E201E8230D5D99007DCEE0 /* rawMultiAllocationsString.json */,
 				E2E201EA230D5DCD007DCEE0 /* rawMultiAllocationsWithDupsString.json */,
+				E2F81C6B231537060091D9B4 /* rawAllocationsWithAudienceString.json */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -291,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				E26DB22122EB04E5007B997F /* EvolvAllocationStore.swift */,
+				E2F81C67231526BE0091D9B4 /* EvolvAudienceQuery.swift */,
 				E26DB22E22EB04E5007B997F /* EvolvClient.swift */,
 				E26DB22F22EB04E5007B997F /* EvolvClientFactory.swift */,
 				E26DB22722EB04E5007B997F /* EvolvConfig.swift */,
@@ -418,6 +427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2E201E7230D5D51007DCEE0 /* rawAllocationsString.json in Resources */,
+				E2F81C6C231537060091D9B4 /* rawAllocationsWithAudienceString.json in Resources */,
 				E2E201E9230D5D99007DCEE0 /* rawMultiAllocationsString.json in Resources */,
 				E2E201EB230D5DCD007DCEE0 /* rawMultiAllocationsWithDupsString.json in Resources */,
 			);
@@ -511,6 +521,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2F81C68231526BE0091D9B4 /* EvolvAudienceQuery.swift in Sources */,
 				E26DB24C22EB04E5007B997F /* LinkedQueue.swift in Sources */,
 				E26DB23A22EB04E5007B997F /* EvolvAllocations.swift in Sources */,
 				E2C9C98723030756003C30CD /* EvolvRawAllocationNode.swift in Sources */,
@@ -553,6 +564,7 @@
 				E26DB26E22EB0E34007B997F /* DefaultAllocatorStoreTest.swift in Sources */,
 				E26DB26822EB0E34007B997F /* AllocatorTest.swift in Sources */,
 				E26DB27122EB0E34007B997F /* EvolvConfigTest.swift in Sources */,
+				E2F81C6A231535FF0091D9B4 /* AudienceTest.swift in Sources */,
 				E26DB27222EB0E34007B997F /* Mocks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

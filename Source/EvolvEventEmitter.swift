@@ -64,14 +64,15 @@ class EvolvEventEmitter {
     func sendAllocationEvents(forKey key: String, rawAllocations: [EvolvRawAllocation]) {
         if !rawAllocations.isEmpty {
             for allocation in rawAllocations {
-                // TODO: Perform audience check here
+                if allocation.isFilter(userAttributes: participant.userAttributes) {
+                    logger.debug("\(key) event filtered")
+                    continue
+                }
+                
                 let url = createEventUrl(type: key,
                                          experimentId: allocation.experimentId,
                                          candidateId: allocation.candidateId)
                 makeEventRequest(url)
-                
-                // TODO: Add audience filter logic here
-                logger.debug("\(key) event filtered")
             }
         }
     }

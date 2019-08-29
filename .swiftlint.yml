@@ -43,4 +43,5 @@ identifier_name:
     - ok
     - no
     - on
+    - or
 reporter: "xcode"

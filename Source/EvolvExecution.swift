@@ -54,7 +54,7 @@ class EvolvExecution: EvolvExecutable {
     
     func execute(with rawAllocations: [EvolvRawAllocation]) throws {
         let allocations = EvolvAllocations(rawAllocations)
-        let node = try allocations.value(forKey: key)
+        let node = try allocations.value(forKey: key, participant: participant)
         
         guard node.type == defaultValue.type else {
             throw Error.mismatchTypes

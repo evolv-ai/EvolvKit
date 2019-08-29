@@ -129,7 +129,7 @@
 		E2BABC1C230C303700FB9AFA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1030;
 				ORGANIZATIONNAME = EvolvKit;
 				TargetAttributes = {
 					E2BABC23230C303700FB9AFA = {
@@ -360,6 +360,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F8B19EAF4CC72EC2D61ACF82 /* Pods-EvolvKit-ExampleObjC.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ExampleObjC/Info.plist;
@@ -377,6 +378,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A1B3BE5E3C87F6CE42D1111C /* Pods-EvolvKit-ExampleObjC.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ExampleObjC/Info.plist;

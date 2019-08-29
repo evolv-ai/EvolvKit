@@ -42,9 +42,13 @@ class EvolvAllocations {
         self.rawAllocations = rawAllocations
     }
     
-    // TODO: add audience filter logic
-    func value(forKey key: String) throws -> EvolvRawAllocationNode {
+    func value(forKey key: String, participant: EvolvParticipant) throws -> EvolvRawAllocationNode {
         for allocation in rawAllocations {
+            if allocation.isFilter(userAttributes: participant.userAttributes) {
+                logger.debug("Participant was filtered from experiment \(allocation.experimentId)")
+                continue
+            }
+            
             let genome = allocation.genome
             
             guard case .dictionary = genome.type else {

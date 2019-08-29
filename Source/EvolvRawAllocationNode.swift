@@ -21,7 +21,9 @@ import Foundation
 // swiftlint:disable type_name
 public typealias __N = EvolvRawAllocationNode
 
-// TODO: add doc for property
+/// A raw dynamic node with experiment settings,
+/// that can contain either a value of a certain type
+/// or arrays of nodes and nodes dictionaries
 public final class EvolvRawAllocationNode: NSObject {
     
     /// Raw allocation node's type definitions.

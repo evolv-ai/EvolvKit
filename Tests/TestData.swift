@@ -36,6 +36,10 @@ class TestData {
         return decode(fromFile: "rawMultiAllocationsWithDupsString")
     }
     
+    static var rawAllocationsWithAudience: [EvolvRawAllocation] {
+        return decode(fromFile: "rawAllocationsWithAudienceString")
+    }
+    
     static var rawAllocationsWithoutGenome: [EvolvRawAllocation] {
         return [EvolvRawAllocation(experimentId: "test_eid",
                                    userId: "test_uid",
