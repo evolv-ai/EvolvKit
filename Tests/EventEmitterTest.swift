@@ -110,7 +110,7 @@ class EventEmitterTest: XCTestCase {
                                                                 mockHttpClient: mockHttpClient,
                                                                 mockAllocationStore: mockAllocationStore)
         let participant = EvolvParticipant.builder().build()
-        let emitter = EvolvEventEmitter(config: mockConfig, participant: participant)
+        let emitter = EvolvEventEmitter(config: mockConfig, participant: participant, store: mockAllocationStore)
         let url = emitter.createEventUrl(type: type, score: score)
         
         XCTAssertEqual(createEventsUrl(config: actualConfig, type: type, score: score, participant: participant), url)
@@ -126,7 +126,7 @@ class EventEmitterTest: XCTestCase {
         let allocations = TestData.rawAllocations
         let participant = EvolvParticipant.builder().build()
         
-        let emitter = EvolvEventEmitter(config: mockConfig, participant: participant)
+        let emitter = EvolvEventEmitter(config: mockConfig, participant: participant, store: mockAllocationStore)
         let url = emitter.createEventUrl(type: type, experimentId: eid, candidateId: cid)
         let testUrl = createAllocationEventUrl(config: actualConfig, rawAllocation: allocations[0], event: type, participant: participant)
         
@@ -146,7 +146,7 @@ class EventEmitterTest: XCTestCase {
             .set(userId: "test_user")
             .set(sessionId: "test_session")
             .build()
-        let emitter = EventEmitterMock(config: mockConfig, participant: participant)
+        let emitter = EventEmitterMock(config: mockConfig, participant: participant, store: mockAllocationStore)
         
         /// sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
         emitter.sendAllocationEvents(forKey: type, rawAllocations: allocations)
@@ -164,7 +164,7 @@ class EventEmitterTest: XCTestCase {
         let allocations = TestData.rawAllocations
         
         let participant = EvolvParticipant.builder().build()
-        let emitter = EventEmitterMock(config: mockConfig, participant: participant)
+        let emitter = EventEmitterMock(config: mockConfig, participant: participant, store: mockAllocationStore)
         
         /// emitter.contaminate => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
         emitter.contaminate(rawAllocations: allocations)
@@ -182,7 +182,7 @@ class EventEmitterTest: XCTestCase {
         let allocations = TestData.rawAllocations
         
         let participant = EvolvParticipant.builder().build()
-        let emitter = EventEmitterMock(config: mockConfig, participant: participant)
+        let emitter = EventEmitterMock(config: mockConfig, participant: participant, store: mockAllocationStore)
         
         /// emitter.confirm => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
         emitter.confirm(rawAllocations: allocations)
@@ -193,7 +193,7 @@ class EventEmitterTest: XCTestCase {
     func testGenericEvent() {
         let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
         let participant = EvolvParticipant.builder().build()
-        let emitter = EventEmitterMock(config: actualConfig, participant: participant)
+        let emitter = EventEmitterMock(config: actualConfig, participant: participant, store: mockAllocationStore)
         
         emitter.emit(forKey: type)
         
@@ -203,7 +203,7 @@ class EventEmitterTest: XCTestCase {
     func testGenericEventWithScore() {
         let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
         let participant = EvolvParticipant.builder().build()
-        let emitter = EventEmitterMock(config: actualConfig, participant: participant)
+        let emitter = EventEmitterMock(config: actualConfig, participant: participant, store: mockAllocationStore)
         
         emitter.emit(forKey: type, score: score)
         

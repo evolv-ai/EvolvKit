@@ -1,0 +1,36 @@
+[
+    {
+        "uid":"test_uid",
+        "sid":"test_sid",
+        "eid":"test_eid",
+        "cid":"test_cid",
+        "genome":{
+            "pages":{
+                "all_pages":{
+                    "header_footer":[
+                        "blue",
+                        "white"
+                    ]
+                },
+                "first_page":{
+                    "header":"hello"
+                }
+            }
+        },
+        "excluded":false
+    },
+    {
+        "uid":"test_uid",
+        "sid":"test_sid",
+        "eid":"test_eid_2",
+        "cid":"test_cid_2",
+        "genome":{
+            "pages":{
+                "settings_page":{
+                    "header":"settings"
+                }
+            }
+        },
+        "excluded":false
+    }
+]

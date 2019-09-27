@@ -40,20 +40,23 @@ class EvolvExecution: EvolvExecutable {
     private let participant: EvolvParticipant
     private var defaultValue: EvolvRawAllocationNode
     private var alreadyExecuted: Set<String> = Set()
+    private var store: EvolvAllocationStore
     private var closure: (EvolvRawAllocationNode) -> Void
     
     init(key: String,
          defaultValue: EvolvRawAllocationNode,
          participant: EvolvParticipant,
+         store: EvolvAllocationStore,
          closure: @escaping (EvolvRawAllocationNode) -> Void) {
         self.key = key
         self.defaultValue = defaultValue
         self.participant = participant
+        self.store = store
         self.closure = closure
     }
     
     func execute(with rawAllocations: [EvolvRawAllocation]) throws {
-        let allocations = EvolvAllocations(rawAllocations)
+        let allocations = EvolvAllocations(rawAllocations, store: store)
         let node = try allocations.value(forKey: key, participant: participant)
         
         guard node.type == defaultValue.type else {

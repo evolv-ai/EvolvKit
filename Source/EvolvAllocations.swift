@@ -37,9 +37,11 @@ class EvolvAllocations {
     private let logger = EvolvLogger.shared
     
     private let rawAllocations: [EvolvRawAllocation]
+    private let store: EvolvAllocationStore
     
-    init(_ rawAllocations: [EvolvRawAllocation]) {
+    init(_ rawAllocations: [EvolvRawAllocation], store: EvolvAllocationStore) {
         self.rawAllocations = rawAllocations
+        self.store = store
     }
     
     func value(forKey key: String, participant: EvolvParticipant) throws -> EvolvRawAllocationNode {
@@ -57,8 +59,14 @@ class EvolvAllocations {
             
             do {
                 if let node = try genome.node(forKey: key) {
+                    // touch current allocation & re-save allocations
+                    allocation.state.insert(.touched)
+                    
+                    // return node
                     return node
                 }
+            } catch {
+                logger.error("Unable to find key '\(key)' in experiment \(allocation.experimentId).")
             }
         }
         

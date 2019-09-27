@@ -55,6 +55,7 @@
 		E26DB27022EB0E34007B997F /* ClientImplTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20D22EB04BC007B997F /* ClientImplTest.swift */; };
 		E26DB27122EB0E34007B997F /* EvolvConfigTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20822EB04BC007B997F /* EvolvConfigTest.swift */; };
 		E26DB27222EB0E34007B997F /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB20F22EB04BC007B997F /* Mocks.swift */; };
+		E28A89F223425504007E4D98 /* rawMultiAllocations2String.json in Resources */ = {isa = PBXBuildFile; fileRef = E28A89F123425504007E4D98 /* rawMultiAllocations2String.json */; };
 		E2937DE62306E5B30003552F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E2937DE52306E5B30003552F /* README.md */; };
 		E2C3712D22EF196A00403C23 /* EvolvAllocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C3712C22EF196900403C23 /* EvolvAllocator.swift */; };
 		E2C3713222EF1AFF00403C23 /* DefaultEvolvClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C3713122EF1AFF00403C23 /* DefaultEvolvClient.swift */; };
@@ -124,6 +125,7 @@
 		E26DB27722EB1113007B997F /* EvolvKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EvolvKit.h; sourceTree = "<group>"; };
 		E26DB27A22EB1AFC007B997F /* EvolvKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = EvolvKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		E26DB27B22EB1AFC007B997F /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		E28A89F123425504007E4D98 /* rawMultiAllocations2String.json */ = {isa = PBXFileReference; explicitFileType = text.json; path = rawMultiAllocations2String.json; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.json; };
 		E2937DE52306E5B30003552F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E2C3712C22EF196900403C23 /* EvolvAllocator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EvolvAllocator.swift; sourceTree = "<group>"; };
 		E2C3713122EF1AFF00403C23 /* DefaultEvolvClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultEvolvClient.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 				E26DB26122EB0DDA007B997F /* Info.plist */,
 				E2E201E5230D5D49007DCEE0 /* rawAllocationsString.json */,
 				E2E201E8230D5D99007DCEE0 /* rawMultiAllocationsString.json */,
+				E28A89F123425504007E4D98 /* rawMultiAllocations2String.json */,
 				E2E201EA230D5DCD007DCEE0 /* rawMultiAllocationsWithDupsString.json */,
 				E2F81C6B231537060091D9B4 /* rawAllocationsWithAudienceString.json */,
 			);
@@ -400,6 +403,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = E26DB1E222EB0470007B997F;
 			productRefGroup = E26DB1ED22EB0470007B997F /* Products */;
@@ -430,6 +434,7 @@
 				E2F81C6C231537060091D9B4 /* rawAllocationsWithAudienceString.json in Resources */,
 				E2E201E9230D5D99007DCEE0 /* rawMultiAllocationsString.json in Resources */,
 				E2E201EB230D5DCD007DCEE0 /* rawMultiAllocationsWithDupsString.json in Resources */,
+				E28A89F223425504007E4D98 /* rawMultiAllocations2String.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -722,7 +727,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.EvolvKit;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.evolv.EvolvKit;
 				PRODUCT_NAME = EvolvKit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -752,7 +757,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.EvolvKit;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.evolv.EvolvKit;
 				PRODUCT_NAME = EvolvKit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;

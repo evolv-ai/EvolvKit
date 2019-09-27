@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		418C71E1126F9572339A6DF5 /* Pods_EvolvKit_ExampleObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7863F3F16BD3A230A8C86A9 /* Pods_EvolvKit_ExampleObjC.framework */; };
+		E2AD87B72344A9CF002AA9B8 /* EvolvClientHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AD87B62344A9CF002AA9B8 /* EvolvClientHelper.m */; };
+		E2AD87BA2344AE6C002AA9B8 /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AD87B92344AE6C002AA9B8 /* LoadingViewController.m */; };
 		E2BABC29230C303700FB9AFA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BABC28230C303700FB9AFA /* AppDelegate.m */; };
 		E2BABC2C230C303700FB9AFA /* ViewControllerObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BABC2B230C303700FB9AFA /* ViewControllerObjC.m */; };
 		E2BABC31230C303800FB9AFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2BABC30230C303800FB9AFA /* Assets.xcassets */; };
@@ -19,6 +21,10 @@
 
 /* Begin PBXFileReference section */
 		A1B3BE5E3C87F6CE42D1111C /* Pods-EvolvKit-ExampleObjC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EvolvKit-ExampleObjC.release.xcconfig"; path = "Target Support Files/Pods-EvolvKit-ExampleObjC/Pods-EvolvKit-ExampleObjC.release.xcconfig"; sourceTree = "<group>"; };
+		E2AD87B52344A9CF002AA9B8 /* EvolvClientHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EvolvClientHelper.h; sourceTree = "<group>"; };
+		E2AD87B62344A9CF002AA9B8 /* EvolvClientHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EvolvClientHelper.m; sourceTree = "<group>"; };
+		E2AD87B82344AE6C002AA9B8 /* LoadingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoadingViewController.h; sourceTree = "<group>"; };
+		E2AD87B92344AE6C002AA9B8 /* LoadingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoadingViewController.m; sourceTree = "<group>"; };
 		E2BABC24230C303700FB9AFA /* ExampleObjC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleObjC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2BABC27230C303700FB9AFA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E2BABC28230C303700FB9AFA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -65,6 +71,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E2AD87BB2344BB3F002AA9B8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E2BABC2D230C303700FB9AFA /* Main.storyboard */,
+				E2BABC30230C303800FB9AFA /* Assets.xcassets */,
+				E2BABC32230C303800FB9AFA /* LaunchScreen.storyboard */,
+				E2BABC35230C303800FB9AFA /* Info.plist */,
+				E2BABC36230C303800FB9AFA /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		E2BABC1B230C303700FB9AFA = {
 			isa = PBXGroup;
 			children = (
@@ -88,15 +106,15 @@
 			children = (
 				E2BABC27230C303700FB9AFA /* AppDelegate.h */,
 				E2BABC28230C303700FB9AFA /* AppDelegate.m */,
-				E2BABC2A230C303700FB9AFA /* ViewControllerObjC.h */,
-				E2BABC2B230C303700FB9AFA /* ViewControllerObjC.m */,
-				E2BABC2D230C303700FB9AFA /* Main.storyboard */,
-				E2BABC30230C303800FB9AFA /* Assets.xcassets */,
-				E2BABC32230C303800FB9AFA /* LaunchScreen.storyboard */,
-				E2BABC35230C303800FB9AFA /* Info.plist */,
-				E2BABC36230C303800FB9AFA /* main.m */,
 				E2BABC40230C53BF00FB9AFA /* CustomAllocationStore.h */,
 				E2BABC41230C53BF00FB9AFA /* CustomAllocationStore.m */,
+				E2AD87B52344A9CF002AA9B8 /* EvolvClientHelper.h */,
+				E2AD87B62344A9CF002AA9B8 /* EvolvClientHelper.m */,
+				E2AD87B82344AE6C002AA9B8 /* LoadingViewController.h */,
+				E2AD87B92344AE6C002AA9B8 /* LoadingViewController.m */,
+				E2AD87BB2344BB3F002AA9B8 /* Supporting Files */,
+				E2BABC2A230C303700FB9AFA /* ViewControllerObjC.h */,
+				E2BABC2B230C303700FB9AFA /* ViewControllerObjC.m */,
 			);
 			path = ExampleObjC;
 			sourceTree = "<group>";
@@ -216,9 +234,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2BABC42230C53BF00FB9AFA /* CustomAllocationStore.m in Sources */,
+				E2AD87BA2344AE6C002AA9B8 /* LoadingViewController.m in Sources */,
 				E2BABC2C230C303700FB9AFA /* ViewControllerObjC.m in Sources */,
 				E2BABC37230C303800FB9AFA /* main.m in Sources */,
 				E2BABC29230C303700FB9AFA /* AppDelegate.m in Sources */,
+				E2AD87B72344A9CF002AA9B8 /* EvolvClientHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

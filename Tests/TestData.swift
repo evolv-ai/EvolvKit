@@ -32,6 +32,10 @@ class TestData {
         return decode(fromFile: "rawMultiAllocationsString")
     }
     
+    static var rawMultiAllocations2: [EvolvRawAllocation] {
+        return decode(fromFile: "rawMultiAllocations2String")
+    }
+    
     static var rawMultiAllocationsWithDups: [EvolvRawAllocation] {
         return decode(fromFile: "rawMultiAllocationsWithDupsString")
     }

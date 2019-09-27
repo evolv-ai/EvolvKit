@@ -24,60 +24,24 @@ class ViewController: UIViewController {
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var checkoutButton: UIButton!
     
-    let client: EvolvClient
-    let httpClient: EvolvHttpClient
-    let store: EvolvAllocationStore
+    private let evolvClient = EvolvClientHelper.shared.client
     
     @IBAction func didPressCheckOut(_ sender: Any) {
-        client.emitEvent(forKey: "conversion")
+        evolvClient?.emitEvent(forKey: "conversion")
         textLabel.text = "Conversion!"
     }
     
     @IBAction func didPressProductInfo(_ sender: Any) {
         textLabel.text = "Some really cool product info"
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        /*
-         When you receive the fetched json from the participants API, it will be as type String.
-         If you use the DefaultEvolvHttpClient, the string will be parsed to EvolvRawAllocation array
-         (required data type for EvolvAllocationStore).
-         
-         This example shows how the data can be structured in your view controllers,
-         your implementation can work directly with the raw string and serialize into EvolvRawAllocation.
-         */
-
-        store = CustomAllocationStore()
-        httpClient = DefaultEvolvHttpClient()
-
-        /// - Build config with custom timeout and custom allocation store
-        // set client to use sandbox environment
-        let config = EvolvConfig.builder(environmentId: "sandbox", httpClient: httpClient)
-            .set(allocationStore: store)
-            .build()
-        
-        // set error or debug logLevel for debugging
-        config.set(logLevel: .error)
-        
-        /// - Initialize the client with a stored user
-        /// fetches allocations from Evolv, and stores them in a custom store
-        client = EvolvClientFactory.createClient(config: config,
-                                                 participant: EvolvParticipant.builder().set(userId: "sandbox_user").build())
-        
-        /// - Initialize the client with a new user
-        /// - Uncomment this line if you prefer this initialization.
-        // client = EvolvClientFactory.createClient(config: config)
-
-        super.init(coder: aDecoder)
-    }
 	
     override func viewDidLoad() {
         super.viewDidLoad()
 
 		// MARK: Evolv subscribe
-        client.subscribe(forKey: "ui.layout", defaultValue: __N("#000000"), closure: setBackgroundColor)
-        client.subscribe(forKey: "ui.buttons.checkout.text", defaultValue: __N("BUY STUFF"), closure: changeButtonText)
-        client.confirm()
+        evolvClient?.subscribe(forKey: "ui.layout", defaultValue: __N("#000000"), closure: setBackgroundColor)
+        evolvClient?.subscribe(forKey: "ui.buttons.checkout.text", defaultValue: __N("BUY STUFF"), closure: changeButtonText)
+        evolvClient?.confirm()
     }
 
     /// Trailing closure example that will apply the treatments from the allocation.

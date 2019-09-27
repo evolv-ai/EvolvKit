@@ -1,14 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ooM-mx-evq">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ooM-mx-evq">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Loading View Controller-->
+        <scene sceneID="iGj-7Q-p2D">
+            <objects>
+                <viewController id="iAf-JR-TPP" customClass="LoadingViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qUG-CW-fnx"/>
+                        <viewControllerLayoutGuide type="bottom" id="bIL-WU-2Zm"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QTc-b1-UB5">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="ePo-qO-Qzk">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YSD-JC-TAR">
+                                <rect key="frame" x="24" y="516.5" width="366" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="bIL-WU-2Zm" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YSD-JC-TAR" secondAttribute="bottom" constant="16" id="6QQ-qA-qxw"/>
+                            <constraint firstItem="ePo-qO-Qzk" firstAttribute="centerX" secondItem="QTc-b1-UB5" secondAttribute="centerX" id="Cbc-RT-iTI"/>
+                            <constraint firstAttribute="trailing" secondItem="YSD-JC-TAR" secondAttribute="trailing" constant="24" id="b0u-Av-E1J"/>
+                            <constraint firstItem="ePo-qO-Qzk" firstAttribute="centerY" secondItem="QTc-b1-UB5" secondAttribute="centerY" id="buA-5Q-JKe"/>
+                            <constraint firstItem="YSD-JC-TAR" firstAttribute="top" secondItem="ePo-qO-Qzk" secondAttribute="bottom" constant="50" id="cWV-T5-zWu"/>
+                            <constraint firstItem="YSD-JC-TAR" firstAttribute="leading" secondItem="QTc-b1-UB5" secondAttribute="leading" constant="24" id="sCE-66-P9R"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Kvg-a1-FBx"/>
+                    <connections>
+                        <outlet property="label" destination="YSD-JC-TAR" id="T5Q-az-R0p"/>
+                        <segue destination="FiO-Vo-Ftc" kind="show" identifier="showMain" id="CzB-eC-Dff"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lEv-np-fNr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="485" y="68"/>
+        </scene>
         <!--EvolvKit Example App-->
         <scene sceneID="ECI-AD-8Bq">
             <objects>
@@ -31,11 +71,17 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z7w-2T-xgG">
-                                        <rect key="frame" x="43.5" y="95.5" width="211" height="38"/>
+                                        <rect key="frame" x="78" y="95.5" width="142" height="38"/>
                                         <color key="backgroundColor" red="1" green="0.86666666670000003" blue="0.17254901959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
-                                        <state key="normal" title="BEGIN SECURE CHECKOUT"/>
+                                        <state key="normal" title="TEST CHECKOUT"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="didPressCheckOut:" destination="FiO-Vo-Ftc" eventType="touchUpInside" id="nmw-aA-Rt6"/>
                                         </connections>
@@ -46,6 +92,12 @@
                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                         <state key="normal" title="PRODUCT INFO"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="didPressProductInfo:" destination="FiO-Vo-Ftc" eventType="touchUpInside" id="M7t-NG-teO"/>
                                         </connections>
@@ -80,7 +132,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gWk-sf-0Lf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1042.0289855072465" y="69.642857142857139"/>
+            <point key="canvasLocation" x="1207" y="70"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bfT-pN-BH4">
@@ -93,12 +145,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="FiO-Vo-Ftc" kind="relationship" relationship="rootViewController" id="VeB-0m-6pw"/>
+                        <segue destination="iAf-JR-TPP" kind="relationship" relationship="rootViewController" id="290-ff-zlD"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qni-H3-AVV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="131.8840579710145" y="69.642857142857139"/>
+            <point key="canvasLocation" x="-271" y="70"/>
         </scene>
     </scenes>
 </document>

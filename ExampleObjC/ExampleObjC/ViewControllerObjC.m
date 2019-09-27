@@ -18,45 +18,25 @@
 
 #import "ViewControllerObjC.h"
 #import "EvolvKit-Swift.h"
-#import "CustomAllocationStore.h"
+#import "EvolvClientHelper.h"
 
 @interface ViewControllerObjC ()
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;
 @property (weak, nonatomic) IBOutlet UIButton *checkoutButton;
 - (IBAction)didPressCheckOut:(id)sender;
 - (IBAction)didPressProductInfo:(id)sender;
-
-@property (strong, nonatomic) id<EvolvClient> client;
-@property (strong, nonatomic) id<EvolvHttpClient> httpClient;
-@property (strong, nonatomic) id<EvolvAllocationStore> store;
 @end
 
 @implementation ViewControllerObjC
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
-    self = [super initWithCoder:coder];
-    if (self) {
-        _httpClient = [[DefaultEvolvHttpClient alloc] init];
-        _store = [[CustomAllocationStore alloc] init];
-
-        /// - Build config with custom timeout and custom allocation store
-        // set client to use sandbox environment
-        EvolvConfig *config = [[[EvolvConfig builderWithEnvironmentId:@"sandbox" httpClient:_httpClient] setWithAllocationStore:_store] build];
-        
-        [config setWithLogLevel:EvolvLogLevelDebug];
-        
-        _client = [EvolvClientFactory createClientWithConfig:config participant:[[[EvolvParticipant builder] setWithUserId:@"sandbox_user"] build]];
-    }
-    
-    return self;
+- (id<EvolvClient>)evolvClient {
+    return [EvolvClientHelper shared].client;
 }
     
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [_client subscribeForKey:@"ui.layout" defaultValue:[[EvolvRawAllocationNode alloc] init:@"#000000"] closure:^(EvolvRawAllocationNode * _Nonnull node) {
-        
+    [self.evolvClient subscribeForKey:@"ui.layout" defaultValue:[[EvolvRawAllocationNode alloc] init:@"#000000"] closure:^(EvolvRawAllocationNode * _Nonnull node) {
         __block ViewControllerObjC *safeSelf = self;
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -75,8 +55,7 @@
             }
         });
     }];
-    [_client subscribeForKey:@"ui.buttons.checkout.text" defaultValue:[[EvolvRawAllocationNode alloc] init:@"BUY STUFF"] closure:^(EvolvRawAllocationNode * _Nonnull node) {
-        
+    [self.evolvClient subscribeForKey:@"ui.buttons.checkout.text" defaultValue:[[EvolvRawAllocationNode alloc] init:@"BUY STUFF"] closure:^(EvolvRawAllocationNode * _Nonnull node) {
         __block ViewControllerObjC *safeSelf = self;
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -85,12 +64,12 @@
         });
     }];
     
-    [_client confirm];
+    [self.evolvClient confirm];
     
 }
 
 - (IBAction)didPressCheckOut:(id)sender {
-    [_client emitEventForKey:@"conversion"];
+    [self.evolvClient emitEventForKey:@"conversion"];
     _textLabel.text = @"Conversion!";
 }
 

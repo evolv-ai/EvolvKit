@@ -1,14 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="9Fd-yr-XeF">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="9Fd-yr-XeF">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Loading View Controller-->
+        <scene sceneID="lIa-TK-7yL">
+            <objects>
+                <viewController id="4yv-Yc-osc" customClass="LoadingViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jAT-OP-BhE"/>
+                        <viewControllerLayoutGuide type="bottom" id="VIS-by-Sfn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UVA-Qm-nPK">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="mzJ-hH-7OT">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EfQ-Dx-7tJ">
+                                <rect key="frame" x="24" y="516.5" width="366" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="mzJ-hH-7OT" firstAttribute="centerX" secondItem="UVA-Qm-nPK" secondAttribute="centerX" id="0hJ-eo-EfQ"/>
+                            <constraint firstItem="EfQ-Dx-7tJ" firstAttribute="leading" secondItem="UVA-Qm-nPK" secondAttribute="leading" constant="24" id="CFi-NM-rfY"/>
+                            <constraint firstItem="mzJ-hH-7OT" firstAttribute="centerY" secondItem="UVA-Qm-nPK" secondAttribute="centerY" id="CSk-9B-Hb4"/>
+                            <constraint firstItem="EfQ-Dx-7tJ" firstAttribute="top" secondItem="mzJ-hH-7OT" secondAttribute="bottom" constant="50" id="EUf-1S-4vK"/>
+                            <constraint firstAttribute="trailing" secondItem="EfQ-Dx-7tJ" secondAttribute="trailing" constant="24" id="hsW-3v-Noe"/>
+                            <constraint firstItem="VIS-by-Sfn" firstAttribute="top" relation="greaterThanOrEqual" secondItem="EfQ-Dx-7tJ" secondAttribute="bottom" constant="16" id="uQD-zd-ssq"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="9LD-XX-AKB"/>
+                    <connections>
+                        <outlet property="label" destination="EfQ-Dx-7tJ" id="IJt-DZ-HJz"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="showMain" id="0ea-Cj-fZk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MzR-VN-z2w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="738" y="139"/>
+        </scene>
         <!--EvolvKit Example App-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -104,7 +144,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1047.8260869565217" y="138.61607142857142"/>
+            <point key="canvasLocation" x="1517" y="139"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5ez-E5-S0M">
@@ -117,12 +157,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="7Cx-Pi-MFJ"/>
+                        <segue destination="4yv-Yc-osc" kind="relationship" relationship="rootViewController" id="efQ-vW-HgW"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X3R-8a-ZwZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="137.68115942028987" y="138.61607142857142"/>
+            <point key="canvasLocation" x="-41" y="139"/>
         </scene>
     </scenes>
 </document>
