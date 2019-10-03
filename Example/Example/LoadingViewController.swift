@@ -29,8 +29,6 @@ class LoadingViewController: UIViewController {
             switch status {
             case .ready:
                 self?.performSegue(withIdentifier: "showMain", sender: nil)
-            case .failed:
-                self?.label?.text = "Evolv Client - Failed to load data"
             default:
                 break
             }

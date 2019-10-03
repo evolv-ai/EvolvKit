@@ -36,6 +36,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.hidesBackButton = YES;
+    
     [self.evolvClient subscribeForKey:@"ui.layout" defaultValue:[[EvolvRawAllocationNode alloc] init:@"#000000"] closure:^(EvolvRawAllocationNode * _Nonnull node) {
         __block ViewControllerObjC *safeSelf = self;
         

@@ -19,29 +19,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="mzJ-hH-7OT">
-                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="mzJ-hH-7OT">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
                             </activityIndicatorView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EfQ-Dx-7tJ">
-                                <rect key="frame" x="24" y="516.5" width="366" height="0.0"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="mzJ-hH-7OT" firstAttribute="centerX" secondItem="UVA-Qm-nPK" secondAttribute="centerX" id="0hJ-eo-EfQ"/>
-                            <constraint firstItem="EfQ-Dx-7tJ" firstAttribute="leading" secondItem="UVA-Qm-nPK" secondAttribute="leading" constant="24" id="CFi-NM-rfY"/>
                             <constraint firstItem="mzJ-hH-7OT" firstAttribute="centerY" secondItem="UVA-Qm-nPK" secondAttribute="centerY" id="CSk-9B-Hb4"/>
-                            <constraint firstItem="EfQ-Dx-7tJ" firstAttribute="top" secondItem="mzJ-hH-7OT" secondAttribute="bottom" constant="50" id="EUf-1S-4vK"/>
-                            <constraint firstAttribute="trailing" secondItem="EfQ-Dx-7tJ" secondAttribute="trailing" constant="24" id="hsW-3v-Noe"/>
-                            <constraint firstItem="VIS-by-Sfn" firstAttribute="top" relation="greaterThanOrEqual" secondItem="EfQ-Dx-7tJ" secondAttribute="bottom" constant="16" id="uQD-zd-ssq"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="9LD-XX-AKB"/>
                     <connections>
-                        <outlet property="label" destination="EfQ-Dx-7tJ" id="IJt-DZ-HJz"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showMain" id="0ea-Cj-fZk"/>
                     </connections>
                 </viewController>

@@ -33,8 +33,6 @@
             case EvolvClientStatusReady:
                 [self performSegueWithIdentifier:@"showMain" sender:nil];
                 break;
-            case EvolvClientStatusFailed:
-                [[self label] setText:@"Evolv Client - Failed to load data"];
             default:
                 break;
         }

@@ -19,6 +19,8 @@
 import UIKit
 import EvolvKit
 
+/// This example shows how the data can be structured in your view controllers,
+/// your implementation can work directly with the raw string and serialize into EvolvRawAllocation.
 class ViewController: UIViewController {
     
     @IBOutlet weak var textLabel: UILabel!
@@ -27,7 +29,7 @@ class ViewController: UIViewController {
     private let evolvClient = EvolvClientHelper.shared.client
     
     @IBAction func didPressCheckOut(_ sender: Any) {
-        evolvClient?.emitEvent(forKey: "conversion")
+        evolvClient.emitEvent(forKey: "conversion")
         textLabel.text = "Conversion!"
     }
     
@@ -37,11 +39,13 @@ class ViewController: UIViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.hidesBackButton = true
 
 		// MARK: Evolv subscribe
-        evolvClient?.subscribe(forKey: "ui.layout", defaultValue: __N("#000000"), closure: setBackgroundColor)
-        evolvClient?.subscribe(forKey: "ui.buttons.checkout.text", defaultValue: __N("BUY STUFF"), closure: changeButtonText)
-        evolvClient?.confirm()
+        evolvClient.subscribe(forKey: "ui.layout", defaultValue: __N("#000000"), closure: setBackgroundColor)
+        evolvClient.subscribe(forKey: "ui.buttons.checkout.text", defaultValue: __N("BUY STUFF"), closure: changeButtonText)
+        evolvClient.confirm()
     }
 
     /// Trailing closure example that will apply the treatments from the allocation.

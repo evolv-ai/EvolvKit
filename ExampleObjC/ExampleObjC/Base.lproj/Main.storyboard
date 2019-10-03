@@ -19,29 +19,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="ePo-qO-Qzk">
-                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ePo-qO-Qzk">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
                             </activityIndicatorView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YSD-JC-TAR">
-                                <rect key="frame" x="24" y="516.5" width="366" height="0.0"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="bIL-WU-2Zm" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YSD-JC-TAR" secondAttribute="bottom" constant="16" id="6QQ-qA-qxw"/>
                             <constraint firstItem="ePo-qO-Qzk" firstAttribute="centerX" secondItem="QTc-b1-UB5" secondAttribute="centerX" id="Cbc-RT-iTI"/>
-                            <constraint firstAttribute="trailing" secondItem="YSD-JC-TAR" secondAttribute="trailing" constant="24" id="b0u-Av-E1J"/>
                             <constraint firstItem="ePo-qO-Qzk" firstAttribute="centerY" secondItem="QTc-b1-UB5" secondAttribute="centerY" id="buA-5Q-JKe"/>
-                            <constraint firstItem="YSD-JC-TAR" firstAttribute="top" secondItem="ePo-qO-Qzk" secondAttribute="bottom" constant="50" id="cWV-T5-zWu"/>
-                            <constraint firstItem="YSD-JC-TAR" firstAttribute="leading" secondItem="QTc-b1-UB5" secondAttribute="leading" constant="24" id="sCE-66-P9R"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Kvg-a1-FBx"/>
                     <connections>
-                        <outlet property="label" destination="YSD-JC-TAR" id="T5Q-az-R0p"/>
                         <segue destination="FiO-Vo-Ftc" kind="show" identifier="showMain" id="CzB-eC-Dff"/>
                     </connections>
                 </viewController>

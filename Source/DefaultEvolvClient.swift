@@ -23,7 +23,6 @@ import PromiseKit
     case unknown
     case initializing
     case ready
-    case failed
 }
 
 @objc public protocol EvolvClientDelegate: AnyObject {
@@ -52,8 +51,6 @@ class DefaultEvolvClient: EvolvClient {
                 logger.debug("Evolv Client - Initializing.")
             case .ready:
                 logger.debug("Evolv Client - Ready for use.")
-            case .failed:
-                logger.error("Evolv Client - Failed.")
             default:
                 break
             }
@@ -155,10 +152,8 @@ extension DefaultEvolvClient: EvolvAllocatorDelegate {
     
     func didChangeAllocationStatus(_ allocationStatus: EvolvAllocator.AllocationStatus) {
         switch allocationStatus {
-        case .retrieved:
+        case .retrieved, .failed:
             status = .ready
-        case .failed:
-            status = .failed
         default:
             break
         }

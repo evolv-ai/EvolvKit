@@ -48,14 +48,14 @@
         _httpClient = [[DefaultEvolvHttpClient alloc] init];
         _store = [[CustomAllocationStore alloc] init];
         
-        /// - Build config with custom timeout and custom allocation store
-        // set client to use sandbox environment
+        /// Build config with custom timeout and custom allocation store
+        /// Set client to any one of your environmentIds. sandbox is an example id.
         EvolvConfig *config = [[[EvolvConfig builderWithEnvironmentId:@"sandbox" httpClient:_httpClient] setWithAllocationStore:_store] build];
         
         // set error or debug logLevel for debugging
         [config setWithLogLevel:EvolvLogLevelDebug];
         
-        /// - Initialize the client with a stored user
+        /// Initialize the client with a stored user
         /// fetches allocations from Evolv, and stores them in a custom store
         _client = [EvolvClientFactory createClientWithConfig:config
                                                  participant:[[[EvolvParticipant builder] setWithUserId:@"sandbox_user"] build]
