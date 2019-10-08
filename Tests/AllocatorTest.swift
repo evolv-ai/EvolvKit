@@ -56,12 +56,14 @@ class AllocatorTest: XCTestCase {
                                                 mockExecutionQueue: EvolvExecutionQueue,
                                                 mockHttpClient: EvolvHttpClient,
                                                 mockAllocationStore: EvolvAllocationStore) -> EvolvConfig {
-        return EvolvConfig(httpScheme: actualConfig.httpScheme,
-                           domain: actualConfig.domain,
-                           version: actualConfig.version,
-                           environmentId: actualConfig.environmentId,
-                           evolvAllocationStore: mockAllocationStore,
-                           httpClient: mockHttpClient)
+        let config = EvolvConfig(httpScheme: actualConfig.httpScheme,
+                                 domain: actualConfig.domain,
+                                 version: actualConfig.version,
+                                 environmentId: actualConfig.environmentId,
+                                 evolvAllocationStore: mockAllocationStore,
+                                 httpClient: mockHttpClient)
+        config.set(logLevel: .error)
+        return config
     }
     
     func createUrlComponents(config: EvolvConfig) -> URLComponents {

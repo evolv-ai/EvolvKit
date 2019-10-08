@@ -18,9 +18,13 @@
 
 import PromiseKit
 
+protocol EvolvAllocatorDelegate: AnyObject {
+    func didChangeAllocationStatus(_ allocationStatus: EvolvAllocator.AllocationStatus)
+}
+
 class EvolvAllocator {
     
-    public enum AllocationStatus {
+    enum AllocationStatus {
         case fetching
         case retrieved
         case failed
@@ -37,7 +41,14 @@ class EvolvAllocator {
     
     private var confirmationSandbagged: Bool = false
     private var contaminationSandbagged: Bool = false
-    private var allocationStatus: AllocationStatus
+    
+    weak var delegate: EvolvAllocatorDelegate?
+    
+    private var allocationStatus: AllocationStatus {
+        didSet {
+            delegate?.didChangeAllocationStatus(allocationStatus)
+        }
+    }
     
     private lazy var jsonDecoder: JSONDecoder = JSONDecoder()
     
@@ -48,7 +59,7 @@ class EvolvAllocator {
         self.participant = participant
         self.httpClient = config.httpClient
         self.allocationStatus = .fetching
-        self.eventEmitter = EvolvEventEmitter(config: config, participant: participant)
+        self.eventEmitter = EvolvEventEmitter(config: config, participant: participant, store: store)
     }
     
     func getAllocationStatus() -> AllocationStatus {
@@ -116,18 +127,18 @@ class EvolvAllocator {
                 self.store.put(self.participant.userId, currentAllocations)
                 self.allocationStatus = .retrieved
                 
-                if self.confirmationSandbagged {
-                    self.eventEmitter.confirm(rawAllocations: currentAllocations)
-                }
-                
-                if self.contaminationSandbagged {
-                    self.eventEmitter.contaminate(rawAllocations: currentAllocations)
-                }
-                
                 resolve.fulfill(currentAllocations)
                 
                 do {
                     try self.executionQueue.executeAllWithValues(from: currentAllocations)
+                    
+                    if self.confirmationSandbagged {
+                        self.eventEmitter.confirm(rawAllocations: currentAllocations)
+                    }
+                    
+                    if self.contaminationSandbagged {
+                        self.eventEmitter.contaminate(rawAllocations: currentAllocations)
+                    }
                 } catch let error {
                     _ = self.resolveAllocationsFailure()
                     self.logger.error("There was an error executing with allocations. \(error.localizedDescription)")

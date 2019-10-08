@@ -44,26 +44,26 @@ import Foundation
     /// - Parameters:
     ///   - key: The identifier of the event.
     ///   - score: A score to be associated with the event.
-    @objc func emitEvent(forKey key: String, score: Double)
+    func emitEvent(forKey key: String, score: Double)
     
     /// Emits a generic event to be recorded by Evolv.
     ///
     /// Sends an event to Evolv to be recorded and reported upon.
     ///
     /// - Parameter key: The identifier of the event.
-    @objc func emitEvent(forKey key: String)
+    func emitEvent(forKey key: String)
     
     /// Sends a confirmed event to Evolv.
     ///
     /// Method produces a confirmed event which confirms the participant's
     /// allocation. Method will not do anything in the event that the allocation
     /// timed out or failed.
-    @objc func confirm()
+    func confirm()
     
     /// Sends a contamination event to Evolv.
     ///
     ///  Method produces a contamination event which will contaminate the
     /// participant's allocation. Method will not do anything in the event
     /// that the allocation timed out or failed.
-    @objc func contaminate()
+    func contaminate()
 }

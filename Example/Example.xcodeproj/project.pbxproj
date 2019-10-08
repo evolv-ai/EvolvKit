@@ -15,6 +15,8 @@
 		E26DB2BE22EB21DC007B997F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E26DB2BD22EB21DC007B997F /* Assets.xcassets */; };
 		E26DB2C122EB21DC007B997F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E26DB2BF22EB21DC007B997F /* LaunchScreen.storyboard */; };
 		E26DB2C922EB2D30007B997F /* CustomAllocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26DB2C822EB2D30007B997F /* CustomAllocationStore.swift */; };
+		E27A86E723437C5C00FE8CDB /* EvolvClientHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27A86E623437C5C00FE8CDB /* EvolvClientHelper.swift */; };
+		E27A86E92343A92700FE8CDB /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27A86E82343A92700FE8CDB /* LoadingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		E26DB2C022EB21DC007B997F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E26DB2C222EB21DC007B997F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E26DB2C822EB2D30007B997F /* CustomAllocationStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAllocationStore.swift; sourceTree = "<group>"; };
+		E27A86E623437C5C00FE8CDB /* EvolvClientHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvolvClientHelper.swift; sourceTree = "<group>"; };
+		E27A86E82343A92700FE8CDB /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,16 +83,26 @@
 		E26DB2B522EB21DB007B997F /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				E26DB2C822EB2D30007B997F /* CustomAllocationStore.swift */,
 				E26DB2B622EB21DB007B997F /* AppDelegate.swift */,
-				E26DB2B822EB21DB007B997F /* ViewController.swift */,
+				E26DB2C822EB2D30007B997F /* CustomAllocationStore.swift */,
+				E27A86E623437C5C00FE8CDB /* EvolvClientHelper.swift */,
 				E23A257122F1AA87000B9611 /* Extensions.swift */,
+				E27A86E82343A92700FE8CDB /* LoadingViewController.swift */,
+				E2AD87BC2344BB5B002AA9B8 /* Supporting Files */,
+				E26DB2B822EB21DB007B997F /* ViewController.swift */,
+			);
+			path = Example;
+			sourceTree = "<group>";
+		};
+		E2AD87BC2344BB5B002AA9B8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
 				E26DB2BA22EB21DB007B997F /* Main.storyboard */,
 				E26DB2BD22EB21DC007B997F /* Assets.xcassets */,
 				E26DB2BF22EB21DC007B997F /* LaunchScreen.storyboard */,
 				E26DB2C222EB21DC007B997F /* Info.plist */,
 			);
-			path = Example;
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		F60693C50CF982065E05313E /* Frameworks */ = {
@@ -215,9 +229,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E26DB2B922EB21DB007B997F /* ViewController.swift in Sources */,
+				E27A86E723437C5C00FE8CDB /* EvolvClientHelper.swift in Sources */,
 				E26DB2C922EB2D30007B997F /* CustomAllocationStore.swift in Sources */,
 				E26DB2B722EB21DB007B997F /* AppDelegate.swift in Sources */,
 				E23A257222F1AA87000B9611 /* Extensions.swift in Sources */,
+				E27A86E92343A92700FE8CDB /* LoadingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,7 +380,7 @@
 			baseConfigurationReference = 7E16C7A42B6A6CE8B52432ED /* Pods-EvolvKit-Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Example/Info.plist;
@@ -372,7 +388,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.EvolvKit.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.evolv.EvolvKit.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -385,7 +401,7 @@
 			baseConfigurationReference = 7033EF8057A4CF1A2B7E49C1 /* Pods-EvolvKit-Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Example/Info.plist;
@@ -393,7 +409,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.EvolvKit.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.evolv.EvolvKit.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

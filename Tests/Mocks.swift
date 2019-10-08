@@ -170,7 +170,7 @@ class ClientMock: DefaultEvolvClient {
     }
     
     public func contaminate(_ eventEmitter: EventEmitterMock, _ allocations: [EvolvRawAllocation]) {
-        eventEmitter.confirm(rawAllocations: allocations)
+        eventEmitter.contaminate(rawAllocations: allocations)
     }
     
 }
@@ -202,6 +202,10 @@ class AllocatorMock: EvolvAllocator {
         sandbagContamationWasCalled = true
     }
     
+    override func getAllocationStatus() -> AllocationStatus {
+        return allocationStatus
+    }
+    
 }
 
 class EventEmitterMock: EvolvEventEmitter {
@@ -210,49 +214,20 @@ class EventEmitterMock: EvolvEventEmitter {
     var confirmWithAllocationsWasCalled = false
     var contaminateWithAllocationsWasCalled = false
     
-    override func sendAllocationEvents(forKey key: String, rawAllocations allocations: [EvolvRawAllocation]) {
-        let eid = allocations[0].experimentId
-        let cid = allocations[0].candidateId
-        
-        guard let url = createEventUrl(type: key, experimentId: eid, candidateId: cid) else {
-            return
-        }
-        
-        makeEventRequest(url)
-    }
-    
     private func makeEventRequest(_ url: URL) {
         httpClientMock.sendEvents(url)
     }
     
     /// emitter.contaminate => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
     override public func contaminate(rawAllocations allocations: [EvolvRawAllocation]) {
-        let testKey = "test_key"
-        sendAllocationEvents(forKey: testKey, rawAllocations: allocations)
+        sendAllocationEvents(forKey: Key.contaminate.rawValue, rawAllocations: allocations)
         contaminateWithAllocationsWasCalled = true
     }
     
     /// emitter.confirm => sendAllocationEvents => makeEventRequest => httpClient.sendEvents()
     override public func confirm(rawAllocations allocations: [EvolvRawAllocation]) {
-        let testKey = "test_key"
-        sendAllocationEvents(forKey: testKey, rawAllocations: allocations)
+        sendAllocationEvents(forKey: Key.confirm.rawValue, rawAllocations: allocations)
         confirmWithAllocationsWasCalled = true
-    }
-    
-    override public func emit(forKey key: String) {
-        guard let url = createEventUrl(type: key, score: 1.0) else {
-            return
-        }
-        
-        makeEventRequest(url)
-    }
-    
-    override public func emit(forKey key: String, score: Double) {
-        guard let url = createEventUrl(type: key, score: score) else {
-            return
-        }
-        
-        makeEventRequest(url)
     }
     
 }

@@ -30,22 +30,16 @@ class EvolvEventEmitter {
     private let httpClient: EvolvHttpClient
     private let config: EvolvConfig
     private let participant: EvolvParticipant
+    private let store: EvolvAllocationStore
     
-    init(config: EvolvConfig, participant: EvolvParticipant) {
+    init(config: EvolvConfig, participant: EvolvParticipant, store: EvolvAllocationStore) {
         self.config = config
         self.participant = participant
+        self.store = store
         self.httpClient = config.httpClient
     }
     
-    func emit(forKey key: String) {
-        guard let url = createEventUrl(type: key, score: 1.0) else {
-            return
-        }
-        
-        makeEventRequest(url)
-    }
-    
-    func emit(forKey key: String, score: Double) {
+    func emit(forKey key: String, score: Double = 1.0) {
         guard let url: URL = createEventUrl(type: key, score: score) else {
             return
         }
@@ -62,17 +56,39 @@ class EvolvEventEmitter {
     }
     
     func sendAllocationEvents(forKey key: String, rawAllocations: [EvolvRawAllocation]) {
-        if !rawAllocations.isEmpty {
-            for allocation in rawAllocations {
-                if allocation.isFilter(userAttributes: participant.userAttributes) {
-                    logger.debug("\(key) event filtered")
-                    continue
-                }
-                
-                let url = createEventUrl(type: key,
-                                         experimentId: allocation.experimentId,
-                                         candidateId: allocation.candidateId)
-                makeEventRequest(url)
+        guard rawAllocations.isEmpty == false else {
+            return
+        }
+        
+        for allocation in rawAllocations {
+            if allocation.isFilter(userAttributes: participant.userAttributes) {
+                logger.debug("\(key) event filtered")
+                continue
+            }
+            
+            guard allocation.state.contains(.touched) else {
+                logger.debug("\(key) event filtered (not touched)")
+                continue
+            }
+            
+            guard EvolvRawAllocation.State.submitted.subtracting(allocation.state) == .submitted else {
+                logger.debug("\(key) event filtered (already submitted)")
+                continue
+            }
+            
+            let url = createEventUrl(type: key,
+                                     experimentId: allocation.experimentId,
+                                     candidateId: allocation.candidateId)
+            makeEventRequest(url)
+            
+            // mark confirmed || contaminated
+            switch key {
+            case Key.confirm.rawValue:
+                allocation.state.insert(.confirmed)
+            case Key.contaminate.rawValue:
+                allocation.state.insert(.contaminated)
+            default:
+                break
             }
         }
     }

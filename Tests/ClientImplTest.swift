@@ -51,7 +51,7 @@ class ClientImplTest: XCTestCase {
                                       evolvAllocationStore: mockAllocationStore,
                                       httpClient: mockHttpClient)
         mockExecutionQueue = ExecutionQueueMock()
-        mockEventEmitter = EventEmitterMock(config: mockConfig, participant: participant)
+        mockEventEmitter = EventEmitterMock(config: mockConfig, participant: participant, store: mockAllocationStore)
         mockAllocator = AllocatorMock(config: mockConfig, participant: participant)
     }
     
@@ -75,7 +75,7 @@ class ClientImplTest: XCTestCase {
                                  environmentId: "test_env",
                                  evolvAllocationStore: mockStoreWithAllocations,
                                  httpClient: self.mockHttpClient)
-        let emitter = EvolvEventEmitter(config: config, participant: participant)
+        let emitter = EvolvEventEmitter(config: config, participant: participant, store: mockAllocationStore)
         
         let subscriptionKey = "search.weighting.distance"
         let defaultValue: Double = 0.001
@@ -110,7 +110,7 @@ class ClientImplTest: XCTestCase {
                                  environmentId: "test_env",
                                  evolvAllocationStore: mockStoreWithAllocations,
                                  httpClient: mockHttpClient)
-        let emitter = EvolvEventEmitter(config: config, participant: participant)
+        let emitter = EvolvEventEmitter(config: config, participant: participant, store: mockAllocationStore)
         
         let subscriptionKey = "search.weighting.distance.bubbles"
         let defaultValue: Double = 0.001
@@ -232,7 +232,7 @@ class ClientImplTest: XCTestCase {
                                     allocator: mockAllocator,
                                     previousAllocations: false,
                                     participant: participant)
-        let emitter = EventEmitterMock(config: mockConfig, participant: participant)
+        let emitter = EventEmitterMock(config: mockConfig, participant: participant, store: mockAllocationStore)
         client.confirm(emitter, allocations)
         allocator.allocationStatus = .retrieved
         
@@ -286,12 +286,12 @@ class ClientImplTest: XCTestCase {
                                     allocator: mockAllocator,
                                     previousAllocations: false,
                                     participant: participant)
-        let emitter = EventEmitterMock(config: mockConfig, participant: participant)
+        let emitter = EventEmitterMock(config: mockConfig, participant: participant, store: mockAllocationStore)
         client.contaminate(emitter, allocations)
         allocator.allocationStatus = .retrieved
         
         XCTAssertEqual(allocator.allocationStatus, .retrieved)
-        XCTAssertTrue(emitter.confirmWithAllocationsWasCalled)
+        XCTAssertTrue(emitter.contaminateWithAllocationsWasCalled)
     }
     
     func testSubscribeNoPreviousAllocationsWithFetchingState() {
@@ -399,7 +399,7 @@ class ClientImplTest: XCTestCase {
         }
         
         client.subscribe(forKey: "search.weighting.distance", defaultValue: __N(defaultValue), closure: updateValue)
-        XCTAssertEqual(expected, self.testValue)
+        XCTAssertNotEqual(expected, self.testValue)
         self.testValue = 0.0
     }
     
@@ -438,6 +438,107 @@ class ClientImplTest: XCTestCase {
         client.subscribe(forKey: "not.a.valid.key", defaultValue: __N(defaultValue), closure: updateValue)
         XCTAssertNotEqual(expected, self.testValue)
         self.testValue = 0.0
+    }
+    
+    func test_RawAllocationTouchState() {
+        let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+        let store = DefaultEvolvAllocationStore(size: 10)
+        let mockConfig = AllocatorTest()
+            .setUpMockedEvolvConfigWithMockedClient(mockedConfig: self.mockConfig,
+                                                    actualConfig: actualConfig,
+                                                    mockExecutionQueue: mockExecutionQueue,
+                                                    mockHttpClient: mockHttpClient,
+                                                    mockAllocationStore: store)
+        let allocations = TestData.rawMultiAllocations2
+        store.put(participant.userId, allocations)
+        
+        let promise = Promise { resolver in
+            resolver.fulfill(allocations)
+        }
+        
+        let allocator = AllocatorMock(config: mockConfig, participant: participant)
+        allocator.allocationStatus = .retrieved
+        
+        let client = ClientMock(config: mockConfig,
+                                eventEmitter: mockEventEmitter,
+                                futureAllocations: promise,
+                                allocator: allocator,
+                                previousAllocations: false,
+                                participant: participant)
+        
+        XCTAssertNotEqual(allocations.first?.state, .touched)
+        XCTAssertNotEqual(allocations.last?.state, .touched)
+        
+        // invalid key
+        client.subscribe(forKey: "pages.first_page.asd", defaultValue: __N(""), closure: { _ in })
+        XCTAssertNotEqual(allocations.first?.state, .touched)
+        
+        // touch first allocation
+        client.subscribe(forKey: "pages.first_page.header", defaultValue: __N(""), closure: { _ in })
+        XCTAssertEqual(allocations.first?.state, .touched)
+        
+        // double touch first allocation
+        client.subscribe(forKey: "pages.first_page.header", defaultValue: __N(""), closure: { _ in })
+        XCTAssertEqual(allocations.first?.state, .touched)
+        XCTAssertNotEqual(allocations.last?.state, .touched)
+        
+        // touch last allocation
+        client.subscribe(forKey: "pages.settings_page.header", defaultValue: __N(""), closure: { _ in })
+        XCTAssertEqual(allocations.first?.state, .touched)
+        XCTAssertEqual(allocations.last?.state, .touched)
+    }
+    
+    func test_RawAllocationConfirmContaminateIndividually() {
+        let actualConfig = EvolvConfig.builder(environmentId: environmentId, httpClient: mockHttpClient).build()
+        let store = DefaultEvolvAllocationStore(size: 10)
+        let mockConfig = AllocatorTest()
+            .setUpMockedEvolvConfigWithMockedClient(mockedConfig: self.mockConfig,
+                                                    actualConfig: actualConfig,
+                                                    mockExecutionQueue: mockExecutionQueue,
+                                                    mockHttpClient: mockHttpClient,
+                                                    mockAllocationStore: store)
+        let allocations = TestData.rawMultiAllocations2
+        store.put(participant.userId, allocations)
+        
+        let promise = Promise { resolver in
+            resolver.fulfill(allocations)
+        }
+        
+        let allocator = AllocatorMock(config: mockConfig, participant: participant)
+        allocator.allocationStatus = .retrieved
+        
+        let client = ClientMock(config: mockConfig,
+                                eventEmitter: mockEventEmitter,
+                                futureAllocations: promise,
+                                allocator: allocator,
+                                previousAllocations: false,
+                                participant: participant)
+        let emitter = EventEmitterMock(config: mockConfig, participant: participant, store: store)
+        
+        XCTAssertNotEqual(allocations.first?.state, .touched)
+        XCTAssertNotEqual(allocations.last?.state, .touched)
+        
+        // touch first allocation
+        client.subscribe(forKey: "pages.first_page.header", defaultValue: __N(""), closure: { _ in })
+        XCTAssertEqual(allocations.first?.state, .touched)
+        
+        // confirm first allocation
+        client.confirm(emitter, allocations)
+        XCTAssertEqual(allocations.first?.state, [.confirmed, .touched])
+        XCTAssertNotEqual(allocations.last?.state, .confirmed)
+        
+        // touch last allocation
+        client.subscribe(forKey: "pages.settings_page.header", defaultValue: __N(""), closure: { _ in })
+        XCTAssertEqual(allocations.last?.state, .touched)
+        
+        // contaminate last allocation
+        client.contaminate(emitter, allocations)
+        XCTAssertEqual(allocations.first?.state, [.confirmed, .touched])
+        XCTAssertEqual(allocations.last?.state, [.contaminated, .touched])
+        
+        // check store updates
+        XCTAssertEqual(store.get(participant.userId).first?.state, [.confirmed, .touched])
+        XCTAssertEqual(store.get(participant.userId).last?.state, [.contaminated, .touched])
     }
     
 }

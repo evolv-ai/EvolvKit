@@ -65,7 +65,7 @@ class ExecutionQueueTest: XCTestCase {
         let defaultValue = "red"
         let execution = ExecutionMock(key: key,
                                       defaultValue: __N(defaultValue),
-                                      participant: participant,
+                                      participant: participant, store: mockAllocationStore,
                                       closure: printSomething)
         
         mockExecutionQueue.enqueue(execution)
@@ -82,8 +82,16 @@ class ExecutionQueueTest: XCTestCase {
     func testExecuteAllWithValuesFromAllocations() {
         let key = "pages.testing_page.header"
         let defaultValue = "red"
-        let exMock1 = ExecutionMock(key: key, defaultValue: __N(defaultValue), participant: participant, closure: printSomething)
-        let exMock2 = ExecutionMock(key: "pages.testing_page.header", defaultValue: __N("red"), participant: participant, closure: doSomething)
+        let exMock1 = ExecutionMock(key: key,
+                                    defaultValue: __N(defaultValue),
+                                    participant: participant,
+                                    store: mockAllocationStore,
+                                    closure: printSomething)
+        let exMock2 = ExecutionMock(key: "pages.testing_page.header",
+                                    defaultValue: __N("red"),
+                                    participant: participant,
+                                    store: mockAllocationStore,
+                                    closure: doSomething)
         
         let allocations = TestData.rawAllocations
         
@@ -102,8 +110,16 @@ class ExecutionQueueTest: XCTestCase {
     func testExecuteAllWithValuesFromDefaults() {
         let key = "pages.testing_page_typo.header_typo"
         let defaultValue = "red"
-        let exMock1 = ExecutionMock(key: key, defaultValue: __N(defaultValue), participant: participant, closure: printSomething)
-        let exMock2 = ExecutionMock(key: key, defaultValue: __N(defaultValue), participant: participant, closure: doSomething)
+        let exMock1 = ExecutionMock(key: key,
+                                    defaultValue: __N(defaultValue),
+                                    participant: participant,
+                                    store: mockAllocationStore,
+                                    closure: printSomething)
+        let exMock2 = ExecutionMock(key: key,
+                                    defaultValue: __N(defaultValue),
+                                    participant: participant,
+                                    store: mockAllocationStore,
+                                    closure: doSomething)
         
         mockExecutionQueue.enqueue(exMock1)
         mockExecutionQueue.enqueue(exMock2)

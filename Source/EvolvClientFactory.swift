@@ -26,26 +26,26 @@ public class EvolvClientFactory: NSObject {
     ///   - config: General configurations for the SDK.
     ///   - participant: The participant for the initialized client.
     /// - Returns: an instance of EvolvClient
-    @objc public class func createClient(config: EvolvConfig, participant: EvolvParticipant? = nil) -> EvolvClient {
-        EvolvLogger.shared.debug("Initializing Evolv Client.")
-        
+    @objc public class func createClient(config: EvolvConfig,
+                                         participant: EvolvParticipant? = nil,
+                                         delegate: EvolvClientDelegate? = nil) -> EvolvClient {
         let participant = participant ?? EvolvParticipant.builder().build()
         let store = config.allocationStore
         let previousAllocations = store.get(participant.userId)
         let allocator = EvolvAllocator(config: config, participant: participant)
         let futureAllocations = allocator.fetchAllocations()
-        let eventEmitter = EvolvEventEmitter(config: config, participant: participant)
+        let eventEmitter = EvolvEventEmitter(config: config, participant: participant, store: store)
         
-        defer {
-            EvolvLogger.shared.debug("Initialized Evolv Client.")
-        }
+        let client = DefaultEvolvClient(config: config,
+                                        eventEmitter: eventEmitter,
+                                        futureAllocations: futureAllocations,
+                                        allocator: allocator,
+                                        previousAllocations: !previousAllocations.isEmpty,
+                                        participant: participant)
+        allocator.delegate = client
+        client.delegate = delegate
         
-        return DefaultEvolvClient(config: config,
-                                  eventEmitter: eventEmitter,
-                                  futureAllocations: futureAllocations,
-                                  allocator: allocator,
-                                  previousAllocations: !previousAllocations.isEmpty,
-                                  participant: participant)
+        return client
     }
     
 }

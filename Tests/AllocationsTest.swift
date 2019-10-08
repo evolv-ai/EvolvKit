@@ -22,23 +22,26 @@ import PromiseKit
 
 class AllocationsTest: XCTestCase {
     
-    var participant: EvolvParticipant!
+    private var participant: EvolvParticipant!
+    private var mockAllocationStore: DefaultEvolvAllocationStore!
     
     override func setUp() {
         super.setUp()
         
         participant = EvolvParticipant.builder().build()
+        mockAllocationStore = DefaultEvolvAllocationStore(size: 5)
     }
     
     override func tearDown() {
         super.tearDown()
         
         participant = nil
+        mockAllocationStore = nil
     }
     
     func testGetValueFromAllocationGenome() {
         do {
-            let allocations = EvolvAllocations(TestData.rawAllocations)
+            let allocations = EvolvAllocations(TestData.rawAllocations, store: mockAllocationStore)
             
             let featureImportance = try allocations.value(forKey: "algorithms.feature_importance", participant: participant)
             let weightingDistance = try allocations.value(forKey: "search.weighting.distance", participant: participant)
@@ -52,7 +55,7 @@ class AllocationsTest: XCTestCase {
     
     func testGetValueFromMultiAllocationGenome() {
         do {
-            let allocations = EvolvAllocations(TestData.rawAllocations)
+            let allocations = EvolvAllocations(TestData.rawAllocations, store: mockAllocationStore)
             
             let featureImportance = try allocations.value(forKey: "algorithms.feature_importance", participant: participant)
             let weightingDistance = try allocations.value(forKey: "search.weighting.distance", participant: participant)
@@ -66,7 +69,7 @@ class AllocationsTest: XCTestCase {
     
     func testGetValueFromMultiAllocationWithDupsGenome() {
         do {
-            let allocations = EvolvAllocations(TestData.rawMultiAllocations)
+            let allocations = EvolvAllocations(TestData.rawMultiAllocations, store: mockAllocationStore)
             
             let featureImportance = try allocations.value(forKey: "algorithms.feature_importance", participant: participant)
             let weightingDistance = try allocations.value(forKey: "search.weighting.distance", participant: participant)
@@ -79,7 +82,7 @@ class AllocationsTest: XCTestCase {
     }
     
     func testGetActiveExperiments() {
-        let allocations = EvolvAllocations(TestData.rawMultiAllocationsWithDups)
+        let allocations = EvolvAllocations(TestData.rawMultiAllocationsWithDups, store: mockAllocationStore)
         
         let activeExperiments: Set<String> = allocations.getActiveExperiments()
         var expected: Set<String> = Set()
@@ -91,7 +94,7 @@ class AllocationsTest: XCTestCase {
     
     func test_KeyWithLastDot() {
         // given
-        let allocations = EvolvAllocations(TestData.rawAllocations)
+        let allocations = EvolvAllocations(TestData.rawAllocations, store: mockAllocationStore)
         let key = "search.weighting.distance."
         var result: EvolvRawAllocationNode = EvolvRawAllocationNode.null
         
@@ -108,7 +111,7 @@ class AllocationsTest: XCTestCase {
     
     func test_KeyWithEmptyKeyPart() {
         // given
-        let allocations = EvolvAllocations(TestData.rawAllocations)
+        let allocations = EvolvAllocations(TestData.rawAllocations, store: mockAllocationStore)
         let key = "search..weighting.distance"
         var result: EvolvRawAllocationNode = EvolvRawAllocationNode.null
         
@@ -125,7 +128,7 @@ class AllocationsTest: XCTestCase {
     
     func test_ThrowValueNotFound() {
         // given
-        let allocations = EvolvAllocations([])
+        let allocations = EvolvAllocations([], store: mockAllocationStore)
         let key = "search.weighting.distance"
         
         // when & then
@@ -136,24 +139,12 @@ class AllocationsTest: XCTestCase {
     
     func test_ThrowGenomeEmpty() {
         // given
-        let allocations = EvolvAllocations(TestData.rawAllocationsWithoutGenome)
+        let allocations = EvolvAllocations(TestData.rawAllocationsWithoutGenome, store: mockAllocationStore)
         let key = "search.weighting.distance"
         
         // when & then
         XCTAssertThrowsError(try allocations.value(forKey: key, participant: participant)) { error in
             XCTAssertEqual(error as! EvolvAllocations.Error, EvolvAllocations.Error.genomeEmpty)
-        }
-    }
-    
-    func test_ThrowIncorrectKeyPart() {
-        // given
-        let allocations = EvolvAllocations(TestData.rawAllocations)
-        let key = "search.weighting2.distance"
-        
-        // when & then
-        XCTAssertThrowsError(try allocations.value(forKey: key, participant: participant)) { error in
-            XCTAssertEqual(error as! EvolvRawAllocationNode.Error,
-                           EvolvRawAllocationNode.Error.incorrectKey(key: "search.weighting2"))
         }
     }
     

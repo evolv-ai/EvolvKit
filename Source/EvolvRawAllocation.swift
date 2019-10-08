@@ -22,6 +22,16 @@ import Foundation
 /// experimented against
 public class EvolvRawAllocation: NSObject, Decodable {
     
+    struct State: OptionSet {
+        let rawValue: Int
+        
+        static let touched = State(rawValue: 1 << 0)
+        static let confirmed = State(rawValue: 1 << 1)
+        static let contaminated = State(rawValue: 1 << 2)
+        
+        static let submitted: State = [.confirmed, .contaminated]
+    }
+    
     /// The unique identifier of the experiment.
     public let experimentId: String
     /// The unique identifier of the Participant.
@@ -34,8 +44,10 @@ public class EvolvRawAllocation: NSObject, Decodable {
     public let genome: EvolvRawAllocationNode
     /// User has been excluded from the experiment
     public let excluded: Bool
-   /// Query the specific audience filter defined by project
+    /// Query the specific audience filter defined by project
     public let audienceQuery: EvolvQuery?
+    /// Local state
+    var state: State = []
     
     enum CodingKey: String, Swift.CodingKey {
         case experimentId = "eid"

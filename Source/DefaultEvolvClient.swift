@@ -18,6 +18,17 @@
 
 import PromiseKit
 
+/// The statuses that indicate whether a client can successfully use
+@objc public enum EvolvClientStatus: Int {
+    case unknown
+    case initializing
+    case ready
+}
+
+@objc public protocol EvolvClientDelegate: AnyObject {
+    func didChangeClientStatus(_ status: EvolvClientStatus)
+}
+
 class DefaultEvolvClient: EvolvClient {
     
     private let logger = EvolvLogger.shared
@@ -30,12 +41,33 @@ class DefaultEvolvClient: EvolvClient {
     private let previousAllocations: Bool
     private let participant: EvolvParticipant
     
+    // status
+    private(set) var status: EvolvClientStatus = .unknown {
+        didSet {
+            delegate?.didChangeClientStatus(status)
+            
+            switch status {
+            case .initializing:
+                logger.debug("Evolv Client - Initializing.")
+            case .ready:
+                logger.debug("Evolv Client - Ready for use.")
+            default:
+                break
+            }
+        }
+    }
+    public weak var delegate: EvolvClientDelegate?
+    
     init(config: EvolvConfig,
          eventEmitter: EvolvEventEmitter,
          futureAllocations: Promise<[EvolvRawAllocation]>,
          allocator: EvolvAllocator,
          previousAllocations: Bool,
          participant: EvolvParticipant) {
+        defer {
+            status = .initializing
+        }
+        
         self.store = config.allocationStore
         self.executionQueue = config.executionQueue
         self.eventEmitter = eventEmitter
@@ -48,7 +80,11 @@ class DefaultEvolvClient: EvolvClient {
     public func subscribe(forKey key: String,
                           defaultValue: EvolvRawAllocationNode,
                           closure: @escaping (EvolvRawAllocationNode) -> Void) {
-        let execution = EvolvExecution(key: key, defaultValue: defaultValue, participant: participant, closure: closure)
+        let execution = EvolvExecution(key: key,
+                                       defaultValue: defaultValue,
+                                       participant: participant,
+                                       store: store,
+                                       closure: closure)
         let previousAllocations = store.get(participant.userId)
         
         if previousAllocations.isEmpty == false {
@@ -105,6 +141,21 @@ class DefaultEvolvClient: EvolvClient {
         } else if allocationStatus == .retrieved {
             let allocations = store.get(participant.userId)
             eventEmitter.contaminate(rawAllocations: allocations)
+        }
+    }
+    
+}
+
+// MARK: - EvolvAllocatorDelegate
+
+extension DefaultEvolvClient: EvolvAllocatorDelegate {
+    
+    func didChangeAllocationStatus(_ allocationStatus: EvolvAllocator.AllocationStatus) {
+        switch allocationStatus {
+        case .retrieved, .failed:
+            status = .ready
+        default:
+            break
         }
     }
     
