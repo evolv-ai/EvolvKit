@@ -70,7 +70,8 @@ let client: EvolvClient = EvolvClientFactory.createClient(config: config)
 
 ### Confirm the Allocation
 
-1. Once the client has been initialized, confirm the participant into the experiment.
+1. The call to ‘confirm’ should send a confirmation for every candidate that a user has been allocated into with the corresponding experiment.
+Evolv SDK will keep a record of every candidate that requested a variant. When ‘confirm’ is called, Evolv will send confirmation for those candidates.
 ```swift
 client.confirm()
 ```
