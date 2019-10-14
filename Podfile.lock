@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (4.8.2)
-  - EvolvKit (1.2.3):
+  - EvolvKit (1.2.4):
     - Alamofire (~> 4.8.0)
     - PromiseKit (~> 6.0)
   - PromiseKit (6.10.0):
@@ -29,7 +29,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
-  EvolvKit: c7a6415d1afd7a6fb4b0168fd4b07653f2af554f
+  EvolvKit: 8a61d6873bfff5da85ecce324c8920abcfce875c
   PromiseKit: 1fdaeb6c0a94a5114fcb814ff3d772b86886ad4e
 
 PODFILE CHECKSUM: 3b25bd15ba3517202890a1234a76d51096a2c8c8
