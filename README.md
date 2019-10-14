@@ -33,6 +33,8 @@ EvolvKit is available under the Apache License, Version 2.0. See the LICENSE fil
 **Participant:** The end user of the application, the individual who's actions are being recorded in the experiment.
 **Allocation:** The set of configurations that have been given to the participant, the values that are being
 experimented against.
+**Candidate** The specific group of variants in the allocation.
+**Variant** The different values each variable can have.
 
 For a complete example of how to use this SDK see our [example app](https://github.com/evolv-ai/EvolvKit/tree/master/Example).
 
