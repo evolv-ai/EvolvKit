@@ -148,4 +148,67 @@ class AllocationsTest: XCTestCase {
         }
     }
     
+    func test_CheckValueType() {
+        // given
+        let allocations = EvolvAllocations(TestData.rawAllocations, store: mockAllocationStore)
+        let key1 = "pages.settings.isMute"
+        let key2 = "pages.settings.volume"
+        let key3 = "pages.testing_page.megatron"
+        let key4 = "pages.all_pages.header_footer"
+        let key5 = "pages"
+        let key6 = "pages.settings.filter"
+        
+        // when & then
+        // bool
+        guard let isMuteNode = try? allocations.value(forKey: key1, participant: participant) else {
+            XCTFail("Key \(key1) was not found")
+            return
+        }
+        
+        XCTAssertEqual(isMuteNode.type, EvolvRawAllocationNode.NodeType.bool)
+        XCTAssertEqual(isMuteNode.boolValue, true)
+        
+        // number
+        guard let volume = try? allocations.value(forKey: key2, participant: participant) else {
+            XCTFail("Key \(key2) was not found")
+            return
+        }
+        
+        XCTAssertEqual(volume.type, EvolvRawAllocationNode.NodeType.number)
+        XCTAssertEqual(volume.intValue, 1)
+        
+        // string
+        guard let megatron = try? allocations.value(forKey: key3, participant: participant) else {
+            XCTFail("Key \(key3) was not found")
+            return
+        }
+        
+        XCTAssertEqual(megatron.type, EvolvRawAllocationNode.NodeType.string)
+        XCTAssertEqual(megatron.stringValue, "none")
+        
+        // array
+        guard let header_footer = try? allocations.value(forKey: key4, participant: participant) else {
+            XCTFail("Key \(key4) was not found")
+            return
+        }
+        
+        XCTAssertEqual(header_footer.type, EvolvRawAllocationNode.NodeType.array)
+        
+        // dict
+        guard let pages = try? allocations.value(forKey: key5, participant: participant) else {
+            XCTFail("Key \(key5) was not found")
+            return
+        }
+        
+        XCTAssertEqual(pages.type, EvolvRawAllocationNode.NodeType.dictionary)
+        
+        // null
+        guard let filter = try? allocations.value(forKey: key6, participant: participant) else {
+            XCTFail("Key \(key6) was not found")
+            return
+        }
+        
+        XCTAssertEqual(filter.type, EvolvRawAllocationNode.NodeType.null)
+    }
+    
 }

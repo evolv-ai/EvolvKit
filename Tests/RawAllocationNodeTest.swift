@@ -42,10 +42,13 @@ class RawAllocationNodeTest: XCTestCase {
         let nodeNumber3 = EvolvRawAllocationNode(0)
         let nodeNumber4 = EvolvRawAllocationNode(Int8(12))
         let nodeNumber5 = EvolvRawAllocationNode(-1_234_567)
+        let nodeNumber6 = EvolvRawAllocationNode(1)
         let nodeString1 = EvolvRawAllocationNode("")
         let nodeString2 = EvolvRawAllocationNode("foo")
         let nodeBool1 = EvolvRawAllocationNode(false)
         let nodeBool2 = EvolvRawAllocationNode(true)
+        let nodeBool3 = EvolvRawAllocationNode(0)
+        let nodeBool4 = EvolvRawAllocationNode(1)
         let nodeArray1 = EvolvRawAllocationNode([])
         let nodeArray2 = EvolvRawAllocationNode([1, 2, 3])
         let nodeArray3 = EvolvRawAllocationNode(["1", "2", "3"])
@@ -68,6 +71,8 @@ class RawAllocationNodeTest: XCTestCase {
         XCTAssertEqual(nodeNumber4, 12)
         XCTAssertEqual(nodeNumber5.type, EvolvRawAllocationNode.NodeType.number)
         XCTAssertEqual(nodeNumber5, -1234567)
+        XCTAssertEqual(nodeNumber6.type, EvolvRawAllocationNode.NodeType.number)
+        XCTAssertEqual(nodeNumber6, 1)
         
         // string
         XCTAssertEqual(nodeString1.type, EvolvRawAllocationNode.NodeType.string)
@@ -80,6 +85,8 @@ class RawAllocationNodeTest: XCTestCase {
         XCTAssertEqual(nodeBool1, false)
         XCTAssertEqual(nodeBool2.type, EvolvRawAllocationNode.NodeType.bool)
         XCTAssertEqual(nodeBool2, true)
+        XCTAssertNotEqual(nodeBool3.type, EvolvRawAllocationNode.NodeType.bool)
+        XCTAssertNotEqual(nodeBool4.type, EvolvRawAllocationNode.NodeType.bool)
         
         // array
         XCTAssertEqual(nodeArray1.type, EvolvRawAllocationNode.NodeType.array)

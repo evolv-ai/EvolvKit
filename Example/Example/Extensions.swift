@@ -25,25 +25,31 @@ extension UIColor {
             .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             .replacingOccurrences(of: "#", with: "")
         
-        guard let hex = Int(hexString, radix: 16) else {
+        guard let hex = Int(hexString, radix: 16), 0...0xffffff ~= hex else {
             self.init(red: 0, green: 0, blue: 0, alpha: alpha)
             return
         }
         
-        self.init(red: CGFloat((hex >> 16) & 0xff),
-                  green: CGFloat((hex >> 8) & 0xff),
-                  blue: CGFloat(hex & 0xff),
+        self.init(red: CGFloat((hex >> 16) & 0xff) / 255.0,
+                  green: CGFloat((hex >> 8) & 0xff) / 255.0,
+                  blue: CGFloat(hex & 0xff) / 255.0,
                   alpha: alpha)
     }
     
-    func toHexString() -> String {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        let rgb: Int = (Int)(red * 255) << 16 | (Int)(green * 255) << 8 | (Int)(blue * 255) << 0
-        return String(format: "#%06x", rgb)
+    func isLight(threshold: Float = 0.5) -> Bool? {
+        let originalCGColor = self.cgColor
+        let rgbCgColor = originalCGColor.converted(to: CGColorSpaceCreateDeviceRGB(), intent: .defaultIntent, options: nil)
+        
+        guard let components = rgbCgColor?.components else {
+            return nil
+        }
+        
+        guard components.count >= 3 else {
+            return nil
+        }
+
+        let brightness = Float(((components[0] * 299) + (components[1] * 587) + (components[2] * 114)) / 1000)
+        return (brightness > threshold)
     }
     
 }

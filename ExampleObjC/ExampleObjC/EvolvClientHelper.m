@@ -50,7 +50,7 @@
         
         /// Build config with custom timeout and custom allocation store
         /// Set client to any one of your environmentIds. sandbox is an example id.
-        EvolvConfig *config = [[[EvolvConfig builderWithEnvironmentId:@"sandbox" httpClient:_httpClient] setWithAllocationStore:_store] build];
+        EvolvConfig *config = [[[EvolvConfig builderWithEnvironmentId:@"a0cf1cfaab" httpClient:_httpClient] setWithAllocationStore:_store] build];
         
         // set error or debug logLevel for debugging
         [config setWithLogLevel:EvolvLogLevelDebug];

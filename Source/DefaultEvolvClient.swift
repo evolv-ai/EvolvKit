@@ -112,7 +112,6 @@ class DefaultEvolvClient: EvolvClient {
         default:
             execution.executeWithDefault()
         }
-		execution.executeWithDefault()
     }
     
     public func emitEvent(forKey key: String) {

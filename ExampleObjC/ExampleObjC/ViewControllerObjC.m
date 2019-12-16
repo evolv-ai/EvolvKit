@@ -19,6 +19,8 @@
 #import "ViewControllerObjC.h"
 #import "EvolvKit-Swift.h"
 #import "EvolvClientHelper.h"
+#import "UIColor+HexString.h"
+#import "UIColor+Light.h"
 
 @interface ViewControllerObjC ()
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;
@@ -38,31 +40,29 @@
     
     self.navigationItem.hidesBackButton = YES;
     
-    [self.evolvClient subscribeForKey:@"ui.layout" defaultValue:[[EvolvRawAllocationNode alloc] init:@"#000000"] closure:^(EvolvRawAllocationNode * _Nonnull node) {
+    [_checkoutButton titleLabel].font = [UIFont systemFontOfSize:24];
+    
+    [self.evolvClient subscribeForKey:@"checkout.button.background.color" defaultValue:[[EvolvRawAllocationNode alloc] init:@"#000000"] closure:^(EvolvRawAllocationNode * _Nonnull node) {
         __block ViewControllerObjC *safeSelf = self;
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
             NSString *colorString = [node stringValue];
+            UIColor *backgroundColor = [UIColor colorWithHexString:colorString];
             
-            if ([colorString isEqualToString:@"option_1"]) {
-                [safeSelf.view setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:0.5 alpha:1.0]];
-            } else if ([colorString isEqualToString:@"option_2"]) {
-                [safeSelf.view setBackgroundColor:[UIColor colorWithRed:0.6 green:0.9 blue:0.5 alpha:1.0]];
-            } else if ([colorString isEqualToString:@"option_3"]) {
-                [safeSelf.view setBackgroundColor:[UIColor colorWithRed:32 / 255 green:79 / 255 blue:79 / 255 alpha:1.0]];
-            } else if ([colorString isEqualToString:@"option_4"]) {
-                [safeSelf.view setBackgroundColor:[UIColor colorWithRed:1.0 green:176 / 255 blue:198 / 255 alpha:1.0]];
+            [safeSelf.checkoutButton setBackgroundColor:backgroundColor];
+            
+            if ([backgroundColor isLight]) {
+                [safeSelf.checkoutButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             } else {
-                [safeSelf.view setBackgroundColor:[UIColor blackColor]];
+                [safeSelf.checkoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             }
         });
     }];
-    [self.evolvClient subscribeForKey:@"ui.buttons.checkout.text" defaultValue:[[EvolvRawAllocationNode alloc] init:@"BUY STUFF"] closure:^(EvolvRawAllocationNode * _Nonnull node) {
+    [self.evolvClient subscribeForKey:@"checkout.button.text" defaultValue:[[EvolvRawAllocationNode alloc] init:@"BUY STUFF"] closure:^(EvolvRawAllocationNode * _Nonnull node) {
         __block ViewControllerObjC *safeSelf = self;
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [safeSelf.checkoutButton setTitle:[node stringValue] forState:UIControlStateNormal];
-            [safeSelf.checkoutButton titleLabel].font = [UIFont systemFontOfSize:24];
         });
     }];
     
