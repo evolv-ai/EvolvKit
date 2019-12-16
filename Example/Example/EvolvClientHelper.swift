@@ -36,11 +36,11 @@ final class EvolvClientHelper {
         
         /// Build config with custom timeout and custom allocation store.
         /// Set client to any one of your environmentIds. sandbox is an example id.
-        let config = EvolvConfig.builder(environmentId: "sandbox", httpClient: httpClient)
+        let config = EvolvConfig.builder(environmentId: "a0cf1cfaab", httpClient: httpClient)
             .set(allocationStore: store)
             .build()
         
-        // set error or debug logLevel for debugging
+        /// set error or debug logLevel for debugging
         config.set(logLevel: .error)
         
         /// Initialize the client with a stored user
