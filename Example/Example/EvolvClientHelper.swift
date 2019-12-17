@@ -46,7 +46,7 @@ final class EvolvClientHelper {
         /// Initialize the client with a stored user
         /// fetches allocations from Evolv, and stores them in a custom store
         let client = EvolvClientFactory.createClient(config: config,
-                                                     participant: EvolvParticipant.builder().set(userId: "sandbox_user").build(),
+                                                     participant: EvolvParticipant.builder().set(userId: "example_user").build(),
                                                      delegate: self)
         
         /// Initialize the client with a new user
