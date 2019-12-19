@@ -67,7 +67,12 @@ public class EvolvRawAllocation: NSObject, Decodable {
         candidateId = try container.decode(String.self, forKey: .candidateId)
         genome = try container.decode(EvolvRawAllocationNode.self, forKey: .genome)
         excluded = try container.decode(Bool.self, forKey: .excluded)
-        audienceQuery = try container.decodeIfPresent(EvolvQuery.self, forKey: .audienceQuery)
+        
+        if let audienceQuery = try? container.decodeIfPresent(EvolvQuery.self, forKey: .audienceQuery) {
+            self.audienceQuery = audienceQuery
+        } else {
+            self.audienceQuery = nil
+        }
     }
     
     public init(experimentId: String,

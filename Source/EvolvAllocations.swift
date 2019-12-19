@@ -62,11 +62,13 @@ class EvolvAllocations {
                     // touch current allocation & re-save allocations
                     allocation.state.insert(.touched)
                     
+                    logger.debug("Found key '\(key)' with value '\(node.value)' from experiment \(allocation.experimentId).")
+                    
                     // return node
                     return node
                 }
             } catch {
-                logger.error("Unable to find key '\(key)' in experiment \(allocation.experimentId).")
+                logger.debug("Unable to find key '\(key)' in experiment \(allocation.experimentId).")
             }
         }
         

@@ -97,9 +97,9 @@ public final class EvolvRawAllocationNode: NSObject {
         }
         set {
             switch unwrap(newValue) {
-            case let bool as Bool:
+            case let number as NSNumber where CFNumberGetType(number) == .charType:
                 type = .bool
-                rawBool = bool
+                rawBool = number.boolValue
             case let number as NSNumber:
                 type = .number
                 rawNumber = number
@@ -346,6 +346,7 @@ extension EvolvRawAllocationNode: ExpressibleByDictionaryLiteral {
         let dictionary = elements.reduce(into: [String: Any](), { $0[$1.0] = $1.1})
         self.init(dictionary)
     }
+    
 }
 
 extension EvolvRawAllocationNode: ExpressibleByArrayLiteral {

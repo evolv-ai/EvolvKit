@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		418C71E1126F9572339A6DF5 /* Pods_EvolvKit_ExampleObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7863F3F16BD3A230A8C86A9 /* Pods_EvolvKit_ExampleObjC.framework */; };
+		E237812E23A8FAA1006856BE /* UIColor+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = E237812D23A8FAA1006856BE /* UIColor+HexString.m */; };
+		E237813123A8FBDE006856BE /* UIColor+Light.m in Sources */ = {isa = PBXBuildFile; fileRef = E237813023A8FBDE006856BE /* UIColor+Light.m */; };
 		E2AD87B72344A9CF002AA9B8 /* EvolvClientHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AD87B62344A9CF002AA9B8 /* EvolvClientHelper.m */; };
 		E2AD87BA2344AE6C002AA9B8 /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2AD87B92344AE6C002AA9B8 /* LoadingViewController.m */; };
 		E2BABC29230C303700FB9AFA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BABC28230C303700FB9AFA /* AppDelegate.m */; };
@@ -21,6 +23,10 @@
 
 /* Begin PBXFileReference section */
 		A1B3BE5E3C87F6CE42D1111C /* Pods-EvolvKit-ExampleObjC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EvolvKit-ExampleObjC.release.xcconfig"; path = "Target Support Files/Pods-EvolvKit-ExampleObjC/Pods-EvolvKit-ExampleObjC.release.xcconfig"; sourceTree = "<group>"; };
+		E237812C23A8FAA1006856BE /* UIColor+HexString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+HexString.h"; sourceTree = "<group>"; };
+		E237812D23A8FAA1006856BE /* UIColor+HexString.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HexString.m"; sourceTree = "<group>"; };
+		E237812F23A8FBDE006856BE /* UIColor+Light.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Light.h"; sourceTree = "<group>"; };
+		E237813023A8FBDE006856BE /* UIColor+Light.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Light.m"; sourceTree = "<group>"; };
 		E2AD87B52344A9CF002AA9B8 /* EvolvClientHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EvolvClientHelper.h; sourceTree = "<group>"; };
 		E2AD87B62344A9CF002AA9B8 /* EvolvClientHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EvolvClientHelper.m; sourceTree = "<group>"; };
 		E2AD87B82344AE6C002AA9B8 /* LoadingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoadingViewController.h; sourceTree = "<group>"; };
@@ -115,6 +121,10 @@
 				E2AD87BB2344BB3F002AA9B8 /* Supporting Files */,
 				E2BABC2A230C303700FB9AFA /* ViewControllerObjC.h */,
 				E2BABC2B230C303700FB9AFA /* ViewControllerObjC.m */,
+				E237812C23A8FAA1006856BE /* UIColor+HexString.h */,
+				E237812D23A8FAA1006856BE /* UIColor+HexString.m */,
+				E237812F23A8FBDE006856BE /* UIColor+Light.h */,
+				E237813023A8FBDE006856BE /* UIColor+Light.m */,
 			);
 			path = ExampleObjC;
 			sourceTree = "<group>";
@@ -147,7 +157,7 @@
 		E2BABC1C230C303700FB9AFA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1030;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = EvolvKit;
 				TargetAttributes = {
 					E2BABC23230C303700FB9AFA = {
@@ -235,8 +245,10 @@
 			files = (
 				E2BABC42230C53BF00FB9AFA /* CustomAllocationStore.m in Sources */,
 				E2AD87BA2344AE6C002AA9B8 /* LoadingViewController.m in Sources */,
+				E237813123A8FBDE006856BE /* UIColor+Light.m in Sources */,
 				E2BABC2C230C303700FB9AFA /* ViewControllerObjC.m in Sources */,
 				E2BABC37230C303800FB9AFA /* main.m in Sources */,
+				E237812E23A8FAA1006856BE /* UIColor+HexString.m in Sources */,
 				E2BABC29230C303700FB9AFA /* AppDelegate.m in Sources */,
 				E2AD87B72344A9CF002AA9B8 /* EvolvClientHelper.m in Sources */,
 			);

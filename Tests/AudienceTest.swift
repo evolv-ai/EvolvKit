@@ -40,6 +40,7 @@ class AudienceTest: XCTestCase {
     private var filterExcluded: EvolvRawAllocation?
     private var filterWithoutAudienceQuery: EvolvRawAllocation?
     private var filterAudienceQueryIsNull: EvolvRawAllocation?
+    private var filterAudienceQueryIsEmpty: EvolvRawAllocation?
     
     override func setUp() {
         super.setUp()
@@ -65,6 +66,7 @@ class AudienceTest: XCTestCase {
         filterExcluded = rawAllocations[16]
         filterWithoutAudienceQuery = rawAllocations[17]
         filterAudienceQueryIsNull = rawAllocations[18]
+        filterAudienceQueryIsEmpty = rawAllocations[19]
     }
     
     override func tearDown() {
@@ -89,6 +91,7 @@ class AudienceTest: XCTestCase {
         filterExcluded = nil
         filterWithoutAudienceQuery = nil
         filterAudienceQueryIsNull = nil
+        filterAudienceQueryIsEmpty = nil
     }
     
     func test_FilterExcluded() {
@@ -149,6 +152,21 @@ class AudienceTest: XCTestCase {
         
         // when & then
         guard let rawAllocation = filterAudienceQueryIsNull else {
+            XCTFail("A non-empty allocation is expected")
+            return
+        }
+        
+        filter = rawAllocation.isFilter(userAttributes: userAttributes)
+        XCTAssertFalse(filter)
+    }
+    
+    func test_FilterEmptyAudience() {
+        // given
+        let userAttributes: [String: String] = [:]
+        var filter: Bool
+        
+        // when & then
+        guard let rawAllocation = filterAudienceQueryIsEmpty else {
             XCTFail("A non-empty allocation is expected")
             return
         }

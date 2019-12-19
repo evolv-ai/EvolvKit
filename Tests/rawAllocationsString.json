@@ -21,6 +21,11 @@
                 "testing_page":{
                     "megatron":"none",
                     "header":"white"
+                },
+                "settings":{
+                    "isMute":true,
+                    "volume":1,
+                    "filter":null
                 }
             },
             "algorithms":{
